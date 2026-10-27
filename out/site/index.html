@@ -59,6 +59,7 @@ main { min-width: 0; }
 .hero { display: grid; gap: 22px; padding-block: 14px 36px; }
 .hero h1 { font-size: clamp(40px, calc(var(--mainw) / 16), 104px); font-weight: 800; line-height: 1.02; letter-spacing: -.03em; }
 .hero h1 em { font-style: normal; white-space: nowrap; background: var(--butter); border: var(--bw) solid var(--ink); border-radius: .16em; padding: 0 .14em; box-shadow: var(--sh); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.byline { margin: -10px 0 0; font-size: 17px; font-weight: 700; color: var(--ink-2); }
 .searchwrap { position: relative; }
 .searchbar { display: flex; align-items: center; gap: 12px; min-height: 70px; padding: 0 10px 0 24px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: 999px; box-shadow: var(--sh-lg); }
 .searchbar:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
@@ -306,6 +307,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
       <section class="hero" aria-labelledby="hero-h">
         <div class="eyebrow">NVIDIA SimReady · <span class="nA">2,000+</span> assets · simulated in MuJoCo and PhysX · JEPA</div>
         <h1 id="hero-h">Search objects by <em>how they move</em>, not how they look</h1>
+        <p class="byline">By <a href="https://github.com/ghanemja">Janelle Ghanem</a></p>
         <div class="searchwrap">
           <div class="searchbar" role="search">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>

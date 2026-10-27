@@ -17,10 +17,11 @@ html, body { margin: 0; width: 1080px; height: 1350px; overflow: hidden; backgro
 h1, h2 { font-family: var(--display); font-weight: 800; letter-spacing: -.035em; }
 h1 { font-size: 94px; line-height: .98; margin: 36px 0 0; }
 h2 { font-size: 58px; line-height: 1.02; margin: 26px 0 0; }
-h1 em, h2 em, .big em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
   background: linear-gradient(transparent 60%, var(--accent) 60%, var(--accent) 92%, transparent 92%); }
-.sub { font-size: 32px; line-height: 1.38; color: var(--ink-2); margin-top: 30px; max-width: 920px; font-weight: 500; }
-.view { position: absolute; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 26px; box-shadow: var(--sh); padding: 8px; }
+.byline { margin: 26px 0 0; font-size: 32px; font-weight: 700; color: var(--ink-2); }
+.byline b { color: var(--ink); font-weight: 800; }
+.view { position: absolute; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 26px; box-shadow: var(--sh); padding: 8px; transition: none; }
 .view.hot { background: var(--accent); box-shadow: var(--sh-lg); }
 .view.warn { background: var(--pink); }
 .stg { width: 100%; height: 100%; border-radius: 18px; overflow: hidden; background: var(--stage); }
@@ -31,69 +32,100 @@ h1 em, h2 em, .big em { font-style: normal; padding: 0 .06em; -webkit-box-decora
 .rowlbl b { font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: -.02em; padding: 5px 20px 8px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--card); box-shadow: 3px 3px 0 var(--ink); }
 .rowlbl.beh b { background: var(--sky); }
 .rowlbl span { color: var(--ink-3); font-size: 22px; font-weight: 500; }
-.callout { position: absolute; left: 60px; right: 60px; bottom: 50px; margin: 0; padding: 20px 28px 22px; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 24px; box-shadow: var(--sh-lg); font-size: 30px; line-height: 1.32; font-weight: 600; opacity: 0; }
-.callout b, .callout .w { font-weight: 800; padding: 0 8px; border-radius: 8px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-.callout b { background: var(--accent); }
-.callout .w { background: var(--pink); }
 .ring { position: absolute; border: 6px solid var(--accent); border-radius: 30px; opacity: 0; }
-.big { transform-origin: left center; font-family: var(--display); font-size: 168px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-top: 64px; font-variant-numeric: tabular-nums; }
-.big span { color: var(--ink-3); font-size: 84px; letter-spacing: -.02em; margin: 0 .12em; }
-.big .lo { color: var(--ink-2); }
-.credit { position: absolute; left: 60px; right: 60px; bottom: 56px; font-size: 22px; color: var(--ink-3); line-height: 1.45; }
-.series { position: absolute; left: 60px; z-index: 6; font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: -.01em; padding: 10px 26px 13px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--pink); box-shadow: var(--sh); transform-origin: left center; opacity: 0; }
-#r-series { bottom: 64px; }
-#d-series { top: 1010px; }
-.try { position: absolute; left: 60px; top: 770px; margin: 0; font-size: 28px; font-weight: 600; color: var(--ink-2); opacity: 0; }
-.url { position: absolute; left: 60px; top: 824px; font-family: var(--display); font-size: 52px; font-weight: 800; letter-spacing: -.02em; padding: 14px 40px 20px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--accent); box-shadow: var(--sh-lg); transform-origin: left center; opacity: 0; }
+/* outcome stamps: pop onto a view the moment its object lands, or clearly stays put */
+.stamp { position: absolute; right: -14px; top: -18px; z-index: 3; padding: 4px 14px 7px; border: var(--bw) solid var(--ink); border-radius: 999px; box-shadow: 3px 3px 0 var(--ink);
+  font-family: var(--display); font-size: 24px; font-weight: 800; letter-spacing: -.01em; white-space: nowrap; opacity: 0; transform-origin: right center; }
+.stamp.big { font-size: 34px; padding: 6px 22px 10px; right: -16px; top: -24px; }
+.stamp.ok { background: var(--mint); }
+.stamp.bad { background: var(--pink); }
+.stamp.meh { background: var(--butter); }
+/* live captions: one phrase at a time, revealed word by word */
+#cap { position: absolute; left: 60px; right: 60px; bottom: 52px; z-index: 8; margin: 0; padding: 18px 30px 22px; border-radius: 24px; background: var(--ink); color: #fff;
+  box-shadow: 6px 6px 0 var(--accent); font-size: 41px; font-weight: 700; line-height: 1.26; letter-spacing: -.005em; opacity: 0; transform-origin: center bottom; }
+#cap .w { display: inline-block; white-space: pre; }
+#cap .ok { color: var(--mint); font-weight: 800; }
+#cap .bad { color: var(--pink); font-weight: 800; }
+#cap .hi { color: var(--butter); font-weight: 800; }
+.series { position: absolute; z-index: 6; font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: -.01em; padding: 9px 24px 12px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--pink); box-shadow: var(--sh); opacity: 0; }
+#r-series { right: 60px; top: 60px; transform-origin: right center; }
+#d-series { left: 60px; top: 64px; transform-origin: left center; }
+/* results: bars */
+.bl { position: absolute; left: 60px; font-size: 30px; font-weight: 800; }
+.bl span { color: var(--ink-3); font-weight: 600; }
+.bar { position: absolute; left: 60px; height: 84px; border: var(--bw) solid var(--ink); border-radius: 18px; box-shadow: var(--sh); width: 0; }
+.bar.thin { height: 44px; border-radius: 12px; box-shadow: 3px 3px 0 var(--ink); }
+.bar.b { background: var(--accent); }
+.bar.a { background: var(--pink); }
+.val { position: absolute; font-family: var(--display); font-size: 70px; font-weight: 800; letter-spacing: -.03em; line-height: 1; opacity: 0; }
+.val.thin { font-size: 38px; }
+.note { position: absolute; left: 60px; right: 60px; font-size: 26px; line-height: 1.4; color: var(--ink-2); font-weight: 500; margin: 0; }
+/* end card */
+.try { position: absolute; left: 60px; top: 450px; margin: 0; font-size: 32px; font-weight: 700; color: var(--ink-2); }
+.url { position: absolute; left: 60px; top: 508px; font-family: var(--display); font-size: 56px; font-weight: 800; letter-spacing: -.02em; padding: 14px 42px 22px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--accent); box-shadow: var(--sh-lg); transform-origin: left center; opacity: 0; }
+.who { position: absolute; left: 60px; top: 720px; transform-origin: left center; opacity: 0; }
+.who b { display: block; font-family: var(--display); font-size: 64px; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.who span { display: block; margin-top: 12px; font-family: var(--mono); font-size: 28px; color: var(--ink-2); }
+.credit { position: absolute; left: 60px; right: 60px; bottom: 56px; font-size: 22px; color: var(--ink-3); line-height: 1.45; margin: 0; }
 </style></head>
 <body>
 
 <section class="scene" id="s1">
   <div class="eyebrow">NVIDIA SimReady · behavior search</div>
   <h1>Search 3D objects by <em>how they move</em>, not how they look</h1>
-  <p class="sub"><span id="nA">2,167</span> rigid assets from NVIDIA's SimReady library. The same simulated pokes for every one, in MuJoCo and in NVIDIA's own PhysX.</p>
-  <div class="view" data-v="t0" style="left:60px; top:820px; width:300px; height:300px"></div>
-  <div class="view" data-v="t1" style="left:390px; top:820px; width:300px; height:300px"></div>
-  <div class="view" data-v="t2" style="left:720px; top:820px; width:300px; height:300px"></div>
+  <p class="byline">by <b>Janelle Ghanem</b></p>
+  <div class="view" data-v="t0" style="left:60px; top:590px; width:300px; height:330px"></div>
+  <div class="view" data-v="t1" style="left:390px; top:590px; width:300px; height:330px"></div>
+  <div class="view" data-v="t2" style="left:720px; top:590px; width:300px; height:330px"></div>
 </section>
 
 <section class="scene" id="s2">
   <div class="eyebrow">Query · pushed high</div>
   <h2 id="qname">Canned peaches</h2>
   <div class="view" data-v="q" style="left:60px; top:226px; width:960px; height:262px"></div>
-  <div class="rowlbl beh" style="left:60px; top:512px"><b>Behaves like</b><span>simulated behavior</span></div>
+  <div class="rowlbl beh" id="behLbl" style="left:60px; top:512px"><b>Behaves like</b><span>simulated behavior</span></div>
   <div id="behSlots"></div>
-  <div class="rowlbl" style="left:60px; top:822px"><b>Looks like</b><span>image embedding, like NVIDIA's search</span></div>
+  <div class="rowlbl" id="appLbl" style="left:60px; top:822px"><b>Looks like</b><span>image embedding, like NVIDIA's search</span></div>
   <div id="appSlots"></div>
   <div class="ring" id="ring"></div>
-  <p class="callout" id="c2">Behavior search finds <b>a mug, a steel drum, two sockets</b>. All stay up. The look-alike cans: <span class="w">every one topples</span>.</p>
 </section>
 
 <section class="scene" id="s3">
   <div class="eyebrow">Different looks, same behavior</div>
   <h2>To a robot, these are <em>the same object</em></h2>
   <div id="pairSlots"></div>
-  <p class="callout" id="c3">Neighbors in behavior space tip, slide and land alike, whatever they look like.</p>
 </section>
 
 <section class="scene" id="s4">
   <div class="eyebrow">Physics QA for free</div>
   <h2>Same fruit, <em>different physics</em></h2>
   <div id="bugSlots"></div>
-  <p class="callout" id="c4">This apple's center of mass was authored at its base, so it behaves like a doorstop. <span class="w"><span id="nBug">16</span> assets in the library</span> have this bug.</p>
 </section>
 
 <section class="scene" id="s5">
-  <div class="eyebrow">Tested on probes no model saw</div>
-  <div class="big"><em id="r2b">0.54</em><span>vs</span><b class="lo" id="r2a">0.15</b></div>
-  <p class="sub" style="font-size:34px; color:var(--ink)" id="s5a">How well an object's five nearest neighbors predict its reaction to three new probes. Simulated behavior vs appearance search, on 1,891 test objects.</p>
-  <p class="sub" id="s5b">Checked in NVIDIA's PhysX too. A self-supervised JEPA does far better than looks, but plain statistics of the same simulations do better still.</p>
-  <p class="try" id="d-try">Try it on any object. Code and data are on GitHub.</p>
-  <span class="url" id="d-url">ghanemja.github.io/behaviors</span>
+  <div class="eyebrow" id="s5eye">Tested on objects no model saw</div>
+  <h2>Does it hold up?</h2>
+  <div class="bl" style="top:262px">Nearest neighbors by behavior</div>
+  <div class="bar b" id="barB" style="top:310px"></div><div class="val" id="valB" style="top:318px">0.54</div>
+  <div class="bl" style="top:432px">Nearest neighbors by looks</div>
+  <div class="bar a" id="barA" style="top:480px"></div><div class="val" id="valA" style="top:488px">0.15</div>
+  <div class="bl" style="top:620px; font-size:26px">Same test in NVIDIA's PhysX <span>· behavior vs looks</span></div>
+  <div class="bar b thin" id="barPB" style="top:666px"></div><div class="val thin" id="valPB" style="top:670px">0.41</div>
+  <div class="bar a thin" id="barPA" style="top:724px"></div><div class="val thin" id="valPA" style="top:728px">0.15</div>
+  <p class="note" id="s5note" style="top:810px">Score: how well an object's 5 nearest neighbors predict its reaction to new pushes, tilts and drops (R², where 1 is perfect).</p>
+</section>
+
+<section class="scene" id="s6">
   <span class="series" id="d-series">7 Days of Vibes · Day 4</span>
+  <h2 style="font-size:84px; line-height:.98; margin-top:110px">Search 3D objects by <em>how they move</em></h2>
+  <p class="try">Try it on any object. Code and data are on GitHub.</p>
+  <span class="url" id="d-url">ghanemja.github.io/behaviors</span>
+  <div class="who" id="d-who"><b>Janelle Ghanem</b><span>github.com/ghanemja</span></div>
   <p class="credit">3D assets: NVIDIA SimReady on Hugging Face, CC BY 4.0. Physics: MuJoCo and PhysX (SAPIEN). Appearance: SigLIP2. Everything ran on a 4-core CPU.</p>
 </section>
+
 <span class="series" id="r-series">7 Days of Vibes · Day 4</span>
+<p id="cap"></p>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -117,9 +149,6 @@ const MODELS = {};
 const loadModel = (i) => fetch(A[i].glb).then((r) => r.text()).then((t) => new Promise((res, rej) => loader.parse(b64(t.trim(), Uint8Array).buffer, "", (g) => { MODELS[i] = { root: g.scene, box: new THREE.Box3().setFromObject(g.scene) }; res(); }, rej)));
 const shadowTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"); const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, "rgba(0,0,0,0.6)"); r.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
 const mats = {
-  clay: new THREE.MeshStandardMaterial({ roughness: 0.6, color: col("--clay") }),
-  hot: new THREE.MeshStandardMaterial({ roughness: 0.55, color: col("--accent") }),
-  warn: new THREE.MeshStandardMaterial({ roughness: 0.55, color: col("--warn") }),
   pusher: new THREE.MeshStandardMaterial({ roughness: 0.4, color: col("--pusher") }),
   floor: new THREE.MeshBasicMaterial({ color: col("--stage"), toneMapped: false }),
   grid: new THREE.LineBasicMaterial({ color: col("--grid"), toneMapped: false }),
@@ -137,9 +166,9 @@ function track(i, p) {
     if (p === "ramp") tr.ang.push(raw[r + 7] / 100); }
   trackCache.set(key, tr); return tr;
 }
-const CAM = { push_high: { target: [0.45, 0, 0.34], off: [1.5, -3.6, 1.6] }, push_low: { target: [0.45, 0, 0.32], off: [1.5, -3.6, 1.6] }, ramp: { target: [0.55, 0, -0.25], off: [1.3, -3.9, 1.6] }, drop: { target: [0.1, 0, 0.42], off: [1.4, -3.6, 1.5] } };
+const CAM = { push_high: { target: [0.45, 0, 0.34], off: [1.5, -3.6, 1.6] } };
 class View {
-  constructor(el, i, p, mat, zoom = 1, tshift = 0) {
+  constructor(el, i, p, zoom = 1, tshift = 0) {
     this.el = el; this.scene = new THREE.Scene(); this.scene.fog = new THREE.Fog(mats.fog.color, 4.4 * zoom, 9.5 * zoom);
     this.scene.environment = envTex;
     const dl = new THREE.DirectionalLight(0xffffff, 0.7); dl.position.set(2.5, -3, 5); this.scene.add(dl);
@@ -147,22 +176,19 @@ class View {
     this.floor = new THREE.Group(); this.floor.add(new THREE.Mesh(floorGeo, mats.floor)); this.floor.add(new THREE.LineSegments(gridGeo, mats.grid));
     this.shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mats.shadow); this.floor.add(this.shadow); this.scene.add(this.floor);
     this.obj = new THREE.Group(); const md = MODELS[i], S = A[i].S, mdl = md.root.clone(); mdl.scale.setScalar(1 / S); this.obj.add(mdl); this.scene.add(this.obj);
-    if (mat === mats.warn) el.classList.add("warn"); if (mat === mats.hot) el.classList.add("hot");
     this.stg = document.createElement("div"); this.stg.className = "stg"; this.cv = document.createElement("canvas"); this.stg.appendChild(this.cv); el.appendChild(this.stg); this.ctx = this.cv.getContext("2d");
     this.pusher = new THREE.Mesh(sphereGeo, mats.pusher); this.pusher.scale.setScalar(A[i].r); this.scene.add(this.pusher);
     this.tr = track(i, p); this.p = p; this.center = md.box.getCenter(new THREE.Vector3()).multiplyScalar(1 / S);
     const ext = md.box.getSize(new THREE.Vector3()).multiplyScalar(1 / S); this.ss = Math.max(ext.x, ext.y) * 1.25;
     const c = CAM[p], tg = [c.target[0] + tshift, c.target[1], c.target[2]]; this.camera.position.set(tg[0] + c.off[0] * zoom, tg[1] + c.off[1] * zoom, tg[2] + c.off[2] * zoom); this.camera.lookAt(...tg);
+    this.m0 = 0; this.ml = 4;
   }
   draw(u) {
     const tr = this.tr, f = u * (NF - 1), k = Math.min(Math.floor(f), NF - 2), w = f - k;
     this.obj.position.lerpVectors(tr.pos[k], tr.pos[k + 1], w); this.obj.quaternion.copy(tr.quat[k]).slerp(tr.quat[k + 1], w);
-    const ang = this.p === "ramp" ? THREE.MathUtils.degToRad(tr.ang[k] + (tr.ang[k + 1] - tr.ang[k]) * w) : 0;
-    this.floor.rotation.set(0, ang, 0);
     const pp = tr.push.length ? tr.push[k] : null; this.pusher.visible = !!pp; if (pp) this.pusher.position.copy(pp);
     const c = this.center.clone().applyQuaternion(this.obj.quaternion).add(this.obj.position);
-    const lx = c.x * Math.cos(ang) - c.z * Math.sin(ang), lz = c.x * Math.sin(ang) + c.z * Math.cos(ang), h = Math.max(lz, 0);
-    this.shadow.position.set(lx, c.y, 0.003); const s = this.ss * (1 + h * 0.6); this.shadow.scale.set(s, s, 1);
+    this.shadow.position.set(c.x, c.y, 0.003); const s = this.ss * (1 + Math.max(c.z, 0) * 0.6); this.shadow.scale.set(s, s, 1);
     const W = this.stg.clientWidth, H = this.stg.clientHeight; if (W < 2) return;
     if (this.cv.width !== W || this.cv.height !== H) { this.cv.width = W; this.cv.height = H; }
     this.camera.aspect = W / H; this.camera.updateProjectionMatrix();
@@ -172,83 +198,186 @@ class View {
   }
 }
 const id = (s) => A.findIndex((a) => a.id === s);
-const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const $ = (s) => document.getElementById(s);
 const fmt = (a) => (a.S >= 1 ? a.S.toFixed(2) + " m" : Math.round(a.S * 100) + " cm") + " · " + (a.mass >= 1 ? a.mass.toFixed(1) + " kg" : Math.round(a.mass * 1000) + " g");
+const NAME = { drum_steel_a02: "steel drum", handTool_socket_9_16in_a01: "socket", handTool_socket_5_8in_a01: "socket", consumable_spray_solvent_a01: "solvent spray",
+  cleaning_abrasivePowder_a01: "abrasive powder", consumable_threadlocker_blue_stick_a01: "threadlocker stick", food_processed_milk_a01: "milk carton", food_canned_peach_a03: "canned peaches" };
 function slot(parent, i, x, y, w, h, extra) {
   const v = document.createElement("div"); v.className = "view"; Object.assign(v.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" }); parent.appendChild(v);
   const l = document.createElement("div"); l.className = "lbl"; l.style.left = x + "px"; l.style.top = (y + h + 18) + "px"; l.style.width = w + "px";
-  l.innerHTML = `${(NAME[A[i].id] || A[i].name).toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}<small>${extra || fmt(A[i])}</small>`; parent.appendChild(l); return v;
+  l.innerHTML = `${(NAME[A[i].id] || A[i].name).toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}<small>${extra ?? fmt(A[i])}</small>`; parent.appendChild(l); return v;
 }
-const SCENES = [];
-const NAME = { drum_steel_a02: "steel drum", handTool_socket_9_16in_a01: "socket", handTool_socket_5_8in_a01: "socket", consumable_spray_solvent_a01: "solvent spray",
-  cleaning_abrasivePowder_a01: "abrasive powder", consumable_threadlocker_blue_stick_a01: "threadlocker stick", food_processed_milk_a01: "milk carton", food_canned_peach_a03: "canned peaches" };
-function scene(elId, start, end, motionStart, motionLen, views, extra) { SCENES.push({ el: document.getElementById(elId), start, end, motionStart, motionLen, views, extra }); }
-const $ = (s) => document.getElementById(s);
+
+// --- Timing. Everything sits on the soundtrack's grid: 150 bpm, a beat is 0.4 s, a bar 1.6 s (see soundtrack.song.js).
+const CUT = [0, 4.8, 17.6, 24.0, 32.0, 38.4, 43.2];   // scene boundaries, on bar lines
 const prog = (t, start, dur) => Math.min(1, Math.max(0, (t - start) / dur));
 const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
 const outCubic = (x) => 1 - (1 - x) ** 3;
 // a sticker popping on: overshoot in scale, settling from a tilt to its resting angle
 function pop(el, t, start, dur = .5, rot = -8, rest = 0) { const k = prog(t, start, dur); el.style.opacity = k > 0 ? 1 : 0; el.style.transform = `scale(${back(k)}) rotate(${rest + (1 - outCubic(k)) * rot}deg)`; }
-// a card landing: a smaller bounce, for callouts
-function land(el, t, start) { const k = prog(t, start, .4); el.style.opacity = Math.min(1, k * 4); el.style.transform = `scale(${.9 + .1 * back(k)})`; }
+
+// Cue times for the soundtrack (render.js cues writes them to video/cues.json).
+const CUES = { touches: [], lands: [], chimes: [], boings: [], pops: [], cuts: CUT.slice(2, -1), end: CUT.at(-1) };
+window.CUES = CUES;
+
+// Play a view's push from `start`, and stamp its outcome on it the moment it is clear:
+// a fall when the object lands, a stay-up a second after the touch, a bounce-back when it is upright again.
+const LABEL = { fell: "falls over", stayed: "stays up", back: "pops back up" };
+function play(v, start, len = 4, label = {}, big = false) {
+  v.m0 = start; v.ml = len;
+  const tr = v.tr, n = tr.quat.length, inv = tr.quat[0].clone().invert(), up = new THREE.Vector3(0, 0, 1);
+  const tilt = tr.quat.map((q) => THREE.MathUtils.radToDeg(Math.acos(THREE.MathUtils.clamp(up.clone().applyQuaternion(q.clone().multiply(inv)).z, -1, 1))));
+  const T = (k) => start + len * k / (n - 1);
+  const touch = T(Math.max(0, tr.pos.findIndex((p) => p.distanceTo(tr.pos[0]) > 0.004)));
+  const fin = tilt[n - 1], max = Math.max(...tilt), km = tilt.indexOf(max);
+  const kind = fin > 45 ? "fell" : max > 25 ? "back" : "stayed";
+  const at = kind === "fell" ? T(tilt.findIndex((a) => a > 0.92 * fin)) : kind === "back" ? T(km + Math.max(0, tilt.slice(km).findIndex((a) => a < 12))) : touch + 1.0;
+  const x = parseFloat(v.el.style.left) + parseFloat(v.el.style.width) / 2, pan = +((x / 1080 * 2 - 1) * 0.7).toFixed(2);
+  CUES.touches.push(+touch.toFixed(2));
+  if (kind === "fell") CUES.lands.push({ t: +at.toFixed(2), pan });
+  if (kind === "stayed") CUES.chimes.push(+at.toFixed(2));
+  if (kind === "back") CUES.boings.push({ t: +(touch + 0.15).toFixed(2), pan });
+  const st = document.createElement("span"); st.className = `stamp ${big ? "big " : ""}${{ fell: "bad", stayed: "ok", back: "bad" }[kind]}`;
+  if (label.cls) st.className = st.className.replace(/ok|bad/, label.cls);
+  st.textContent = label[kind] || LABEL[kind]; v.el.appendChild(st);
+  v.stamp = st; v.stampAt = at;
+  return v;
+}
+
+// Live captions: [start, end, text]. *mint*, _pink_ and ^butter^ mark highlighted words.
+let CAPS = [];
+const WORD = 0.09;   // seconds per word, sped up so a long caption is fully shown by 45% of its time
+function capHTML(text) {
+  let cls = "";
+  return text.split(" ").map((w) => {
+    let open = "";
+    for (const [m, c] of [["*", "ok"], ["_", "bad"], ["^", "hi"]]) if (w.startsWith(m)) { cls = c; w = w.slice(1); }
+    const c = cls; let close = false;
+    for (const m of ["*", "_", "^"]) if (w.endsWith(m) || w.endsWith(m + ".") || w.endsWith(m + ",") || w.endsWith(m + ":")) { w = w.replace(m, ""); close = true; }
+    if (close) cls = "";
+    return `<span class="w${c ? " " + c : ""}">${w}</span>`;
+  }).join(" ");
+}
+let capOn = -1;
+function captions(t) {
+  const el = $("cap"), k = CAPS.findIndex(([a, b]) => t >= a && t < b);
+  if (k < 0) { el.style.opacity = 0; capOn = -1; return; }
+  const [a, b] = CAPS[k], words = CAPS[k][2].split(" ").length, step = Math.min(WORD, 0.45 * (b - a) / words);
+  if (capOn !== k) { el.innerHTML = capHTML(CAPS[k][2]); capOn = k; }
+  // the box springs in when a caption starts after a gap; back-to-back captions just swap words
+  const fresh = k === 0 || CAPS[k - 1][1] < a - 0.05, kb = fresh ? prog(t, a, .3) : 1;
+  el.style.opacity = Math.min(1, kb * 3); el.style.transform = `translateY(${(1 - outCubic(kb)) * 24}px)`;
+  [...el.querySelectorAll(".w")].forEach((w, i) => { const kw = prog(t, a + i * step, .14); w.style.opacity = kw; w.style.transform = `translateY(${(1 - outCubic(kw)) * 10}px)`; });
+}
+
+const SCENES = [];
+function scene(elId, start, end, views, extra) { SCENES.push({ el: $(elId), start, end, views, extra }); }
 
 window.setup = async function () {
   const d = await (await fetch("data.json")).json(); A = d.assets; NF = d.nframes;
   const qi0 = id("food_canned_peach_a03");
   const PAIRS = [["food_processed_milk_a01", "consumable_spray_solvent_a01"], ["cleaning_abrasivePowder_a01", "consumable_threadlocker_blue_stick_a01"]];
-  const need = ["cleaning_dishSoap_a01", "fireProtection_extinguisher_portable_b01", "sign_wetFloor_a01", "food_produce_apple_redDelicous_a01", "food_produce_apple_grannySmith_a01", ...PAIRS.flat()].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
+  const APPLES = ["food_produce_apple_redDelicous_a01", "food_produce_apple_grannySmith_a01"];
+  const S1 = ["cleaning_dishSoap_a01", "fireProtection_extinguisher_portable_b01", "sign_wetFloor_a01"];
+  const need = [...S1, ...APPLES, ...PAIRS.flat()].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
   await Promise.all([...new Set(need)].map(loadModel));
-  const E = d.eval, f2 = (x) => x.toFixed(2);
-  document.getElementById("nA").textContent = A.length.toLocaleString();
-  document.getElementById("nBug").textContent = A.filter((a) => a.qa.includes("com_at_base")).length;
-  document.getElementById("r2b").textContent = f2(E.main["Rollout statistics (hand-built)"].R2);
-  document.getElementById("r2a").textContent = f2(E.main["Appearance (SigLIP2)"].R2);
-  document.getElementById("s5a").textContent = `How well an object's five nearest neighbors predict its reaction to three new probes. Simulated behavior vs appearance search, on ${E.n_test.toLocaleString()} test objects.`;
-  const px = E.cross["cross-engine: PhysX, same hulls"].R2;
-  document.getElementById("s5b").textContent = `Checked in NVIDIA's PhysX too: ${f2(px["Rollout statistics (hand-built)"].R2)} vs ${f2(px["Appearance (SigLIP2)"].R2)}. A self-supervised JEPA reaches ${f2(E.main["JEPA behavior embedding"].R2)}: far better than looks, behind plain statistics of the same simulations.`;
-  // s1: three tippers
-  const s1v = ["cleaning_dishSoap_a01", "fireProtection_extinguisher_portable_b01", "sign_wetFloor_a01"].map(id);
-  scene("s1", 0, 3.2, 0.2, 3.0, [...document.querySelectorAll("#s1 .view")].map((el, k) => new View(el, s1v[k], "push_high", null, 1.4, 0.4)));
-  // s2: canned peaches query, pushed high
-  const q = qi0, qa = A[q];
-  const s2 = document.getElementById("s2");
-  const v2 = [new View(s2.querySelector('[data-v="q"]'), q, "push_high", mats.hot, 1.0, 0.4)];
-  const tw = 225, gap = 20, fate = (j) => (A[j].sum.th > 0.5 ? "topples" : "stays up");
-  qa.beh.slice(0, 4).forEach((j, k) => v2.push(new View(slot(document.getElementById("behSlots"), j, 60 + k * (tw + gap), 582, tw, 150, fate(j)), j, "push_high", null, 1.35, 0.5)));
-  qa.app.slice(0, 4).forEach((j, k) => v2.push(new View(slot(document.getElementById("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150, fate(j)), j, "push_high", null, 1.35, 0.5)));
-  const ring = document.getElementById("ring");
-  Object.assign(ring.style, { left: "46px", top: "878px", width: (4 * tw + 3 * gap + 28) + "px", height: "254px" });
-  scene("s2", 3.2, 12.8, 3.8, 4.6, v2, (t) => { land($("c2"), t, 8.8); ring.style.opacity = prog(t, 8.8, .25); });
-  // s3: two pairs
-  const ps = document.getElementById("pairSlots"), v3 = [];
-  PAIRS.forEach(([a, b], r) => { [a, b].forEach((n, c) => { const i = id(n); v3.push(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300, `tips if pushed high · slides at ${Math.round(A[i].sum.sl)}°`), i, "push_high", null, 1.45, 0.5)); }); });
-  scene("s3", 12.8, 19.2, 13.2, 4.6, v3, (t) => land($("c3"), t, 16.8));
-  // s4: apples
-  const bs = document.getElementById("bugSlots"), v4 = [];
-  [["food_produce_apple_redDelicous_a01", "authored center of mass: middle"], ["food_produce_apple_grannySmith_a01", "authored center of mass: at the base"]].forEach(([n, note], c) => {
-    const i = id(n); v4.push(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, note), i, "push_high", c === 1 ? mats.warn : mats.clay, 2.3, 0.75));
+  const E = d.eval, f2 = (x) => x.toFixed(2), n = (x) => x.toLocaleString();
+  const R = { b: E.main["Rollout statistics (hand-built)"].R2, a: E.main["Appearance (SigLIP2)"].R2 };
+  const px = E.cross["cross-engine: PhysX, same hulls"].R2, P = { b: px["Rollout statistics (hand-built)"].R2, a: px["Appearance (SigLIP2)"].R2 };
+  const nBug = A.filter((a) => a.qa.includes("com_at_base")).length;
+  const nm = (i) => NAME[A[i].id] || A[i].name;
+
+  // s1: the test. Three objects, the same push.
+  const v1 = [...document.querySelectorAll("#s1 .view")].map((el, k) => play(new View(el, id(S1[k]), "push_high", 1.4, 0.4), 2.4, 4));
+  scene("s1", CUT[0], CUT[1], v1, (t) => {});
+
+  // s2: canned peaches, then its behavior neighbors, then its look-alikes; each row pushed in turn.
+  const q = qi0, qa = A[q], s2 = $("s2");
+  const vq = play(new View(s2.querySelector('[data-v="q"]'), q, "push_high", 1.0, 0.4), 5.6, 4, {}, true);
+  vq.el.classList.add("hot");
+  const tw = 225, gap = 20;
+  const beh = qa.beh.slice(0, 4).map((j, k) => play(new View(slot($("behSlots"), j, 60 + k * (tw + gap), 582, tw, 150), j, "push_high", 1.35, 0.5), 9.2, 4));
+  const app = qa.app.slice(0, 4).map((j, k) => play(new View(slot($("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150), j, "push_high", 1.35, 0.5), 13.2, 4));
+  const ring = $("ring");
+  const FOCUS = [[4.8, "q", 212, 290], [8.0, "beh", 498, 316], [12.0, "app", 808, 316], [15.6, "all"]];
+  scene("s2", CUT[1], CUT[2], [vq, ...beh, ...app], (t) => {
+    const f = FOCUS.filter(([a]) => t >= a).at(-1);
+    const dim = (on) => (f[1] === "all" || on ? 1 : 0.28);
+    vq.el.style.opacity = dim(f[1] === "q");
+    for (const e of [$("behLbl"), $("behSlots")]) e.style.opacity = dim(f[1] === "beh");
+    for (const e of [$("appLbl"), $("appSlots")]) e.style.opacity = dim(f[1] === "app");
+    if (f[2]) Object.assign(ring.style, { left: "46px", top: f[2] + "px", width: "988px", height: f[3] + "px" });
+    ring.style.opacity = f[1] === "all" ? 0 : prog(t, f[0], .25);
   });
-  scene("s4", 19.2, 25.6, 19.6, 4.6, v4, (t) => land($("c4"), t, 22.4));
-  scene("s5", 25.6, 31.6, 0, 1, [], (t) => {
-    pop(document.querySelector("#s5 .big"), t, 25.6, .5, -3);
-    $("d-try").style.opacity = prog(t, 26.2, .3);
-    pop($("d-url"), t, 26.4, .5, 4);
-    pop($("d-series"), t, 27.2, .45, -8, -3);
+
+  // s3: two look-different, behave-alike pairs
+  const ps = $("pairSlots"), v3 = [];
+  PAIRS.forEach(([a, b], r) => { [a, b].forEach((nn, c) => { const i = id(nn);
+    v3.push(play(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300, `tips if pushed high · slides at ${Math.round(A[i].sum.sl)}°`), i, "push_high", 1.45, 0.5), 19.4, 4, { fell: "tips over", cls: "meh" })); }); });
+  scene("s3", CUT[2], CUT[3], v3);
+
+  // s4: two apples; one has its center of mass authored at its base
+  const bs = $("bugSlots"), notes = ["authored center of mass: middle", "authored center of mass: at the base"];
+  const v4 = APPLES.map((nn, c) => { const i = id(nn); return play(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, notes[c]), i, "push_high", 2.3, 0.75), 25.6, 4, { fell: "rolls over" }); });
+  const REVEAL = 28.8;
+  CUES.pops.push(REVEAL);
+  scene("s4", CUT[3], CUT[4], v4, (t) => {
+    v4[1].el.classList.toggle("warn", t >= REVEAL);
+    bs.querySelectorAll(".lbl small").forEach((s) => (s.style.opacity = prog(t, REVEAL, .3)));
   });
+
+  // s5: the held-out test, as bars (R², 0 to 1 across 900 px)
+  $("s5eye").textContent = `Tested on ${n(E.n_test)} objects no model saw`;
+  const BARS = [["barB", "valB", R.b, 33.6], ["barA", "valA", R.a, 35.2], ["barPB", "valPB", P.b, 36.8], ["barPA", "valPA", P.a, 36.8]];
+  BARS.forEach(([, v, x]) => ($(v).textContent = f2(x)));
+  BARS.forEach(([, , , s]) => CUES.pops.push(s));
+  scene("s5", CUT[4], CUT[5], [], (t) => {
+    for (const [b, v, x, s] of BARS) { const w = 900 * x * outCubic(prog(t, s, .6)); $(b).style.width = Math.max(0, w) + "px"; $(b).style.opacity = t >= s ? 1 : 0;
+      $(v).style.left = (60 + w + 22) + "px"; $(v).style.opacity = prog(t, s + .35, .25); }
+  });
+
+  // s6: end card
+  CUES.pops.push(38.8, 39.2, 39.6);
+  scene("s6", CUT[5], CUT[6], [], (t) => { pop($("d-url"), t, 38.8, .5, 4); pop($("d-who"), t, 39.2, .5, -4); pop($("d-series"), t, 39.6, .45, -8, -3); });
+  CUES.pops.push(0.15);
+
+  CAPS = [
+    [0.3, 2.0, `${n(A.length)} 3D objects from NVIDIA's SimReady library.`],
+    [2.0, 4.7, "Each one gets the ^same push^ in a physics simulator."],
+    [4.9, 6.8, "Take a can of peaches and push it high up."],
+    [6.8, 8.0, "It *stays up*."],
+    [8.0, 10.4, `Search by ^behavior^ finds two sockets, a steel drum and a mug.`],
+    [10.4, 12.0, "Push them: they *stay up too*."],
+    [12.0, 14.0, "Search by ^looks^ finds other cans."],
+    [14.0, 15.6, "Push them: _every one falls over_."],
+    [15.6, 17.5, "Looking alike doesn't mean moving alike."],
+    [17.7, 19.4, "And things that look nothing alike can move the same:"],
+    [19.4, 21.6, `a ${nm(id(PAIRS[0][0]))} tips over just like a can of ${nm(id(PAIRS[0][1]))},`],
+    [21.6, 23.9, `and ${nm(id(PAIRS[1][0]))} just like a ${nm(id(PAIRS[1][1]))}.`],
+    [24.1, 25.6, "It also catches broken physics."],
+    [25.6, 27.2, "Two apples, same push."],
+    [27.2, 28.8, "One rolls over. The other _pops back up_."],
+    [28.8, 30.4, "Its center of mass sits at its base: an authoring bug."],
+    [30.4, 31.9, `_${nBug} assets_ in the library have this bug.`],
+    [32.1, 33.6, "Does it hold up on objects it never saw?"],
+    [33.6, 35.2, `Neighbors by behavior predict how they react: ^${f2(R.b)}^`],
+    [35.2, 36.8, `Neighbors by looks: _${f2(R.a)}_`],
+    [36.8, 38.3, `Checked in NVIDIA's PhysX too: ^${f2(P.b)}^ vs _${f2(P.a)}_`],
+  ];
+  for (const k of ["touches", "chimes", "pops"]) CUES[k] = [...new Set(CUES[k])].sort((a, b) => a - b);
   await document.fonts.ready;
-  return 31.6;
+  return CUT.at(-1);
 };
-// Cuts, callouts and pops sit on the soundtrack's grid (150 bpm: a beat is 0.4 s, a bar 1.6 s); see soundtrack.song.js.
 window.renderAt = function (t) {
   renderer.setScissorTest(true);
-  const rs = $("r-series"); pop(rs, t, .15, .45, -8, -3); if (t > 4.4) rs.style.opacity = 1 - prog(t, 4.4, .3);
+  const rs = $("r-series"); pop(rs, t, .15, .45, 8, 3); if (t > 4.2) rs.style.opacity = 1 - prog(t, 4.2, .3);
   for (const s of SCENES) {
     const on = t >= s.start && t < s.end; s.el.classList.toggle("on", on);
     if (!on) continue;
     if (s.extra) s.extra(t);
-    const u = Math.min(Math.max((t - s.motionStart) / s.motionLen, 0), 1);
-    for (const v of s.views) v.draw(u);
+    for (const v of s.views) { v.draw(prog(t, v.m0, v.ml)); pop(v.stamp, t, v.stampAt, .35, 10, -4); }
   }
+  captions(t);
   return true;
 };
 </script>

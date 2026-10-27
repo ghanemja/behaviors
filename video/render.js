@@ -4,7 +4,7 @@ const fs = require('fs');
   const outDir = process.argv[2];
   const fps = +(process.argv[3] || 30);
   const only = process.argv[4];
-  fs.mkdirSync(outDir, { recursive: true });
+  if (outDir !== 'cues') fs.mkdirSync(outDir, { recursive: true });
   const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 }, deviceScaleFactor: 1 });
   const errs = [];
@@ -12,7 +12,10 @@ const fs = require('fs');
   page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   await page.goto('http://localhost:8765/reel.html', { waitUntil: 'networkidle', timeout: 90000 });
   const dur = await page.evaluate(() => window.setup());
-  if (only) {
+  if (outDir === 'cues') {
+    // `node render.js cues video/cues.json`: write the soundtrack's cue times and stop
+    fs.writeFileSync(process.argv[3], JSON.stringify(await page.evaluate(() => window.CUES), null, 1) + '\n');
+  } else if (only) {
     for (const t of only.split(',').map(Number)) {
       await page.evaluate(t => window.renderAt(t), t);
       await page.screenshot({ path: `${outDir}/still_${t}.png` });

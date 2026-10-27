@@ -1,5 +1,7 @@
 # Behaviors: search NVIDIA SimReady 3D assets by how they move
 
+By Janelle Ghanem.
+
 **Live demo: https://ghanemja.github.io/behaviors/**
 
 [![Canned peaches: behavior search finds a mug, a steel drum and two sockets that stay up; appearance search finds cans that all topple](media/cover.jpg)](media/behavior_search.mp4)
@@ -139,7 +141,7 @@ Hardening the first version found and fixed these problems in our own pipeline:
 | `src/build_glb.py` | textured, decimated models for the demo |
 | `src/build_pages.py` | assembles the GitHub Pages site |
 | `out/site/index.html` | the demo page |
-| `video/` | the 30-second video: composition (`reel.html`), frame renderer (`render.js`) and soundtrack (`soundtrack.song.js`, every sound an equation, made with [equalizer](https://github.com/ghanemja/equalizer)) |
+| `video/` | the 43-second captioned video: composition (`reel.html`), frame renderer (`render.js`) and soundtrack (`soundtrack.song.js`, every sound an equation, made with [equalizer](https://github.com/ghanemja/equalizer); its effects follow `cues.json`, the moments objects land or stay up) |
 | `data/v2/results/` | `eval.json`, `qa.json`, `findings.json` and the embeddings |
 | `src/legacy/` | scripts from the first, 276-asset version |
 
@@ -154,7 +156,7 @@ python src/build_pages.py out/site pages_build https://ghanemja.github.io/behavi
 # video: serve video/ on port 8765, render frames with Playwright, encode with ffmpeg
 mkdir -p video/mt && python src/reel_data.py out/site video && (cd video && python -m http.server 8765 &)
 node video/render.js frames 30 && ffmpeg -framerate 30 -i frames/f%04d.jpg -c:v libx264 -pix_fmt yuv420p video.mp4
-node video/soundtrack.mjs soundtrack.wav && ffmpeg -i video.mp4 -i soundtrack.wav -c:v copy -c:a aac -b:a 192k -shortest \
+node video/render.js cues video/cues.json && node video/soundtrack.mjs soundtrack.wav && ffmpeg -i video.mp4 -i soundtrack.wav -c:v copy -c:a aac -b:a 192k -shortest \
     -movflags +faststart media/behavior_search.mp4
 ```
 

@@ -12,7 +12,8 @@ import sys
 SITE, OUT, BASE, REPO = sys.argv[1:5]
 BASE = BASE.rstrip("/") + "/"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TITLE = "Behavior Search for NVIDIA SimReady"
+AUTHOR = "Janelle Ghanem"
+TITLE = f"Behavior Search for NVIDIA SimReady, by {AUTHOR}"
 DESC = ("Search 2,167 NVIDIA SimReady 3D assets by how they move in physics simulation, not how they look. "
         "Tested on held-out probes in MuJoCo and PhysX.")
 FAVICON = ("data:image/svg+xml," "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
@@ -27,7 +28,7 @@ head, body = src[:cut], src[cut:]
 head = "\n".join(l for l in head.splitlines() if not l.startswith(("<meta charset", "<title>", '<meta name="claude:')))
 body = body.replace(
     "<p>Physics: MuJoCo 3.17 and PhysX 5 (SAPIEN 3), both on CPU.",
-    f'<p>Code, data and every number: <a href="{REPO}">{REPO.replace("https://", "")}</a>.</p>\n      <p>Physics: MuJoCo 3.17 and PhysX 5 (SAPIEN 3), both on CPU.', 1)
+    f'<p>By {AUTHOR}. Code, data and every number: <a href="{REPO}">{REPO.replace("https://", "")}</a>.</p>\n      <p>Physics: MuJoCo 3.17 and PhysX 5 (SAPIEN 3), both on CPU.', 1)
 page = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -35,6 +36,7 @@ page = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{TITLE}</title>
 <meta name="description" content="{DESC}">
+<meta name="author" content="{AUTHOR}">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{TITLE}">
 <meta property="og:description" content="{DESC}">
