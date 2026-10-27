@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Behavior Search for NVIDIA SimReady</title>
+<meta name="description" content="Search 2,167 NVIDIA SimReady 3D assets by how they move in physics simulation, not how they look. Tested on held-out probes in MuJoCo and PhysX.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Behavior Search for NVIDIA SimReady">
+<meta property="og:description" content="Search 2,167 NVIDIA SimReady 3D assets by how they move in physics simulation, not how they look. Tested on held-out probes in MuJoCo and PhysX.">
+<meta property="og:url" content="https://ghanemja.github.io/behaviors/">
+<meta property="og:image" content="https://ghanemja.github.io/behaviors/cover.jpg">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1350">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ghanemja.github.io/behaviors/cover.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23FFD86B' stroke='%231E1B2E' stroke-width='2'/%3E%3Ccircle cx='10' cy='19' r='5' fill='%232a78d6' stroke='%231E1B2E' stroke-width='1.5'/%3E%3Ccircle cx='20' cy='11' r='5' fill='%23eb6834' stroke='%231E1B2E' stroke-width='1.5'/%3E%3Ccircle cx='22' cy='22' r='4' fill='%231baf7a' stroke='%231E1B2E' stroke-width='1.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky app bar with Search / Info tabs; a main column (hero + search results, or the info sections) and a sticky right rail
+   holding the behavior minimap and the browse grid. The map opens as a pop-up on load, then flies into the rail's top-right slot.
+   Visual language from the Crochet app: ink outlines, hard shadows, pastel fills. */
+:root {
+  color-scheme: light;
+  --bg: #F1F3EC; --surface: #FFFFFF; --soft: #F7F5FF; --ink: #1E1B2E; --ink-2: #4F4B63; --muted: #5E5A73; --line: #C9C6D6;
+  --accent: #FF7A3D; --accent-press: #F0652A; --accent-ink: #1E1B2E;
+  --butter: #FFD86B; --pink: #FF9BB0; --mint: #8EE0C3; --sky: #9CCBFF; --here: #FFF2C7; --good: #1E6B52; --good-soft: #E4F7EF;
+  --stage: #F6EEE2; --floor: #F6EEE2; --grid: #E0D2BC;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --bw: 2px; --sh: 3px 3px 0 var(--ink); --sh-lg: 6px 6px 0 var(--ink);
+  --r-hero: 28px; --r-card: 24px; --r-tile: 18px; --r-sm: 12px;
+  --ease: cubic-bezier(.32,.72,0,1); --t-fast: .14s var(--ease);
+  --display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --bar-h: 64px; --rail: 300px; --gut: max(16px, env(safe-area-inset-left, 0px));
+  --mainw: calc(min(100vw, 1640px) - 76px - var(--rail));
+}
+@media (min-width: 1400px) { :root { --rail: 340px; } }
+* { box-sizing: border-box }
+html { scroll-padding-top: calc(var(--bar-h) + 16px); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--accent); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.mono { font-family: var(--mono); }
+.eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+#gl { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+
+/* app bar */
+.appbar { position: sticky; top: 0; z-index: 20; height: var(--bar-h); display: flex; align-items: center; gap: 18px; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 var(--gut); background: var(--bg); border-bottom: var(--bw) solid var(--ink); }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 19px; letter-spacing: -.01em; white-space: nowrap; }
+.mark { width: 32px; height: 32px; flex: none; border-radius: 50%; border: var(--bw) solid var(--ink); background: var(--butter); box-shadow: 2px 2px 0 var(--ink); display: grid; place-items: center; }
+.tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--soft); border: var(--bw) solid var(--ink); }
+.tabs button { min-height: 38px; padding: 0 18px; border-radius: 999px; border: var(--bw) solid transparent; background: transparent; font-size: 14.5px; font-weight: 750; color: var(--ink-2); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--ink); box-shadow: 2px 2px 0 var(--ink); }
+.barnote { margin-left: auto; font-size: 12.5px; color: var(--ink-2); white-space: nowrap; }
+#dockM { display: none; margin-left: auto; width: 80px; height: 50px; flex: none; }
+
+/* page grid: main column + right rail */
+.app { max-width: 1640px; margin: 0 auto; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 0 var(--gut); display: grid; grid-template-columns: minmax(0, 1fr) var(--rail); gap: 28px; align-items: start; }
+main { min-width: 0; }
+.rail { position: sticky; top: calc(var(--bar-h) + 24px); display: flex; flex-direction: column; gap: 18px; max-height: calc(100vh - var(--bar-h) - 44px); max-height: calc(100dvh - var(--bar-h) - 44px); }
+#dock { flex: none; height: calc((var(--rail) - 24px) * .62 + 62px); }
+
+/* hero */
+.hero { display: grid; gap: 22px; padding-block: 14px 36px; }
+.hero h1 { font-size: clamp(40px, calc(var(--mainw) / 16), 104px); font-weight: 800; line-height: 1.02; letter-spacing: -.03em; }
+.hero h1 em { font-style: normal; white-space: nowrap; background: var(--butter); border: var(--bw) solid var(--ink); border-radius: .16em; padding: 0 .14em; box-shadow: var(--sh); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.searchwrap { position: relative; }
+.searchbar { display: flex; align-items: center; gap: 12px; min-height: 70px; padding: 0 10px 0 24px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: 999px; box-shadow: var(--sh-lg); }
+.searchbar:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
+.searchbar svg { flex: none; }
+.searchbar input { flex: 1; min-width: 0; height: 66px; border: 0; background: transparent; color: var(--ink); font: 500 clamp(17px, 1.5vw, 21px) var(--body); outline: none; }
+.searchbar input::placeholder { color: var(--muted); }
+.searchbar kbd { font-family: var(--mono); font-size: 12px; padding: 2px 8px; border-radius: 8px; border: 1.5px solid var(--line); color: var(--muted); }
+#sugg { position: absolute; left: 14px; right: 14px; top: calc(100% + 12px); z-index: 15; margin: 0; padding: 6px; list-style: none; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: 20px; box-shadow: var(--sh-lg); max-height: min(440px, 60vh); overflow-y: auto; }
+#sugg li { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 6px 12px 6px 6px; border-radius: 14px; cursor: pointer; }
+#sugg li[aria-selected="true"], #sugg li:hover { background: var(--here); }
+#sugg li.none { display: block; padding: 12px; cursor: default; color: var(--muted); background: none; }
+#sugg img { width: 46px; height: 46px; object-fit: contain; background: #fff; border: 1.5px solid var(--ink); border-radius: 10px; }
+#sugg b { display: block; font-weight: 750; text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#sugg small { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tries { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; color: var(--ink-2); }
+.hero-foot { display: grid; gap: 22px; }
+.lede { font-size: 17.5px; color: var(--ink-2); display: grid; gap: 12px; justify-items: start; max-width: 82ch; }
+.linkish { padding: 0; border: 0; background: none; font-weight: 750; color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-color: var(--accent); cursor: pointer; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.stat { display: grid; padding: 10px 16px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-sm); }
+.stat b { font-family: var(--display); font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+
+/* chips, buttons */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 11px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--surface); font-size: 12.5px; font-weight: 650; cursor: pointer; transition: transform var(--t-fast), box-shadow var(--t-fast); }
+.chip:hover { box-shadow: 2px 2px 0 var(--ink); transform: translate(-1px, -1px); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.tries .chip { font-size: 13.5px; min-height: 34px; text-transform: capitalize; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; border: 1.5px solid var(--ink); }
+.btn { min-height: 44px; padding: 0 20px; border-radius: 999px; border: var(--bw) solid var(--ink); background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 14px; box-shadow: var(--sh); cursor: pointer; transition: transform var(--t-fast), box-shadow var(--t-fast); white-space: nowrap; }
+.btn:hover { background: var(--accent-press); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+.iconbtn { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--soft); cursor: pointer; }
+.iconbtn:hover { background: var(--butter); }
+
+/* browse (rail) */
+.browse { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); box-shadow: var(--sh); padding: 14px; }
+.browse-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.count { font-size: 12px; color: var(--muted); }
+.gridscroll { flex: 1 1 auto; min-height: 140px; overflow-y: auto; padding: 2px 4px 4px 2px; }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: max-content; gap: 8px; }
+.thumb { position: relative; aspect-ratio: 1; border: 1.5px solid var(--ink); border-radius: var(--r-sm); background: #fff; padding: 0; cursor: pointer; overflow: hidden; transition: transform var(--t-fast), box-shadow var(--t-fast); }
+.thumb:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+.thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.thumb[aria-current="true"] { outline: 3px solid var(--accent); outline-offset: 1px; }
+.thumb .dot { position: absolute; top: 5px; right: 5px; }
+.grid .more { grid-column: 1 / -1; justify-content: center; }
+
+/* results */
+#stage { display: grid; gap: 16px; padding-block: 30px 36px; border-top: var(--bw) solid var(--ink); }
+.stage-head { display: grid; gap: 6px; max-width: 80ch; }
+.stage-head h2 { font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; letter-spacing: -.01em; }
+.stage-head p { color: var(--ink-2); }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.seg { display: inline-flex; padding: 5px; border-radius: 999px; background: var(--soft); border: var(--bw) solid var(--ink); gap: 4px; flex-wrap: wrap; }
+.seg button { min-height: 38px; border: var(--bw) solid transparent; background: transparent; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 650; cursor: pointer; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--surface); border-color: var(--ink); color: var(--ink); box-shadow: 2px 2px 0 var(--ink); }
+.probe-note { font-size: 13.5px; color: var(--ink-2); flex-basis: 100%; }
+.query { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); box-shadow: var(--sh-lg); padding: 12px; }
+.view { position: relative; background: var(--stage); border-radius: var(--r-tile); border: 1.5px solid var(--ink); overflow: hidden; }
+.view.big { aspect-ratio: 16 / 10; }
+.qinfo { display: grid; gap: 12px; align-content: start; padding: 6px 4px; min-width: 0; }
+.qinfo h2 { font-size: 30px; font-weight: 800; text-transform: capitalize; letter-spacing: -.01em; }
+.qid { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.facts div { display: grid; padding: 8px 10px; border-radius: var(--r-sm); background: var(--soft); border: 1.5px solid var(--line); }
+.facts dt { font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+.facts dd { margin: 0; font-family: var(--mono); font-size: 15px; font-variant-numeric: tabular-nums; }
+.does { display: grid; gap: 6px; padding: 0; margin: 0; list-style: none; }
+.does li { display: flex; gap: 8px; align-items: baseline; font-size: 14.5px; }
+.does li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--mint); border: 1.5px solid var(--ink); flex: none; transform: translateY(-1px); }
+.warnbox { background: var(--here); color: var(--ink); border: var(--bw) solid var(--ink); border-radius: var(--r-sm); padding: 9px 12px; font-size: 13px; display: grid; gap: 2px; }
+.arch { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.rowhead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.rowhead h3 { font-size: 16px; font-weight: 800; padding: 3px 14px; border-radius: 999px; border: var(--bw) solid var(--ink); background: var(--surface); }
+.rowhead span { font-size: 13px; color: var(--ink-2); }
+.rowhead.beh h3 { background: var(--sky); }
+.row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile { display: grid; gap: 6px; padding: 8px; border-radius: var(--r-tile); border: var(--bw) solid var(--ink); background: var(--surface); text-align: left; cursor: pointer; min-width: 0; box-shadow: var(--sh); transition: transform var(--t-fast), box-shadow var(--t-fast); }
+.tile:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+.tile .view { aspect-ratio: 4 / 3; border-radius: var(--r-sm); }
+.tile .nm { font-size: 14.5px; font-weight: 750; text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile .meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2px 8px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tile .flag { color: var(--ink); font-weight: 700; background: var(--here); border: 1.5px solid var(--ink); border-radius: 999px; padding: 0 7px; }
+.score { font-family: var(--mono); }
+
+/* info tab */
+.info-head { display: grid; gap: 14px; padding-block: 14px 26px; }
+.info-head h1 { font-size: clamp(36px, 4.6vw, 72px); font-weight: 800; line-height: 1.02; letter-spacing: -.03em; }
+.info-head p { font-size: 17px; color: var(--ink-2); max-width: 72ch; }
+section.block { padding-block: 32px; border-top: var(--bw) solid var(--ink); display: grid; gap: 18px; }
+.block-head { display: grid; gap: 6px; max-width: 72ch; }
+.block-head h2 { font-size: clamp(26px, 2.6vw, 36px); font-weight: 800; letter-spacing: -.01em; }
+.block-head p { color: var(--ink-2); }
+.pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 16px; }
+.pair { background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); box-shadow: var(--sh); padding: 12px; display: grid; gap: 10px; align-content: start; }
+.pair .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pair .side { display: grid; gap: 4px; min-width: 0; }
+.pair .side .view { aspect-ratio: 1; }
+.pair .side button { all: unset; cursor: pointer; display: grid; gap: 4px; }
+.pair .side button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: var(--r-tile); }
+.pair .nm { font-weight: 750; text-transform: capitalize; font-size: 14.5px; }
+.pair .sub { font-size: 12.5px; color: var(--muted); }
+.pair .scores { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12px; font-family: var(--mono); }
+.pair .scores span { padding: 1px 9px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--soft); }
+.pair .why { font-size: 13.5px; }
+.badge { justify-self: start; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--pink); color: var(--ink); border: 1.5px solid var(--ink); }
+.shown { font-size: 12px; color: var(--muted); }
+.qa { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 14px; }
+.qa-card { background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); box-shadow: var(--sh); padding: 16px; display: grid; gap: 8px; align-content: start; }
+.qa-kind { justify-self: start; font-size: 11.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; border: 1.5px solid var(--ink); }
+.qa-kind.error { background: var(--pink); }
+.qa-kind.warning { background: var(--here); }
+.qa-card b { font-family: var(--display); font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+.qa-card p { font-size: 14px; color: var(--ink-2); }
+.qa-card p strong { color: var(--ink); }
+.qa-card .mini { display: flex; flex-wrap: wrap; gap: 6px; }
+.qa-card .mini button { width: 42px; height: 42px; padding: 0; border-radius: 10px; border: 1.5px solid var(--ink); background: #fff; cursor: pointer; overflow: hidden; }
+.qa-card .mini img { width: 100%; height: 100%; object-fit: contain; }
+.how { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 14px; padding: 0; margin: 0; list-style: none; counter-reset: step; }
+.how li { background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); padding: 16px; display: grid; gap: 8px; align-content: start; counter-increment: step; }
+.how li::before { content: counter(step); width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; border: var(--bw) solid var(--ink); background: var(--butter); font-family: var(--mono); font-size: 13px; font-weight: 500; }
+.how h3 { font-size: 18px; font-weight: 800; }
+.how p { font-size: 14px; color: var(--ink-2); }
+.chart { background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); box-shadow: var(--sh); padding: 18px; display: grid; gap: 12px; }
+.chart h3 { font-size: 18px; font-weight: 800; }
+.chart .sub { font-size: 13px; color: var(--ink-2); }
+.bars { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 48px; gap: 10px 12px; align-items: center; }
+.bars .lab { font-size: 13.5px; font-weight: 650; }
+.bars .lab small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+.track { position: relative; height: 24px; }
+.track .gridl { position: absolute; top: -4px; bottom: -4px; width: 1px; background: var(--line); }
+.track .gridl.zero { background: var(--ink); width: 1.5px; }
+.track .ci { position: absolute; top: 11px; height: 2px; background: var(--ink); }
+.chart h4 { margin: 10px 0 0; font-size: 15px; font-weight: 800; font-family: var(--display); }
+.chart h4 small { display: block; font-family: var(--body); font-weight: 500; font-size: 12.5px; color: var(--ink-2); }
+.track .bar { position: absolute; left: 0; top: 2px; height: 20px; border-radius: 4px; background: var(--soft); border: 1.5px solid var(--ink); }
+.track .bar.hl { background: var(--accent); box-shadow: 2px 2px 0 var(--ink); }
+.track .bar.hl2 { background: var(--butter); box-shadow: 2px 2px 0 var(--ink); }
+.bars .val { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.axis { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) 48px; gap: 12px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.axis .ticks { position: relative; height: 14px; }
+.axis .ticks span { position: absolute; transform: translateX(-50%); }
+details { font-size: 13px; }
+details summary { cursor: pointer; font-weight: 700; }
+details table { border-collapse: collapse; margin-top: 8px; font-variant-numeric: tabular-nums; }
+details th, details td { padding: 4px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+details th:first-child, details td:first-child { text-align: left; }
+.tablewrap { overflow-x: auto; }
+.subhead { font-size: 18px; font-weight: 800; margin-top: 8px; }
+.checks { display: grid; gap: 8px; padding: 0; margin: 0; list-style: none; max-width: 90ch; font-size: 14px; color: var(--ink-2); }
+.checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.checks li::before { content: "✓"; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--mint); font-size: 11px; font-weight: 800; color: var(--ink); }
+.checks b, .limits b { color: var(--ink); }
+.seg.mini { padding: 3px; }
+.seg.mini button { min-height: 30px; font-size: 13px; padding: 0 11px; }
+code { font-family: var(--mono); font-size: .92em; }
+.limits { display: grid; gap: 6px; padding-left: 18px; margin: 0; max-width: 80ch; font-size: 14px; color: var(--ink-2); }
+footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-size: 13px; color: var(--ink-2); display: grid; gap: 6px; }
+.loading { padding: 40px; text-align: center; color: var(--muted); grid-column: 1 / -1; }
+
+/* behavior map: one card that lives either in the pop-up or in a dock */
+.mapcard { position: relative; display: grid; gap: 8px; padding: 10px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: var(--r-card); box-shadow: var(--sh); }
+.mc-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 30px; }
+.mc-label { display: inline-flex; align-items: center; gap: 8px; min-width: 0; white-space: nowrap; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.mc-label .live { min-width: 0; font-family: var(--mono); font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); font-size: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#map { display: block; width: 100%; height: calc((var(--rail) - 24px) * .62); border-radius: 14px; background: var(--soft); cursor: zoom-in; touch-action: manipulation; }
+.mc-intro, .mc-foot { display: none; }
+.mapcard.open { width: 100%; padding: 22px 24px 20px; gap: 14px; border-radius: var(--r-hero); box-shadow: var(--sh-lg); max-height: calc(100dvh - 32px); overflow-y: auto; }
+.mapcard.open .mc-head { height: auto; }
+.mapcard.open .mc-label { padding: 6px 12px 7px; border-radius: 12px; background: var(--butter); border: var(--bw) solid var(--ink); transform: rotate(-2deg); }
+.mapcard.open .mc-label .live { display: none; }
+.mapcard.open .mc-intro { display: grid; gap: 8px; }
+.mapcard.open .mc-foot { display: flex; }
+.mapcard.open #map { height: min(52vh, 540px); cursor: crosshair; }
+.mc-intro h2 { font-size: clamp(24px, 3.2vw, 38px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
+.mc-intro p { color: var(--ink-2); max-width: 74ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; font-weight: 600; padding-top: 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.mc-foot { flex-wrap: wrap; align-items: center; gap: 12px 18px; }
+.mc-foot .hint { font-size: 13px; color: var(--ink-2); flex: 1 1 220px; }
+.mc-timer { flex: 0 1 180px; height: 10px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--soft); overflow: hidden; }
+.mc-timer span { display: block; height: 100%; background: var(--butter); transform-origin: left center; }
+.mc-timer.armed span { animation: drain 4.6s linear forwards; }
+.mapcard.held .mc-timer span { animation-play-state: paused; }
+.mapcard.seen .mc-timer { display: none; }
+@keyframes drain { to { transform: scaleX(0); } }
+.mapcard.mini { display: block; width: 100%; height: 100%; padding: 0; gap: 0; border-radius: 12px; box-shadow: 2px 2px 0 var(--ink); overflow: hidden; }
+.mapcard.mini .mc-head { position: absolute; inset: 0; height: auto; z-index: 1; }
+.mapcard.mini .mc-label { display: none; }
+.mapcard.mini .iconbtn { width: 100%; height: 100%; border: 0; border-radius: 0; background: transparent; }
+.mapcard.mini .iconbtn svg { display: none; }
+.mapcard.mini #map { height: 100%; border-radius: 0; }
+#mapModal { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 16px; }
+#mapModal[hidden] { display: none; }
+#mapModal .scrim { position: absolute; inset: 0; background: rgba(30, 27, 46, .45); transition: opacity .45s var(--ease); }
+#mapModal.closing .scrim { opacity: 0; }
+#mapSlot { position: relative; width: min(1040px, 100%); }
+.tip { position: fixed; z-index: 40; pointer-events: none; background: var(--surface); color: var(--ink); border: var(--bw) solid var(--ink); border-radius: var(--r-sm); padding: 8px; display: grid; grid-template-columns: 48px auto; gap: 8px; align-items: center; font-size: 13px; box-shadow: var(--sh); max-width: 280px; }
+.tip img { width: 48px; height: 48px; object-fit: contain; background: #fff; border-radius: 8px; }
+
+@media (max-width: 999px) {
+  :root { --mainw: calc(100vw - 32px); }
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; max-height: none; }
+  #dock, .barnote { display: none; }
+  #dockM { display: block; }
+  .browse .gridscroll { max-height: 300px; }
+  .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .query { grid-template-columns: minmax(0, 1fr); }
+  .row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .bars, .axis { grid-template-columns: minmax(0, 130px) minmax(0, 1fr) 44px; }
+}
+@media (max-width: 600px) {
+  .appbar { gap: 10px; }
+  .brand > span:not(.mark) { display: none; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tabs button { padding: 0 14px; }
+  .searchbar { min-height: 58px; padding-left: 16px; }
+  .searchbar input { height: 54px; }
+  .searchbar kbd, .searchbar .btn { display: none; }
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .mapcard.open { padding: 16px; }
+  .mapcard.open #map { height: 46vh; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } .mc-timer { display: none; } }
+</style>
+</head>
+<body>
+
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header class="appbar">
+  <div class="brand"><span class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="5" cy="11" r="3" fill="#2a78d6" stroke="#1E1B2E" stroke-width="1.5"/><circle cx="12" cy="6" r="3" fill="#eb6834" stroke="#1E1B2E" stroke-width="1.5"/><circle cx="13" cy="13" r="2.4" fill="#1baf7a" stroke="#1E1B2E" stroke-width="1.5"/></svg></span><span>Behavior Search</span></div>
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button type="button" role="tab" id="tab-search" aria-controls="panel-search" aria-selected="true">Search</button>
+    <button type="button" role="tab" id="tab-info" aria-controls="panel-info" aria-selected="false" tabindex="-1">Info</button>
+  </div>
+  <span class="barnote">NVIDIA SimReady · <span class="nA">2,000+</span> assets · MuJoCo + PhysX · JEPA</span>
+  <div id="dockM"></div>
+</header>
+
+<div class="app">
+  <main>
+    <div id="panel-search" role="tabpanel" aria-labelledby="tab-search">
+      <section class="hero" aria-labelledby="hero-h">
+        <div class="eyebrow">NVIDIA SimReady · <span class="nA">2,000+</span> assets · simulated in MuJoCo and PhysX · JEPA</div>
+        <h1 id="hero-h">Search objects by <em>how they move</em>, not how they look</h1>
+        <div class="searchwrap">
+          <div class="searchbar" role="search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+            <label for="q" class="sr">Search objects</label>
+            <input id="q" type="text" role="combobox" aria-expanded="false" aria-controls="sugg" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="Search objects: bottle, apple, crate, sign…">
+            <kbd aria-hidden="true">/</kbd>
+            <button class="btn" id="go" type="button">Search</button>
+          </div>
+          <ul id="sugg" role="listbox" aria-label="Matching objects" hidden></ul>
+        </div>
+        <div class="tries" id="tries"><span>Try</span></div>
+        <div class="hero-foot">
+          <div class="lede">
+            <p>Every rigid asset in NVIDIA's SimReady library (<span class="nA">2,000+</span> of them) got the same pokes in a physics simulator: pushed low, pushed high, tilted on a ramp, dropped. Search ranks objects by how they reacted, not by how they look. It was tested on probes no model saw, with MuJoCo and NVIDIA's own PhysX engine. Pick an object and compare what moves like it with what merely looks like it.</p>
+            <button type="button" class="linkish" data-goto="how">How it works and what we found</button>
+          </div>
+          <div class="stats">
+            <div class="stat"><b class="nA">…</b><span>rigid assets, CC BY 4.0</span></div>
+            <div class="stat"><b id="statRuns">…</b><span>simulated probe runs, MuJoCo and PhysX</span></div>
+            <div class="stat"><b id="statR2">…</b><span id="statR2l">R² on unseen probes, behavior vs looks</span></div>
+            <div class="stat"><b>0</b><span>GPUs used</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="stage" aria-labelledby="stage-h">
+        <div class="stage-head">
+          <h2 id="stage-h">Behaves like vs looks like</h2>
+          <p>The top row ranks objects by simulated behavior: simple statistics of each object's probe runs (the most accurate, and the default) or a self-supervised JEPA embedding of the same runs. The bottom row ranks by a SigLIP2 image embedding of NVIDIA's thumbnails, the model family behind NVIDIA's own asset search. Recolored copies of the same mesh are hidden from both rows. Every tile replays the same poke, scaled to the object's size.</p>
+        </div>
+        <div class="controls">
+          <div class="seg" id="probes" role="group" aria-label="Poke"></div>
+          <button class="btn" id="play" type="button">Pause</button>
+          <p class="probe-note" id="probeNote"></p>
+        </div>
+        <div class="query">
+          <div class="view big" id="qview"></div>
+          <div class="qinfo" id="qinfo"></div>
+        </div>
+        <div class="rowhead beh"><h3>Behaves like</h3><div class="seg mini" id="behMode" role="group" aria-label="Behavior similarity"><button type="button" data-m="def" aria-pressed="true">Simulation statistics</button><button type="button" data-m="alt" aria-pressed="false">Learned (JEPA)</button></div><span id="behNote"></span></div>
+        <div class="row" id="behRow"></div>
+        <div class="rowhead"><h3>Looks like</h3><span>nearest by appearance (SigLIP2)</span></div>
+        <div class="row" id="appRow"></div>
+      </section>
+    </div>
+
+    <div id="panel-info" role="tabpanel" aria-labelledby="tab-info" hidden>
+      <header class="info-head">
+        <div class="eyebrow">Info</div>
+        <h1>What we found, and how it works</h1>
+        <p>Findings from running all <span class="nA">2,000+</span> rigid SimReady assets through the same pokes, the physics bugs that fell out of it, and how the behavior model was built and tested.</p>
+        <nav class="chips" aria-label="Jump to">
+          <button type="button" class="chip" data-goto="same">Different looks, same behavior</button>
+          <button type="button" class="chip" data-goto="diff">Same looks, different behavior</button>
+          <button type="button" class="chip" data-goto="qa">Physics QA</button>
+          <button type="button" class="chip" data-goto="how">How it works</button>
+          <button type="button" class="chip" data-goto="test">How we tested it</button>
+        </nav>
+      </header>
+
+      <section class="block" id="same" aria-labelledby="same-h">
+        <div class="block-head">
+          <h2 id="same-h">Different looks, same behavior</h2>
+          <p>Pairs that sit side by side in behavior space but far apart by appearance. Recolored copies of one mesh and items from the same product family are excluded. To a robot pushing them around, these are nearly the same object.</p>
+        </div>
+        <div class="pairs" id="samePairs"></div>
+      </section>
+
+      <section class="block" id="diff" aria-labelledby="diff-h">
+        <div class="block-head">
+          <h2 id="diff-h">Same looks, different behavior</h2>
+          <p>Look-alikes that move differently. Some differences are real geometry or friction. Others point at authoring mistakes in the asset's physics data.</p>
+        </div>
+        <div class="pairs" id="diffPairs"></div>
+      </section>
+
+      <section class="block" id="qa-sec" aria-labelledby="qa-h">
+        <div class="block-head">
+          <h2 id="qa-h">Physics QA for free</h2>
+          <p>Running every asset through the same pokes also checks its physics data. Each count comes from the authored USD values, or from runs that agree in both MuJoCo and PhysX. The evidence for every flagged asset is in the project's <code>qa.json</code>. Click a thumbnail to search from it.</p>
+        </div>
+        <div class="qa" id="qa"></div>
+      </section>
+
+      <section class="block" id="how" aria-labelledby="how-h">
+        <div class="block-head">
+          <h2 id="how-h">How it works</h2>
+        </div>
+        <ol class="how">
+          <li><h3>Poke every asset the same way</h3><p>Each rigid asset is loaded with the mass, center of mass, inertia, friction and collision shape authored in its USD. It then gets ten pokes, three times each with small jitter: a fingertip push at 20%, 50% and 85% of its height along two axes, a floor that tilts to 45°, and two drops. Push speed and timing scale with √(g × size), so a mug and a fridge are tested alike.</p></li>
+          <li><h3>Summarize how it reacted</h3><p>Two ways. Simulation statistics: max tilt, slide distance, slip and tip angles, bounces and settle time for each probe, averaged over repeats. And a self-supervised JEPA that sees a few of an object's pokes and predicts the latent of another, with no labels and no hand-picked features.</p></li>
+          <li><h3>Search by similarity</h3><p>Neighbors are the objects whose summaries are most similar (cosine similarity). They respond to pushes, ramps and drops alike, whatever their size, color or category. The map in the corner places every object by t-SNE on the default summary.</p></li>
+          <li><h3>Check on probes nobody saw</h3><p>Three held-out probes: a diagonal push at 65% height and 1.4x speed, a diagonal ramp, and a 45° drop from twice the height. If an object's five nearest neighbors predict how it reacts to those, the search captured behavior.</p></li>
+        </ol>
+      </section>
+
+      <section class="block" id="test" aria-labelledby="test-h">
+        <div class="block-head">
+          <h2 id="test-h">How we tested it</h2>
+          <p id="testIntro"></p>
+        </div>
+        <div class="chart" id="chart">
+          <div><h3>Do an object's 5 nearest neighbors predict its reaction to unseen probes?</h3><p class="sub" id="chartSub"></p></div>
+          <div id="bars"></div>
+          <div><h3>The same neighbors, scored against PhysX</h3><p class="sub">Neighbors still come from MuJoCo. The ground truth is PhysX 5, the engine SimReady targets: first with identical collision hulls (engine only), then with SDF collision, NVIDIA's PhysX setting, on a fixed random sample. Each index holds only the assets simulated in that engine.</p></div>
+          <div id="crossBars"></div>
+          <details><summary>Show the full table</summary><div class="tablewrap"><table id="evalTable"></table></div></details>
+        </div>
+        <h3 class="subhead">What we checked</h3>
+        <ul class="checks" id="checks"></ul>
+        <h3 class="subhead">What could still be wrong</h3>
+        <ul class="limits" id="limits"></ul>
+      </section>
+    </div>
+
+    <footer>
+      <p>3D assets and thumbnails: <a href="https://huggingface.co/datasets/nvidia/simready-assets">NVIDIA SimReady</a> on Hugging Face, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Meshes were simplified and thumbnails resized for this page.</p>
+      <p>Code, data and every number: <a href="https://github.com/ghanemja/behaviors">github.com/ghanemja/behaviors</a>.</p>
+      <p>Physics: MuJoCo 3.17 and PhysX 5 (SAPIEN 3), both on CPU. Appearance embeddings: SigLIP2 ViT-B/16 (OpenCLIP). Behavior: statistics of the probe runs, and a small cross-probe JEPA trained on CPU.</p>
+    </footer>
+  </main>
+
+  <aside class="rail" aria-label="Behavior map and browse">
+    <div id="dock"></div>
+    <div class="browse">
+      <div class="browse-head"><span class="eyebrow">Browse</span><span class="count" id="count"></span></div>
+      <div class="chips" id="archFilter" role="group" aria-label="Filter by behavior"></div>
+      <div class="gridscroll"><div class="grid" id="grid"><div class="loading">Loading assets…</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<div id="mapModal">
+  <div class="scrim" id="scrim"></div>
+  <div id="mapSlot">
+    <div class="mapcard open" id="mapcard" role="dialog" aria-modal="true" aria-labelledby="mc-title">
+      <div class="mc-head">
+        <span class="mc-label">Behavior map <span class="live" id="mcLive"></span></span>
+        <button type="button" class="iconbtn" id="mcToggle" aria-label="Shrink map to the corner">
+          <svg class="i-shrink" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg>
+          <svg class="i-grow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </button>
+      </div>
+      <div class="mc-intro">
+        <h2 id="mc-title">Every object, placed by how it moves</h2>
+        <p>Each dot is one of <span class="nA">2,000+</span> SimReady assets. Dots that sit close together react to pushes, ramps and drops alike, whatever they look like. Hover to peek, click one to search from it.</p>
+        <div class="legend" id="legend"></div>
+      </div>
+      <canvas id="map" aria-label="Scatter plot of SimReady assets placed by behavior similarity"></canvas>
+      <div class="mc-foot">
+        <button type="button" class="btn" id="mcGo">Start searching</button>
+        <div class="mc-timer" id="mcTimer" aria-hidden="true"><span></span></div>
+        <span class="hint" id="mcHint">The map shrinks to the top-right corner. Click it there to open it again.</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+(() => {
+const PROBES = {
+  push_high: { label: "Push high", note: "A fingertip pushes at 85% of the object's height, then lets go." },
+  push_low: { label: "Push low", note: "The same push at 20% of the height. Most things slide; round things roll." },
+  ramp: { label: "Ramp", note: "The floor tilts slowly from 0° to 45°. Does it hold, slide or tip?" },
+  drop: { label: "Drop", note: "Released half its size above the floor, tilted 25°. Does it land upright?" },
+};
+const ARCH = {
+  "slides": { label: "Slides", c: "--s1" },
+  "tips high": { label: "Tips if pushed high", c: "--s2" },
+  "tippy": { label: "Tips easily", c: "--s3" },
+  "rolls": { label: "Rolls", c: "--s4" },
+};
+const TRIES = ["food_canned_peach_a03", "food_produce_apple_grannySmith_a01", "food_beverage_beerBottle_a01", "toy_marble_a01", "sign_wetFloor_a01"];
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (matchMedia("(max-width: 600px)").matches) document.getElementById("q").placeholder = "Search objects";
+let D, A, NF;
+let probe = "push_high", query = 0, playing = !reduce, t0 = performance.now(), tPaused = 2.6;
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const $ = (s) => document.querySelector(s);
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const fmtSize = (m) => m >= 1 ? m.toFixed(2) + " m" : (m * 100).toFixed(m < 0.1 ? 1 : 0) + " cm";
+const fmtMass = (kg) => kg >= 1 ? kg.toFixed(kg >= 10 ? 0 : 1) + " kg" : Math.round(kg * 1000) + " g";
+
+function b64(s, T) { const bin = atob(s); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new T(u.buffer); }
+
+// ---------- three.js shared state ----------
+const canvas = $("#gl");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.setClearColor(0x000000, 0);
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+const envTex = new THREE.PMREMGenerator(renderer).fromScene(new THREE.RoomEnvironment(), 0.04).texture;
+const loader = new THREE.GLTFLoader();
+loader.setMeshoptDecoder(MeshoptDecoder);
+const modelCache = new Map(), trackCache = new Map();
+const sphereGeo = new THREE.SphereGeometry(1, 20, 14);
+const floorGeo = new THREE.PlaneGeometry(8, 8);
+const shadowTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"); const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, "rgba(0,0,0,0.55)"); r.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const mats = {};
+function makeMats() {
+  const col = (v) => new THREE.Color(css(v) || "#999").convertSRGBToLinear();
+  if (!mats.pusher) {
+    mats.pusher = new THREE.MeshStandardMaterial({ roughness: 0.35 });
+    mats.floor = new THREE.MeshBasicMaterial({ toneMapped: false });
+    mats.grid = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.6, toneMapped: false });
+    mats.shadow = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, toneMapped: false });
+    mats.fog = new THREE.Fog(0xffffff, 4.4, 9.5);
+  }
+  mats.fog.color = col("--stage");
+  mats.pusher.color = col("--accent");
+  mats.floor.color = col("--floor");
+  mats.grid.color = col("--grid");
+}
+makeMats();
+const gridGeo = (() => { const pts = []; const n = 16, h = 4; for (let i = 0; i <= n; i++) { const v = -h + (2 * h * i) / n; pts.push(v, -h, 0.001, v, h, 0.001, -h, v, 0.001, h, v, 0.001); } const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)); return g; })();
+
+const shardCache = new Map();
+function shard(kind, k) {
+  const key = kind + k;
+  if (!shardCache.has(key)) shardCache.set(key, fetch(`d/${kind}_${k}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }));
+  return shardCache.get(key);
+}
+function clayModel(i) {
+  return shard("clay", A[i].sh).then((d) => {
+    const c = d[A[i].id];
+    const q = b64(c.v, Int16Array), f = b64(c.f, c.w === 2 ? Uint16Array : Uint32Array);
+    const pos = new Float32Array(q.length);
+    for (let k = 0; k < q.length; k++) pos[k] = c.lo[k % 3] + ((q[k] + 32768) / 65535) * c.sc[k % 3];
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setIndex(new THREE.BufferAttribute(c.w === 2 ? new Uint16Array(f) : new Uint32Array(f), 1));
+    g.computeVertexNormals();
+    const [r, gg, bb] = A[i].col;
+    const mat = new THREE.MeshStandardMaterial({ color: new THREE.Color(`rgb(${r},${gg},${bb})`).convertSRGBToLinear(), roughness: 0.7, metalness: 0.0 });
+    const root = new THREE.Group(); root.add(new THREE.Mesh(g, mat));
+    return { root, box: new THREE.Box3().setFromObject(root) };
+  });
+}
+function model(i) {
+  if (!modelCache.has(i)) {
+    modelCache.set(i, !A[i].glb ? clayModel(i) : fetch(A[i].glb).then((r) => { if (!r.ok) throw new Error(r.status); return r.text(); }).then((txt) => new Promise((resolve, reject) => {
+      const buf = b64(txt.trim(), Uint8Array).buffer;
+      loader.parse(buf, "", (g) => resolve({ root: g.scene, box: new THREE.Box3().setFromObject(g.scene) }), reject);
+    })));
+  }
+  return modelCache.get(i);
+}
+function track(i, p) {
+  const key = i + ":" + p;
+  if (trackCache.has(key)) return Promise.resolve(trackCache.get(key));
+  return shard("tr", A[i].sh).then((d) => {
+    const raw = b64(d[A[i].id][p], Int16Array);
+    const cols = raw.length / NF;
+    const tr = { pos: [], quat: [], push: [], ang: [] };
+    for (let k = 0; k < NF; k++) {
+      const r = k * cols;
+      tr.pos.push(new THREE.Vector3(raw[r] / 8000, raw[r + 1] / 8000, raw[r + 2] / 8000));
+      tr.quat.push(new THREE.Quaternion(raw[r + 4] / 32767, raw[r + 5] / 32767, raw[r + 6] / 32767, raw[r + 3] / 32767).normalize());
+      if (p.startsWith("push")) tr.push.push(raw[r + 7] === -32768 ? null : new THREE.Vector3(raw[r + 7] / 8000, raw[r + 8] / 8000, raw[r + 9] / 8000));
+      if (p === "ramp") tr.ang.push(raw[r + 7] / 100);
+    }
+    trackCache.set(key, tr);
+    return tr;
+  });
+}
+const BLANK = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
+const thumbOf = (a) => a.thumb || BLANK;
+
+const CAM = {
+  push_high: { target: [0.6, 0, 0.28], off: [1.7, -4.1, 1.9] },
+  push_low: { target: [0.6, 0, 0.28], off: [1.7, -4.1, 1.9] },
+  ramp: { target: [0.6, 0, -0.3], off: [1.5, -4.4, 1.8] },
+  drop: { target: [0.15, 0, 0.4], off: [1.6, -4.1, 1.7] },
+};
+const issues = (a) => a.notes.filter((n) => !n.includes("rigid parts merged"));
+const merged = (a) => a.notes.find((n) => n.includes("rigid parts merged"));
+const views = [];
+class View {
+  constructor(el) {
+    this.el = el; this.i = -1; this.p = null;
+    this.scene = new THREE.Scene();
+    this.scene.fog = mats.fog;
+    this.scene.environment = envTex;
+    const dl = new THREE.DirectionalLight(0xffffff, 0.7); dl.position.set(2.5, -3, 5); this.scene.add(dl);
+    this.camera = new THREE.PerspectiveCamera(26, 1, 0.01, 100); this.camera.up.set(0, 0, 1);
+    this.floor = new THREE.Group();
+    this.floor.add(new THREE.Mesh(floorGeo, mats.floor));
+    this.floor.add(new THREE.LineSegments(gridGeo, mats.grid));
+    this.shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mats.shadow); this.shadow.position.z = 0.003;
+    this.floor.add(this.shadow);
+    this.scene.add(this.floor);
+    this.obj = new THREE.Group(); this.scene.add(this.obj);
+    this.pusher = new THREE.Mesh(sphereGeo, mats.pusher); this.scene.add(this.pusher);
+    this.tmpQ = new THREE.Quaternion(); this.tmpV = new THREE.Vector3(); this.center = new THREE.Vector3();
+    views.push(this);
+  }
+  set(i, p) {
+    if (this.i === i && this.p === p) return;
+    const sameAsset = this.i === i;
+    this.i = i; this.p = p;
+    if (!sameAsset) {
+      this.obj.clear();
+      this.center.set(0, 0, 0.3);
+      this.shadowSize = 0;
+      const token = (this.token = {}), S = A[i].S;
+      model(i).then(({ root, box }) => {
+        if (this.token !== token) return;
+        const m = root.clone();
+        m.scale.setScalar(1 / S);
+        this.obj.add(m);
+        box.getCenter(this.center).multiplyScalar(1 / S);
+        const ext = box.getSize(new THREE.Vector3()).multiplyScalar(1 / S);
+        this.shadowSize = Math.max(ext.x, ext.y) * 1.25;
+      }).catch(() => {});
+    }
+    this.tr = null;
+    const tt = (this.ttoken = {});
+    track(i, p).then((tr) => { if (this.ttoken === tt) this.tr = tr; }).catch(() => {});
+    this.pusher.scale.setScalar(A[i].r);
+    const c = CAM[p];
+    this.camera.position.set(c.target[0] + c.off[0], c.target[1] + c.off[1], c.target[2] + c.off[2]);
+    this.camera.lookAt(c.target[0], c.target[1], c.target[2]);
+  }
+  update(u) {
+    const tr = this.tr; if (!tr) return;
+    const f = u * (NF - 1), k = Math.min(Math.floor(f), NF - 2), w = f - k;
+    this.obj.position.lerpVectors(tr.pos[k], tr.pos[k + 1], w);
+    this.obj.quaternion.copy(tr.quat[k]).slerp(tr.quat[k + 1], w);
+    const ang = this.p === "ramp" ? THREE.MathUtils.degToRad(tr.ang[k] + (tr.ang[k + 1] - tr.ang[k]) * w) : 0;
+    this.floor.rotation.set(0, ang, 0);
+    const pp = tr.push.length ? tr.push[k] : null;
+    this.pusher.visible = !!pp;
+    if (pp) this.pusher.position.copy(pp);
+    this.tmpV.copy(this.center).applyQuaternion(this.obj.quaternion).add(this.obj.position);
+    const lx = this.tmpV.x * Math.cos(ang) - this.tmpV.z * Math.sin(ang), lz = this.tmpV.x * Math.sin(ang) + this.tmpV.z * Math.cos(ang);
+    const h = Math.max(lz, 0);
+    this.shadow.position.set(lx, this.tmpV.y, 0.003);
+    const s = this.shadowSize * (1 + h * 0.6);
+    this.shadow.scale.set(s, s, 1);
+    this.shadow.material.opacity = 1;
+    this.shadow.visible = h < 2.5;
+  }
+}
+
+function frameU(now) {
+  const t = playing ? (now - t0) / 1000 : tPaused;
+  const L = 4.2, hold = 1.1;
+  const m = t % (L + hold);
+  return Math.min(m / L, 1);
+}
+function render(now) {
+  const W = canvas.clientWidth, H = canvas.clientHeight;
+  if (canvas.width !== Math.floor(W * renderer.getPixelRatio()) || canvas.height !== Math.floor(H * renderer.getPixelRatio())) renderer.setSize(W, H, false);
+  renderer.setScissorTest(false); renderer.clear(); renderer.setScissorTest(true);
+  const u = frameU(now);
+  const top = $(".appbar").getBoundingClientRect().bottom;
+  for (const v of views) {
+    if (v.i < 0) continue;
+    const r = v.el.getBoundingClientRect();
+    if (r.bottom < top || r.top > H || r.right < 0 || r.left > W || r.width < 2) continue;
+    v.update(u);
+    v.camera.aspect = r.width / r.height; v.camera.updateProjectionMatrix();
+    const y = H - r.bottom;
+    renderer.setViewport(r.left, y, r.width, r.height);
+    const clipTop = Math.max(r.top, top);
+    renderer.setScissor(r.left, y, r.width, Math.max(r.bottom - clipTop, 0));
+    renderer.render(v.scene, v.camera);
+  }
+  requestAnimationFrame(render);
+}
+
+// ---------- tabs ----------
+const tabs = [$("#tab-search"), $("#tab-info")];
+function showTab(name, keepScroll) {
+  const changed = $(`#panel-${name}`).hidden;
+  tabs.forEach((t) => { const on = t.id === "tab-" + name; t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1; $("#" + t.getAttribute("aria-controls")).hidden = !on; });
+  if (changed && !keepScroll) scrollTo({ top: 0, behavior: "auto" });
+}
+tabs.forEach((t, k) => {
+  t.addEventListener("click", () => showTab(t.id.slice(4)));
+  t.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    const n = tabs[(k + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+    n.focus(); showTab(n.id.slice(4));
+  });
+});
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-goto]"); if (!b) return;
+  showTab("info", true);
+  const el = $("#" + (b.dataset.goto === "qa" ? "qa-sec" : b.dataset.goto));
+  requestAnimationFrame(() => el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }));
+});
+
+// ---------- UI ----------
+let qView, behViews = [], appViews = [], behMode = "def";
+function archDot(a) { return `<span class="dot" style="background:var(${ARCH[a.arch].c})"></span>`; }
+
+function buildProbes() {
+  $("#probes").innerHTML = Object.entries(PROBES).map(([k, p]) => `<button type="button" data-p="${k}" aria-pressed="${k === probe}">${p.label}</button>`).join("");
+  $("#probes").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; probe = b.dataset.p; restart(); refreshStage(); });
+  $("#play").addEventListener("click", () => { if (playing) { tPaused = (performance.now() - t0) / 1000; playing = false; } else { t0 = performance.now() - tPaused * 1000; playing = true; } $("#play").textContent = playing ? "Pause" : "Play"; });
+  $("#play").textContent = playing ? "Pause" : "Play";
+}
+function restart() { t0 = performance.now(); tPaused = reduce ? 2.6 : 0; }
+
+// search bar with suggestions, browse grid in the rail
+let filterArch = "all", filterText = "", sugg = [], active = -1, gridLimit = 240;
+const qIn = $("#q"), suggEl = $("#sugg");
+function matches(q) {
+  const out = [];
+  A.forEach((a, i) => {
+    const n = a.name.toLowerCase(), hay = (a.name + " " + a.id + " " + a.cat).toLowerCase();
+    const s = n.startsWith(q) ? 0 : n.split(/\s+/).some((w) => w.startsWith(q)) ? 1 : hay.includes(q) ? 2 : -1;
+    if (s >= 0) out.push([s, n.length, i]);
+  });
+  return out.sort((x, y) => x[0] - y[0] || x[1] - y[1]).map((x) => x[2]);
+}
+function closeSugg() { suggEl.hidden = true; qIn.setAttribute("aria-expanded", "false"); qIn.removeAttribute("aria-activedescendant"); active = -1; }
+function renderSugg() {
+  if (!filterText || !A) { closeSugg(); return; }
+  sugg = matches(filterText).slice(0, 8);
+  suggEl.innerHTML = sugg.length ? sugg.map((i, k) => `<li role="option" id="sg${k}" data-i="${i}" aria-selected="${k === active}"><img src="${thumbOf(A[i])}" alt=""><span><b>${A[i].name}</b><small>${fmtSize(A[i].S)} · ${fmtMass(A[i].mass)}</small></span><span class="arch">${archDot(A[i])}${ARCH[A[i].arch].label}</span></li>`).join("")
+    : `<li class="none" role="option" aria-disabled="true">No objects match “${esc(filterText)}”. Try bottle, apple or crate.</li>`;
+  suggEl.hidden = false; qIn.setAttribute("aria-expanded", "true");
+  if (active >= 0) qIn.setAttribute("aria-activedescendant", "sg" + active); else qIn.removeAttribute("aria-activedescendant");
+}
+function pick(i) { closeSugg(); setQuery(i, true); }
+function buildSearch() {
+  qIn.addEventListener("input", () => { filterText = qIn.value.trim().toLowerCase(); active = -1; renderSugg(); drawGrid(); });
+  qIn.addEventListener("focus", () => { if (filterText) renderSugg(); });
+  qIn.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      if (suggEl.hidden) renderSugg();
+      if (!sugg.length) return;
+      e.preventDefault();
+      active = (active + (e.key === "ArrowDown" ? 1 : sugg.length - 1 + (active < 0 ? 1 : 0))) % sugg.length;
+      renderSugg(); $("#sg" + active)?.scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter") {
+      if (filterText && sugg.length) { e.preventDefault(); pick(sugg[Math.max(active, 0)]); }
+    } else if (e.key === "Escape") closeSugg();
+  });
+  suggEl.addEventListener("mousedown", (e) => e.preventDefault());
+  suggEl.addEventListener("click", (e) => { const li = e.target.closest("li[data-i]"); if (li) pick(+li.dataset.i); });
+  document.addEventListener("click", (e) => { if (!e.target.closest(".searchwrap")) closeSugg(); });
+  $("#go").addEventListener("click", () => { if (filterText && sugg.length) pick(sugg[Math.max(active, 0)]); else qIn.focus(); });
+  addEventListener("keydown", (e) => {
+    if (e.key === "/" && !mapOpen && document.activeElement !== qIn && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); showTab("search", true); qIn.focus(); }
+  });
+  $("#tries").insertAdjacentHTML("beforeend", TRIES.map((id) => A.findIndex((a) => a.id === id)).filter((i) => i >= 0)
+    .map((i) => `<button type="button" class="chip" data-i="${i}">${archDot(A[i])}${A[i].name}</button>`).join(""));
+  $("#tries").addEventListener("click", (e) => { const b = e.target.closest("button[data-i]"); if (b) setQuery(+b.dataset.i, true); });
+}
+function buildPicker() {
+  const counts = {}; A.forEach((a) => counts[a.arch] = (counts[a.arch] || 0) + 1);
+  $("#archFilter").innerHTML = `<button type="button" class="chip" data-a="all" aria-pressed="true">All</button>` +
+    Object.entries(ARCH).map(([k, v]) => `<button type="button" class="chip" data-a="${k}" aria-pressed="false"><span class="dot" style="background:var(${v.c})"></span>${v.label} <span class="count">${counts[k] || 0}</span></button>`).join("");
+  $("#archFilter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; filterArch = b.dataset.a; [...$("#archFilter").children].forEach((c) => c.setAttribute("aria-pressed", c === b)); drawGrid(); });
+  $("#grid").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; if (b.id === "gridMore") { drawGrid(true); return; } setQuery(+b.dataset.i, true); });
+  drawGrid();
+}
+function drawGrid(more) {
+  gridLimit = more ? gridLimit + 240 : 240;
+  const list = A.map((a, i) => i).filter((i) => (filterArch === "all" || A[i].arch === filterArch) && (!filterText || (A[i].name + " " + A[i].id + " " + A[i].cat).toLowerCase().includes(filterText)));
+  $("#count").textContent = list.length === A.length ? `${A.length.toLocaleString()} assets` : `${list.length.toLocaleString()} of ${A.length.toLocaleString()}`;
+  const shown = list.slice(0, gridLimit);
+  $("#grid").innerHTML = (shown.map((i) => `<button type="button" class="thumb" data-i="${i}" aria-current="${i === query}" title="${A[i].name}" aria-label="${A[i].name}">${archDot(A[i])}<img src="${thumbOf(A[i])}" alt=""></button>`).join("") || `<p class="count">No assets match.</p>`)
+    + (list.length > shown.length ? `<button type="button" class="chip more" id="gridMore">Show ${Math.min(240, list.length - shown.length)} more</button>` : "");
+}
+
+function tileHTML(i, score, kind) {
+  const a = A[i];
+  return `<button type="button" class="tile" data-i="${i}"><div class="view"></div>
+    <div class="nm">${a.name}</div>
+    <div class="meta"><span class="arch">${archDot(a)}${ARCH[a.arch].label}</span><span class="score">${kind} ${score.toFixed(2)}</span></div>
+    <div class="meta"><span>${fmtSize(a.S)} · ${fmtMass(a.mass)}</span>${issues(a).length ? '<span class="flag">data note</span>' : ""}</div></button>`;
+}
+function buildStage() {
+  qView = new View($("#qview"));
+  const keyOf = (m) => (m === "def") === (D.method === "stats") ? "Rollout statistics (hand-built)" : "JEPA behavior embedding";
+  const note = () => { const k = keyOf(behMode); $("#behNote").textContent = `R² ${D.eval.main[k].R2.toFixed(2)} on unseen probes`; };
+  if (D.method !== "stats") { const [b0, b1] = $("#behMode").children; b0.textContent = "Learned (JEPA)"; b1.textContent = "Simulation statistics"; }
+  $("#behMode").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; behMode = b.dataset.m;
+    [...$("#behMode").children].forEach((c) => c.setAttribute("aria-pressed", c === b)); note(); setQuery(query, false); });
+  note();
+  for (const row of ["#behRow", "#appRow"]) $(row).addEventListener("click", (e) => { const b = e.target.closest(".tile"); if (b) setQuery(+b.dataset.i, true); });
+}
+function refreshStage() {
+  [...$("#probes").children].forEach((b) => b.setAttribute("aria-pressed", b.dataset.p === probe));
+  $("#probeNote").textContent = PROBES[probe].note;
+  qView.set(query, probe);
+  behViews.forEach((v, k) => v.set((behMode === "def" ? A[query].beh : A[query].alt)[k], probe));
+  appViews.forEach((v, k) => v.set(A[query].app[k], probe));
+  pairViews.forEach((pv) => pv.view.set(pv.i, pv.p));
+}
+function setQuery(i, scroll) {
+  query = i;
+  const a = A[i];
+  $("#qinfo").innerHTML = `<div><h2>${a.name}</h2><div class="qid">${a.id}</div></div>
+    <span class="arch">${archDot(a)}${ARCH[a.arch].label}</span>
+    <ul class="does">${a.does.map((d) => `<li>${cap(d)}</li>`).join("")}</ul>
+    <dl class="facts"><div><dt>Size</dt><dd>${fmtSize(a.S)}</dd></div><div><dt>Mass</dt><dd>${fmtMass(a.mass)}</dd></div>
+    <div><dt>Friction</dt><dd>${a.mu.toFixed(2)}</dd></div><div><dt>Restitution</dt><dd>${a.e.toFixed(2)}</dd></div></dl>
+    ${issues(a).length ? `<div class="warnbox"><strong>Data notes</strong>${issues(a).map((n) => `<span>${cap(n)}</span>`).join("")}</div>` : ""}
+    ${merged(a) ? `<p class="qid">Simulated as one rigid body: ${merged(a)}.</p>` : ""}`;
+  const bl = behMode === "def" ? a.beh : a.alt, bs = behMode === "def" ? a.behSim : a.altSim;
+  $("#behRow").innerHTML = bl.slice(0, 4).map((j, k) => tileHTML(j, bs[k], "match")).join("");
+  $("#appRow").innerHTML = a.app.slice(0, 4).map((j, k) => tileHTML(j, a.appSim[k], "look")).join("");
+  behViews.forEach((v) => views.splice(views.indexOf(v), 1));
+  appViews.forEach((v) => views.splice(views.indexOf(v), 1));
+  behViews = [...$("#behRow").querySelectorAll(".view")].map((el) => new View(el));
+  appViews = [...$("#appRow").querySelectorAll(".view")].map((el) => new View(el));
+  [...$("#grid").children].forEach((b) => b.setAttribute && b.setAttribute("aria-current", +b.dataset.i === i));
+  $("#mcLive").textContent = a.name;
+  restart();
+  refreshStage();
+  drawMap();
+  if (scroll) {
+    if (mapOpen) dockMap(false);
+    showTab("search", true);
+    $("#stage").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  }
+}
+
+// ---------- pairs ----------
+const pairViews = [];
+function bestProbe(a, b) {
+  const s = A[a].sum, t = A[b].sum;
+  const d = { push_high: Math.abs(s.th - t.th) + 0.5 * Math.abs(s.ro - t.ro), push_low: Math.abs(s.tl - t.tl) + Math.abs(s.ro - t.ro), ramp: (Math.abs(s.sl - t.sl) + Math.abs(s.tp - t.tp)) / 25, drop: Math.abs(s.up - t.up) };
+  return Object.entries(d).sort((x, y) => y[1] - x[1])[0][0];
+}
+function sideHTML(i, text) {
+  const a = A[i];
+  return `<div class="side"><button type="button" data-i="${i}" aria-label="Search from ${a.name}"><div class="view"></div><span class="nm">${a.name}</span></button><span class="sub">${text}</span></div>`;
+}
+function buildPairs() {
+  const same = D.behaveAlikeLookDifferent.slice(0, 6), diff = D.lookAlikeBehaveDifferent.slice(0, 6);
+  $("#samePairs").innerHTML = same.map((p) => {
+    const pr = A[p.a].sum.th > 0.5 ? "push_high" : A[p.a].sum.ro > 0.5 ? "push_low" : "drop";
+    return `<article class="pair" data-p="${pr}"><div class="two">${sideHTML(p.a, `${fmtSize(A[p.a].S)} · ${fmtMass(A[p.a].mass)}`)}${sideHTML(p.b, `${fmtSize(A[p.b].S)} · ${fmtMass(A[p.b].mass)}`)}</div>
+      <div class="scores"><span>behavior match ${p.behavior_sim.toFixed(2)}</span><span>look match ${p.appearance_sim.toFixed(2)}</span></div>
+      <p class="why">Both: ${p.both_do.join(", ")}.</p><span class="shown">Shown: ${PROBES[pr].label.toLowerCase()}</span></article>`;
+  }).join("");
+  $("#diffPairs").innerHTML = diff.map((p) => {
+    const pr = bestProbe(p.a, p.b);
+    const bug = p.bug.length ? `<span class="badge">Likely data bug: ${A[p.bug[0]].name} has its center of mass authored at its base</span>` : p.same_mesh ? `<span class="badge">Same mesh, different physics data</span>` : "";
+    return `<article class="pair" data-p="${pr}"><div class="two">${sideHTML(p.a, cap(p.a_does.slice(0, 2).join(", ")))}${sideHTML(p.b, cap(p.b_does.slice(0, 2).join(", ")))}</div>
+      <div class="scores"><span>look match ${p.appearance_sim.toFixed(2)}</span><span>behavior match ${p.behavior_sim.toFixed(2)}</span></div>
+      ${p.why.length ? `<p class="why">Why: ${p.why.join("; ")}.</p>` : ""}${bug}<span class="shown">Shown: ${PROBES[pr].label.toLowerCase()}</span></article>`;
+  }).join("");
+  for (const card of document.querySelectorAll(".pair")) {
+    card.querySelectorAll(".side button").forEach((b) => {
+      const v = new View(b.querySelector(".view"));
+      const pv = { view: v, i: +b.dataset.i, p: card.dataset.p };
+      v.set(pv.i, pv.p); pairViews.push(pv);
+      b.addEventListener("click", () => setQuery(+b.dataset.i, true));
+    });
+  }
+}
+
+// ---------- QA ----------
+function buildQA() {
+  const groups = [
+    { key: "com_at_base", kind: "error", title: "center of mass authored at the base", body: "The authored center of mass is the mesh origin, and that origin sits at the bottom of the object. An apple then behaves like a weighted doorstop." },
+    { key: "com_outside", kind: "error", title: "center of mass authored outside the object", body: "The authored center of mass lies outside the convex hull of the object's own collision shape. No real mass distribution can do that." },
+    { key: "inertia_impossible", kind: "error", title: "inertia too large for their size", body: "A principal radius of gyration is more than 10% larger than the farthest point of the object from its center of mass. Physically impossible." },
+    { key: "unstable_at_rest", kind: "warning", title: "not self-supporting in their authored pose", body: "Set on a floor exactly as authored, they tip more than 10° in both MuJoCo and PhysX. Many are wall- or ceiling-mounted fixtures, where that's expected; for free-standing objects it usually means the base or center of mass is off." },
+    { key: "no_friction", kind: "warning", title: "with no friction authored", body: "No physics material sets friction, so each simulator falls back to its own default." },
+    { key: "density", kind: "warning", title: "with implausible bulk density", body: "Mass divided by collision-hull volume is below 15 or above 25,000 kg/m³." },
+  ];
+  $("#qa").innerHTML = groups.map((g) => {
+    const ids = A.map((a, i) => i).filter((i) => (A[i].qa || []).includes(g.key));
+    return `<div class="qa-card"><span class="qa-kind ${g.kind}">${g.kind === "error" ? "Impossible as authored" : "Suspicious"}</span><b>${ids.length}</b><p><strong>assets ${g.title}.</strong> ${g.body}</p><div class="mini">${ids.slice(0, 18).map((i) => `<button type="button" data-i="${i}" title="${A[i].name}" aria-label="Search from ${A[i].name}"><img src="${thumbOf(A[i])}" alt=""></button>`).join("")}</div></div>`;
+  }).join("");
+  $("#qa").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) setQuery(+b.dataset.i, true); });
+}
+
+// ---------- behavior map: pop-up on load, then docked in the top-right corner ----------
+const mapC = $("#map"), tip = $("#tip"), card = $("#mapcard"), modal = $("#mapModal");
+const mqSmall = matchMedia("(max-width: 999px)");
+let mapPts = [], hoverI = -1, mapOpen = true;
+const dockEl = () => mqSmall.matches ? $("#dockM") : $("#dock");
+const mapMode = () => card.classList.contains("open") ? "open" : card.classList.contains("mini") ? "mini" : "dock";
+function drawMap() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const W = mapC.clientWidth, H = mapC.clientHeight;
+  if (W < 2 || H < 2) return;
+  if (mapC.width !== Math.round(W * dpr) || mapC.height !== Math.round(H * dpr)) { mapC.width = Math.round(W * dpr); mapC.height = Math.round(H * dpr); }
+  const g = mapC.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, W, H);
+  if (!A) { g.font = `600 14px ${css("--body")}`; g.fillStyle = css("--muted"); g.textAlign = "center"; g.fillText("Loading objects…", W / 2, H / 2); g.textAlign = "left"; return; }
+  const mode = mapMode();
+  const R = mode === "open" ? 5.5 : mode === "dock" ? 3.4 : 1.7, lw = mode === "open" ? 1.5 : mode === "dock" ? 1 : 0.6, pad = mode === "open" ? 20 : mode === "dock" ? 10 : 5;
+  mapPts = A.map((a, i) => ({ i, x: pad + a.xy[0] * (W - 2 * pad), y: pad + (1 - a.xy[1]) * (H - 2 * pad) }));
+  const ink = css("--ink"), acc = css("--accent"), q = mapPts[query];
+  if (mode !== "mini") {
+    g.strokeStyle = ink; g.globalAlpha = 0.55; g.lineWidth = 1.2;
+    for (const j of A[query].beh.slice(0, 4)) { g.beginPath(); g.moveTo(q.x, q.y); g.lineTo(mapPts[j].x, mapPts[j].y); g.stroke(); }
+    g.globalAlpha = 1;
+  }
+  for (const p of mapPts) {
+    g.beginPath(); g.arc(p.x, p.y, p.i === hoverI ? R + 2 : R, 0, 2 * Math.PI);
+    g.fillStyle = css(ARCH[A[p.i].arch].c); g.fill();
+    g.lineWidth = lw; g.strokeStyle = ink; g.stroke();
+  }
+  g.beginPath(); g.arc(q.x, q.y, mode === "open" ? 12 : mode === "dock" ? 8 : 4.5, 0, 2 * Math.PI); g.lineWidth = mode === "mini" ? 2 : 3; g.strokeStyle = acc; g.stroke();
+  if (mode === "open") {
+    g.font = `700 13px ${css("--body")}`; g.fillStyle = ink;
+    const label = cap(A[query].name), tw = g.measureText(label).width;
+    g.fillText(label, Math.min(q.x + 16, W - tw - 4), Math.max(q.y - 10, 16));
+  }
+}
+function flip(first, lift) {
+  if (reduce || !card.animate) return;
+  const last = card.getBoundingClientRect();
+  if (!last.width || !first.width) return;
+  if (lift) lift.style.zIndex = 35;
+  const a = card.animate([
+    { transformOrigin: "0 0", transform: `translate(${first.left - last.left}px, ${first.top - last.top}px) scale(${first.width / last.width}, ${first.height / last.height})` },
+    { transformOrigin: "0 0", transform: "none" },
+  ], { duration: 600, easing: "cubic-bezier(.32,.72,0,1)" });
+  a.onfinish = a.oncancel = () => { if (lift) lift.style.zIndex = ""; };
+}
+function setToggle() {
+  const open = mapOpen;
+  $("#mcToggle").setAttribute("aria-label", open ? "Shrink map to the corner" : "Expand behavior map");
+  $("#mcToggle .i-shrink").style.display = open ? "" : "none";
+  $("#mcToggle .i-grow").style.display = open ? "none" : "";
+  card.setAttribute("role", open ? "dialog" : "region");
+  if (open) card.setAttribute("aria-modal", "true"); else card.removeAttribute("aria-modal");
+  card.setAttribute("aria-label", "Behavior map");
+}
+function dockMap(focusSearch) {
+  if (!mapOpen) return;
+  mapOpen = false;
+  const first = card.getBoundingClientRect(), d = dockEl();
+  card.classList.remove("open", "held"); card.classList.add("seen"); card.classList.toggle("mini", d.id === "dockM");
+  $("#mcHint").textContent = "Press Esc or click outside the map to shrink it back to the corner.";
+  d.appendChild(card);
+  $(".app").inert = false; $(".appbar").inert = false;
+  modal.classList.add("closing");
+  setTimeout(() => { if (!mapOpen) modal.hidden = true; }, reduce ? 0 : 460);
+  tip.hidden = true; hoverI = -1;
+  setToggle(); drawMap();
+  flip(first, d.closest(".rail, .appbar"));
+  if (focusSearch && matchMedia("(pointer: fine)").matches) qIn.focus({ preventScroll: true });
+  else if (focusSearch) $("#mcToggle").focus({ preventScroll: true });
+}
+function openMap() {
+  if (mapOpen) return;
+  mapOpen = true;
+  const first = card.getBoundingClientRect();
+  modal.hidden = false; void modal.offsetWidth; modal.classList.remove("closing");
+  card.classList.remove("mini"); card.classList.add("open");
+  $("#mapSlot").appendChild(card);
+  $(".app").inert = true; $(".appbar").inert = true;
+  setToggle(); drawMap();
+  flip(first, null);
+  $("#mcGo").focus({ preventScroll: true });
+}
+function buildLegend() {
+  const counts = {}; A.forEach((a) => counts[a.arch] = (counts[a.arch] || 0) + 1);
+  $("#legend").innerHTML = Object.entries(ARCH).map(([k, v]) => `<span><span class="dot" style="background:var(${v.c})"></span>${v.label} (${counts[k] || 0})</span>`).join("") +
+    `<span><span class="dot" style="background:transparent;border:3px solid var(--accent)"></span>Current search, linked to its 4 behavior neighbors</span>`;
+}
+function wireMap() {
+  const nearest = (ev) => { const r = mapC.getBoundingClientRect(); const x = ev.clientX - r.left, y = ev.clientY - r.top; let best = -1, bd = 14 * 14; for (const p of mapPts) { const d = (p.x - x) ** 2 + (p.y - y) ** 2; if (d < bd) { bd = d; best = p.i; } } return best; };
+  mapC.addEventListener("pointermove", (ev) => {
+    if (!mapOpen || ev.pointerType !== "mouse") return;
+    const i = nearest(ev);
+    if (i !== hoverI) { hoverI = i; drawMap(); }
+    if (i < 0) { tip.hidden = true; return; }
+    const a = A[i];
+    tip.innerHTML = `<img src="${thumbOf(a)}" alt=""><div><strong style="text-transform:capitalize">${a.name}</strong><br><span class="arch">${archDot(a)}${ARCH[a.arch].label}</span><br><span style="color:var(--muted)">${fmtSize(a.S)} · ${fmtMass(a.mass)} · click to search</span></div>`;
+    tip.hidden = false;
+    tip.style.left = Math.min(ev.clientX + 14, innerWidth - 290) + "px"; tip.style.top = (ev.clientY + 14) + "px";
+  });
+  mapC.addEventListener("pointerleave", () => { tip.hidden = true; if (hoverI >= 0) { hoverI = -1; drawMap(); } });
+  mapC.addEventListener("click", (ev) => {
+    if (!mapOpen) { openMap(); return; }
+    const i = nearest(ev); if (i >= 0) { tip.hidden = true; setQuery(i, true); }
+  });
+  $("#mcToggle").addEventListener("click", () => mapOpen ? dockMap(true) : openMap());
+  $("#mcGo").addEventListener("click", () => dockMap(true));
+  $("#scrim").addEventListener("click", () => dockMap(true));
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && mapOpen) dockMap(true); });
+  card.addEventListener("pointermove", (e) => { if (mapOpen && e.pointerType === "mouse") card.classList.add("held"); });
+  card.addEventListener("pointerleave", () => card.classList.remove("held"));
+  $("#mcTimer span").addEventListener("animationend", () => dockMap(true));
+  mqSmall.addEventListener("change", () => { if (!mapOpen) { const d = dockEl(); card.classList.toggle("mini", d.id === "dockM"); d.appendChild(card); drawMap(); } });
+  new ResizeObserver(() => drawMap()).observe(mapC);
+}
+
+// ---------- results ----------
+const METHODS = [
+  ["Rollout statistics (hand-built)", "Simulation statistics", "max tilt, slide distance, slip angle… of the probe runs", "hl"],
+  ["JEPA behavior embedding", "Learned (JEPA)", "self-supervised on the same probe runs", "hl2"],
+  ["JEPA trained on dev assets only", "Learned (JEPA), dev assets only", "never saw the test assets"],
+  ["Static stability (no simulation)", "Static stability, no simulation", "tip and slip angles, center-of-mass height from geometry"],
+  ["Physics metadata", "Physics metadata", "mass, size, center of mass, friction"],
+  ["Appearance + physics metadata", "Appearance + metadata", "both of the above"],
+  ["Appearance (SigLIP2)", "Appearance (SigLIP2)", "image embedding of NVIDIA's thumbnails"],
+  ["Category words (TF-IDF of names)", "Words in the name", "e.g. bucket, bottle, crate"],
+  ["Random", "Random", "chance level"],
+];
+const LABEL = Object.fromEntries(METHODS.map(([k, l]) => [k, l]));
+function barsHTML(rows, max) {
+  const min = Math.min(-0.1, ...rows.map((r) => r.lo));
+  const span = max - min, x = (v) => ((v - min) / span) * 100;
+  const ticks = [-0.2, 0, 0.2, 0.4, 0.6, 0.8].filter((t) => t >= min && t <= max);
+  return `<div class="bars">` + rows.map((r) => `<div class="lab">${LABEL[r.n] || r.n}<small>${r.s}</small></div><div class="track">${ticks.map((t) => `<span class="gridl${t === 0 ? " zero" : ""}" style="left:${x(t)}%"></span>`).join("")}`
+    + `<span class="bar${r.hl ? " " + r.hl : ""}" style="left:${x(Math.min(0, r.v))}%;width:${Math.abs(x(r.v) - x(0))}%" title="${r.n}: R² ${r.v.toFixed(3)}"></span>`
+    + `<span class="ci" style="left:${x(r.lo)}%;width:${x(r.hi) - x(r.lo)}%"></span></div><div class="val">${r.v.toFixed(2)}</div>`).join("")
+    + `</div><div class="axis"><span></span><div class="ticks">${ticks.map((t) => `<span style="left:${x(t)}%">${t.toFixed(1)}</span>`).join("")}</div><span></span></div>`;
+}
+function buildChart() {
+  const E = D.eval;
+  const rows = METHODS.filter(([k]) => E.main[k]).map(([k, , s, hl]) => ({ n: k, s, hl, v: E.main[k].R2, lo: E.main[k].ci[0], hi: E.main[k].ci[1] }));
+  $("#bars").innerHTML = barsHTML(rows, 0.9);
+  const cross = Object.entries(E.cross || {});
+  $("#crossBars").innerHTML = cross.map(([label, c]) => {
+    const r = METHODS.filter(([k]) => c.R2[k]).map(([k, , s, hl]) => ({ n: k, s, hl, v: c.R2[k].R2, lo: c.R2[k].ci[0], hi: c.R2[k].ci[1] }));
+    return `<h4>${label.replace("cross-engine: ", "")} <small>${c.n.toLocaleString()} assets, ${c.nq.toLocaleString()} test queries; engines agree on tip vs no tip in ${(c.agree * 100).toFixed(0)}% of probe runs (${(c.agree_clear * 100).toFixed(0)}% away from the tipping point)</small></h4>` + barsHTML(r, 0.9);
+  }).join("");
+  $("#evalTable").innerHTML = `<thead><tr><th>Method</th><th>R²</th><th>95% CI</th><th>No duplicate exclusion</th><th>k=1</th><th>k=10</th></tr></thead><tbody>` +
+    rows.map((r) => `<tr><td>${LABEL[r.n] || r.n}</td><td>${r.v.toFixed(3)}</td><td>${r.lo.toFixed(2)} to ${r.hi.toFixed(2)}</td><td>${E.nodup[r.n] != null ? E.nodup[r.n].toFixed(3) : "–"}</td><td>${E.k["k=1"][r.n] != null ? E.k["k=1"][r.n].toFixed(3) : "–"}</td><td>${E.k["k=10"][r.n] != null ? E.k["k=10"][r.n].toFixed(3) : "–"}</td></tr>`).join("") + `</tbody>`;
+}
+
+function buildChecks() {
+  const E = D.eval, m = E.main, r2 = (k) => (m[k] ? m[k].R2.toFixed(2) : "–");
+  const pc = (x) => `${Math.round(x * 100)}%`;
+  const parts = E.cross["cross-engine: PhysX, same hulls"], sdf = E.cross["cross-engine: PhysX, SDF collision (NVIDIA's PhysX variant)"];
+  const dJ = E.paired["JEPA behavior embedding minus Rollout statistics (hand-built)"];
+  $("#testIntro").textContent = `Everything here was fixed before looking at test results. The 276 assets used while building the method are the development set; the other ${E.n_test.toLocaleString()} are the test set, and every score below is on them.`;
+  $("#chartSub").textContent = `R² of the neighbors' average reaction, over 11 outcomes of the 3 held-out probes. Whiskers are 95% bootstrap intervals. The query's product family and recolored copies of its mesh are excluded from its neighbors. For scale, an object's own rerun with a slightly different yaw and speed scores about ${E.repeat ? E.repeat.toFixed(2) : "0.8"}.`;
+  const checks = [
+    `<b>Physics sanity.</b> Boxes with textbook answers (slide or tip under a push, slip or tip on a ramp) behave correctly in both MuJoCo and PhysX. PhysX needed 64 solver iterations to pass; that's the setting used.`,
+    `<b>Both engines, same inputs.</b> MuJoCo and PhysX get identical collision hulls, mass properties and friction at every contact. They agree on tip vs no tip in ${parts ? pc(parts.agree) : "–"} of probe runs, and ${parts ? pc(parts.agree_clear) : "–"} away from the tipping point.`,
+    `<b>NVIDIA's own physics data.</b> Mass, center of mass and inertia are read from the USD following USD Physics precedence (values on the rigid body override the colliders). The MuJoCo, PhysX and Newton variants of each asset author the same values, except 7 assets whose MuJoCo variant leaves out mass properties the PhysX variant has.`,
+    `<b>No near-duplicates.</b> Recolored copies would make search look better than it is: without excluding them, appearance search scores ${E.nodup["Appearance (SigLIP2)"].toFixed(2)} instead of ${r2("Appearance (SigLIP2)")}.`,
+    `<b>Generalizes to new assets.</b> A JEPA trained only on the 276 development assets scores ${r2("JEPA trained on dev assets only")} on the test assets, the same as one trained on everything (${r2("JEPA behavior embedding")}).`,
+    `<b>Every license.</b> All 2,576 assets ship the same LICENSE.txt, Creative Commons Attribution 4.0, checked one by one.`,
+    `<b>Reproducible.</b> Fixed seeds everywhere, pinned versions, and one script that rebuilds every number on a 4-core CPU.`,
+  ];
+  $("#checks").innerHTML = checks.map((c) => `<li><span>${c}</span></li>`).join("");
+  const limits = [
+    `<b>Simulation only.</b> No real objects were pushed. Matching real video to assets by behavior is the next step.`,
+    `<b>Engines disagree near tipping points.</b> About ${parts ? pc(parts.near) : "–"} of probe runs end near the tipping point, where small modelling differences flip the outcome. Scored against PhysX, the same neighbors keep a clear lead over appearance, at lower absolute values.`,
+    sdf ? `<b>Simulation's edge over geometry depends on the engine.</b> In MuJoCo, simulation statistics beat a no-simulation stability descriptor (${r2("Rollout statistics (hand-built)")} vs ${r2("Static stability (no simulation)")}). Against PhysX with NVIDIA's SDF collision they don't (${sdf.R2["Rollout statistics (hand-built)"].R2.toFixed(2)} vs ${sdf.R2["Static stability (no simulation)"].R2.toFixed(2)}). Every behavior method still beats appearance (${sdf.R2["Appearance (SigLIP2)"].R2.toFixed(2)}). Search should use the engine you will train in.` : "",
+    `<b>The learned model is not the best method.</b> The JEPA trails simple statistics of the same probe runs by ${Math.abs(dJ.difference).toFixed(2)} R² (95% interval ${Math.abs(dJ["95% CI"][1]).toFixed(2)} to ${Math.abs(dJ["95% CI"][0]).toFixed(2)}). Here the simulator does the heavy lifting; a learned model earns its place when you don't know what to measure, such as video.`,
+    `<b>Our probes, not every task.</b> Pushes, a tilting floor and drops. Grasping, stacking and contact with other materials are not tested.`,
+    `<b>Rigid objects only.</b> Objects with 2 to 4 rigid parts are frozen into one body; 371 articulated assets with more parts are left out.`,
+    `<b>Size-normalized.</b> Neighbors behave alike at their own scale; size and mass are shown separately so you can filter.`,
+  ];
+  $("#limits").innerHTML = limits.filter(Boolean).map((c) => `<li>${c}</li>`).join("");
+}
+
+// the map opens as a pop-up while the data loads
+$(".app").inert = true; $(".appbar").inert = true;
+setToggle(); wireMap(); drawMap();
+$("#mcGo").focus({ preventScroll: true });
+fetch("data.json").then((r) => r.json()).then((data) => {
+  D = data; A = data.assets; NF = data.nframes;
+  document.querySelectorAll(".nA").forEach((el) => { el.textContent = A.length.toLocaleString(); });
+  qIn.placeholder = matchMedia("(max-width: 600px)").matches ? `Search ${A.length.toLocaleString()} objects` : `Search ${A.length.toLocaleString()} objects: bottle, apple, crate, sign…`;
+  if (data.runs) $("#statRuns").textContent = data.runs.toLocaleString();
+  const mJ = data.eval.main[data.method === "stats" ? "Rollout statistics (hand-built)" : "JEPA behavior embedding"], mA = data.eval.main["Appearance (SigLIP2)"];
+  if (mJ && mA) $("#statR2").textContent = `${mJ.R2.toFixed(2)} vs ${mA.R2.toFixed(2)}`;
+  query = Math.max(0, A.findIndex((a) => a.id === "food_canned_peach_a03"));
+  buildProbes(); buildSearch(); buildPicker(); buildStage(); buildPairs(); buildQA(); buildLegend(); buildChart(); buildChecks();
+  setQuery(query, false);
+  requestAnimationFrame(render);
+  if (!reduce && mapOpen) $("#mcTimer").classList.add("armed");
+}).catch((e) => {
+  $("#grid").innerHTML = `<p class="count">Could not load the asset data (${e.message}). Reload the page to try again.</p>`;
+  if (mapOpen) { $("#mcHint").textContent = "Could not load the asset data. Reload the page to try again."; }
+});
+})();
+</script>
+
+</body>
+</html>
