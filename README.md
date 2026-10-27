@@ -112,7 +112,7 @@ then computes them from geometry; the center of mass moves by up to 9% of the ob
 
 ## What changed after the first version (276 assets)
 
-Hardening the first version found and fixed these problems in our own pipeline:
+Hardening the first version found and fixed these problems in my own pipeline:
 
 - Mass properties authored on the rigid body (about a fifth of all assets) were partly ignored: the body's mass was
   used but not its center of mass and inertia. Fixed to follow USD Physics precedence.
