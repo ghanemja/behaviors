@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Behavior Search for NVIDIA SimReady</title>
+<title>Behavior Search for NVIDIA SimReady, by Janelle Ghanem</title>
 <meta name="description" content="Search 2,167 NVIDIA SimReady 3D assets by how they move in physics simulation, not how they look. Tested on held-out probes in MuJoCo and PhysX.">
+<meta name="author" content="Janelle Ghanem">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Behavior Search for NVIDIA SimReady">
+<meta property="og:title" content="Behavior Search for NVIDIA SimReady, by Janelle Ghanem">
 <meta property="og:description" content="Search 2,167 NVIDIA SimReady 3D assets by how they move in physics simulation, not how they look. Tested on held-out probes in MuJoCo and PhysX.">
 <meta property="og:url" content="https://ghanemja.github.io/behaviors/">
 <meta property="og:image" content="https://ghanemja.github.io/behaviors/cover.jpg">
@@ -74,6 +75,7 @@ main { min-width: 0; }
 .hero { display: grid; gap: 22px; padding-block: 14px 36px; }
 .hero h1 { font-size: clamp(40px, calc(var(--mainw) / 16), 104px); font-weight: 800; line-height: 1.02; letter-spacing: -.03em; }
 .hero h1 em { font-style: normal; white-space: nowrap; background: var(--butter); border: var(--bw) solid var(--ink); border-radius: .16em; padding: 0 .14em; box-shadow: var(--sh); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.byline { margin: -10px 0 0; font-size: 17px; font-weight: 700; color: var(--ink-2); }
 .searchwrap { position: relative; }
 .searchbar { display: flex; align-items: center; gap: 12px; min-height: 70px; padding: 0 10px 0 24px; background: var(--surface); border: var(--bw) solid var(--ink); border-radius: 999px; box-shadow: var(--sh-lg); }
 .searchbar:focus-within { outline: 3px solid var(--accent); outline-offset: 3px; }
@@ -324,6 +326,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
       <section class="hero" aria-labelledby="hero-h">
         <div class="eyebrow">NVIDIA SimReady · <span class="nA">2,000+</span> assets · simulated in MuJoCo and PhysX · JEPA</div>
         <h1 id="hero-h">Search objects by <em>how they move</em>, not how they look</h1>
+        <p class="byline">By <a href="https://github.com/ghanemja">Janelle Ghanem</a></p>
         <div class="searchwrap">
           <div class="searchbar" role="search">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
@@ -441,7 +444,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
 
     <footer>
       <p>3D assets and thumbnails: <a href="https://huggingface.co/datasets/nvidia/simready-assets">NVIDIA SimReady</a> on Hugging Face, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Meshes were simplified and thumbnails resized for this page.</p>
-      <p>Code, data and every number: <a href="https://github.com/ghanemja/behaviors">github.com/ghanemja/behaviors</a>.</p>
+      <p>By Janelle Ghanem. Code, data and every number: <a href="https://github.com/ghanemja/behaviors">github.com/ghanemja/behaviors</a>.</p>
       <p>Physics: MuJoCo 3.17 and PhysX 5 (SAPIEN 3), both on CPU. Appearance embeddings: SigLIP2 ViT-B/16 (OpenCLIP). Behavior: statistics of the probe runs, and a small cross-probe JEPA trained on CPU.</p>
     </footer>
   </main>
