@@ -1,0 +1,16 @@
+# Python 3.13, CPU only. Exact versions used for the published results.
+mujoco==3.17.0
+sapien==3.0.3          # PhysX 5 on CPU (cross-engine check)
+usd-core==26.11        # OpenUSD reader
+numpy==2.5.2
+scipy==1.18.1
+scikit-learn==1.9.1
+torch==2.14.1          # CPU build
+trimesh==5.2.0
+fast-simplification==0.2.0
+pillow==12.3.0
+huggingface-hub==2.3.0
+open-clip-torch==3.3.0  # SigLIP2 ViT-B-16 appearance baseline
+torchvision==0.29.1    # CPU build
+timm==1.0.30
+pymeshlab==2025.7.post1  # only for building the demo's textured models

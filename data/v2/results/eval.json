@@ -1,0 +1,712 @@
+{
+ "protocol": "Held-out-probe evaluation with a frozen protocol.\n\nQuestion: if you search the library from an asset, do its k nearest neighbors predict how that asset reacts to\nprobes no embedding ever saw (a new push height/direction/speed, a diagonal ramp, a higher tilted drop)?\n\nProtocol\n  queries     test assets only (everything except the 276-asset development set used to design the model)\n  index       every simulated asset, minus the query itself, its product family (same name up to the _a01-style\n              suffix) and any asset with identical geometry (recolored duplicates)\n  score       R^2 of the k-NN mean prediction for 11 standardized held-out outcomes, averaged over outcomes\n  uncertainty 2,000 bootstrap resamples of the queries; paired differences use the same resamples\n  engines     neighbors come from MuJoCo rollouts; the same neighbors are also scored against PhysX (SDF collision,\n              NVIDIA's PhysX variant) outcomes to test that the result is not a MuJoCo artifact",
+ "n_assets": 2167,
+ "n_test_queries": 1891,
+ "outcomes": [
+  "push max tilt",
+  "push final tilt",
+  "push displacement",
+  "push toppled",
+  "ramp slip angle",
+  "ramp tip angle",
+  "ramp final tilt",
+  "drop final tilt",
+  "drop displacement",
+  "drop bounces",
+  "drop settle time"
+ ],
+ "chance": {
+  "topples under new push": 0.7075621364357483,
+  "tips before slipping on new ramp": 0.8889476467477525
+ },
+ "main (MuJoCo outcomes, k=5, family + duplicate exclusion)": {
+  "JEPA behavior embedding": {
+   "R2": 0.4590205837497649,
+   "R2 seed std": 0.008079508865217536,
+   "R2 95% CI": [
+    0.4383508381615868,
+    0.47944368156140704
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.6273105606551742,
+    "push final tilt": 0.4916574535769769,
+    "push displacement": 0.29648348356006365,
+    "push toppled": 0.5903379401750372,
+    "ramp slip angle": 0.5444809395798681,
+    "ramp tip angle": 0.7990705327445963,
+    "ramp final tilt": 0.6939116240329298,
+    "drop final tilt": 0.4140311269428527,
+    "drop displacement": 0.3399467516323417,
+    "drop bounces": -0.01585728715556589,
+    "drop settle time": 0.2678532955031381
+   },
+   "topples under new push accuracy": 0.8778424114225277,
+   "tips before slipping on new ramp accuracy": 0.9434161819143311
+  },
+  "JEPA trained on dev assets only": {
+   "R2": 0.46721982636633935,
+   "R2 seed std": 0.0038124425238073804,
+   "R2 95% CI": [
+    0.4475316944841661,
+    0.4874685187025304
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.6435699963886315,
+    "push final tilt": 0.509043935474787,
+    "push displacement": 0.3520888277069618,
+    "push toppled": 0.5959264094656116,
+    "ramp slip angle": 0.5344388240941352,
+    "ramp tip angle": 0.7974952849324367,
+    "ramp final tilt": 0.6856292677665708,
+    "drop final tilt": 0.41385135603575246,
+    "drop displacement": 0.3277710673422098,
+    "drop bounces": -0.026877759668426277,
+    "drop settle time": 0.3064808804910624
+   },
+   "topples under new push accuracy": 0.8831306187202538,
+   "tips before slipping on new ramp accuracy": 0.9428873611845584
+  },
+  "Rollout statistics (hand-built)": {
+   "R2": 0.5444806531225673,
+   "R2 seed std": 0.0,
+   "R2 95% CI": [
+    0.5221142365677612,
+    0.5649522384461096
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.6471632143569899,
+    "push final tilt": 0.5264267893984207,
+    "push displacement": 0.41679511326389185,
+    "push toppled": 0.6343300978221862,
+    "ramp slip angle": 0.8367167661833291,
+    "ramp tip angle": 0.819323768509587,
+    "ramp final tilt": 0.6973414906950135,
+    "drop final tilt": 0.46362870063821604,
+    "drop displacement": 0.31689896812238205,
+    "drop bounces": 0.14007417466818384,
+    "drop settle time": 0.4905881006900401
+   },
+   "topples under new push accuracy": 0.8989952406134321,
+   "tips before slipping on new ramp accuracy": 0.9386567953463776
+  },
+  "Static stability (no simulation)": {
+   "R2": 0.32803783528346986,
+   "R2 seed std": 0.0,
+   "R2 95% CI": [
+    0.2970915381107254,
+    0.3588998659228513
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.2696611763964175,
+    "push final tilt": 0.2833813828805115,
+    "push displacement": 0.1537208417952064,
+    "push toppled": 0.3929695613274087,
+    "ramp slip angle": 0.5667112308098115,
+    "ramp tip angle": 0.5030890110541368,
+    "ramp final tilt": 0.4675144158848188,
+    "drop final tilt": 0.3436471623085877,
+    "drop displacement": 0.24710356969108627,
+    "drop bounces": 0.07719991171234997,
+    "drop settle time": 0.3034179242578334
+   },
+   "topples under new push accuracy": 0.8265468006345849,
+   "tips before slipping on new ramp accuracy": 0.8926493918561608
+  },
+  "Physics metadata": {
+   "R2": 0.22940031670463645,
+   "R2 seed std": 0.0,
+   "R2 95% CI": [
+    0.19667431586113895,
+    0.25973979378878415
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.12631881038258486,
+    "push final tilt": 0.1851440370566707,
+    "push displacement": -0.021479741676417197,
+    "push toppled": 0.253325981127552,
+    "ramp slip angle": 0.43919653025001926,
+    "ramp tip angle": 0.3611026636138802,
+    "ramp final tilt": 0.3225426221488722,
+    "drop final tilt": 0.29795976686574,
+    "drop displacement": 0.2011554837707379,
+    "drop bounces": 0.1320144261140035,
+    "drop settle time": 0.22612290409735825
+   },
+   "topples under new push accuracy": 0.7927022739291381,
+   "tips before slipping on new ramp accuracy": 0.8847170809095717
+  },
+  "Appearance (SigLIP2)": {
+   "R2": 0.1471610068314823,
+   "R2 seed std": 0.0,
+   "R2 95% CI": [
+    0.11439683279539434,
+    0.175111607925429
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.16400614404937108,
+    "push final tilt": 0.10597038809583881,
+    "push displacement": 0.05640918630830927,
+    "push toppled": 0.1524268496068606,
+    "ramp slip angle": 0.2355083107735797,
+    "ramp tip angle": 0.2645401446721066,
+    "ramp final tilt": 0.23865534699295277,
+    "drop final tilt": 0.16885741407397725,
+    "drop displacement": 0.08286724453593808,
+    "drop bounces": 0.002030420094784935,
+    "drop settle time": 0.14749962594258637
+   },
+   "topples under new push accuracy": 0.7419354838709677,
+   "tips before slipping on new ramp accuracy": 0.8783712321523004
+  },
+  "Category words (TF-IDF of names)": {
+   "R2": -0.10295238947116,
+   "R2 seed std": 0.0,
+   "R2 95% CI": [
+    -0.13632471439431318,
+    -0.07090153856177901
+   ],
+   "R2 per outcome": {
+    "push max tilt": -0.059987892838096135,
+    "push final tilt": -0.08885301437450699,
+    "push displacement": -0.08176839383933854,
+    "push toppled": -0.0134893514651524,
+    "ramp slip angle": -0.1908388130033798,
+    "ramp tip angle": -0.11279406890930721,
+    "ramp final tilt": -0.10268772616402311,
+    "drop final tilt": -0.0502506286596478,
+    "drop displacement": -0.0827937104680121,
+    "drop bounces": -0.06717650243933093,
+    "drop settle time": -0.28183618202196503
+   },
+   "topples under new push accuracy": 0.7324167107350608,
+   "tips before slipping on new ramp accuracy": 0.8450555261766262
+  },
+  "Appearance + physics metadata": {
+   "R2": 0.15386903611567274,
+   "R2 seed std": 0.0,
+   "R2 95% CI": [
+    0.12157106597048259,
+    0.18111062464654565
+   ],
+   "R2 per outcome": {
+    "push max tilt": 0.1625070568304734,
+    "push final tilt": 0.11780640331098446,
+    "push displacement": 0.05571530067781316,
+    "push toppled": 0.16326302786541558,
+    "ramp slip angle": 0.25170491466099565,
+    "ramp tip angle": 0.2642184870098382,
+    "ramp final tilt": 0.24523382035339558,
+    "drop final tilt": 0.17441071446333034,
+    "drop displacement": 0.08825634978625585,
+    "drop bounces": 0.014572375753077349,
+    "drop settle time": 0.15487094656082068
+   },
+   "topples under new push accuracy": 0.7424643046007403,
+   "tips before slipping on new ramp accuracy": 0.8762559492332099
+  },
+  "Random": {
+   "R2": -0.20544886973448132,
+   "R2 seed std": 0.01236728570531514,
+   "R2 95% CI": [
+    -0.2234623702101016,
+    -0.19090655843546417
+   ],
+   "R2 per outcome": {
+    "push max tilt": -0.19722627419986546,
+    "push final tilt": -0.2042854895610132,
+    "push displacement": -0.2545706817826647,
+    "push toppled": -0.20349730734470706,
+    "ramp slip angle": -0.21455533540275554,
+    "ramp tip angle": -0.20068252216546653,
+    "ramp final tilt": -0.19838361697179585,
+    "drop final tilt": -0.2092413275713425,
+    "drop displacement": -0.18250260850199465,
+    "drop bounces": -0.19185587803259163,
+    "drop settle time": -0.20313652554509734
+   },
+   "topples under new push accuracy": 0.6345848757271285,
+   "tips before slipping on new ramp accuracy": 0.8783712321523004
+  }
+ },
+ "paired differences": {
+  "JEPA behavior embedding minus JEPA trained on dev assets only": {
+   "difference": -0.008199242616574787,
+   "95% CI": [
+    -0.01926409606801356,
+    0.0017059779721181943
+   ],
+   "fraction of resamples where first is better": 0.0515
+  },
+  "JEPA behavior embedding minus Rollout statistics (hand-built)": {
+   "difference": -0.08546006937280348,
+   "95% CI": [
+    -0.10312126933998961,
+    -0.06828799672881336
+   ],
+   "fraction of resamples where first is better": 0.0
+  },
+  "JEPA behavior embedding minus Static stability (no simulation)": {
+   "difference": 0.13098274846629399,
+   "95% CI": [
+    0.10068393998763532,
+    0.1602274575236516
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "JEPA behavior embedding minus Physics metadata": {
+   "difference": 0.2296202670451274,
+   "95% CI": [
+    0.19965332728912275,
+    0.2594054159447609
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "JEPA behavior embedding minus Appearance (SigLIP2)": {
+   "difference": 0.31185957691828153,
+   "95% CI": [
+    0.2828626082793199,
+    0.3415264037351041
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "JEPA behavior embedding minus Category words (TF-IDF of names)": {
+   "difference": 0.5619729732209239,
+   "95% CI": [
+    0.5269566683336118,
+    0.5988463709361107
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "JEPA behavior embedding minus Appearance + physics metadata": {
+   "difference": 0.30515154763409114,
+   "95% CI": [
+    0.27567899888069014,
+    0.33495683746308463
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "JEPA behavior embedding minus Random": {
+   "difference": 0.664469453484245,
+   "95% CI": [
+    0.640897582891996,
+    0.6916188725331833
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "Rollout statistics (hand-built) minus Appearance (SigLIP2)": {
+   "difference": 0.397319646291085,
+   "95% CI": [
+    0.3678367680787877,
+    0.42758477955582447
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "Static stability (no simulation) minus Appearance (SigLIP2)": {
+   "difference": 0.18087682845198755,
+   "95% CI": [
+    0.1473578286825845,
+    0.21603489482583585
+   ],
+   "fraction of resamples where first is better": 1.0
+  }
+ },
+ "k sensitivity": {
+  "k=1": {
+   "JEPA behavior embedding": 0.19802795968951833,
+   "Rollout statistics (hand-built)": 0.29991987491961425,
+   "Static stability (no simulation)": -0.0631360168554907,
+   "Appearance (SigLIP2)": -0.36274106086746444
+  },
+  "k=10": {
+   "JEPA behavior embedding": 0.4855212814392274,
+   "Rollout statistics (hand-built)": 0.5674015013973985,
+   "Static stability (no simulation)": 0.3560301225140551,
+   "Appearance (SigLIP2)": 0.21346221748179028
+  },
+  "k=20": {
+   "JEPA behavior embedding": 0.4931662298786886,
+   "Rollout statistics (hand-built)": 0.5709299520339285,
+   "Static stability (no simulation)": 0.3681535915279604,
+   "Appearance (SigLIP2)": 0.21925852766982257
+  }
+ },
+ "without duplicate exclusion (self only)": {
+  "JEPA behavior embedding": 0.5193337976664875,
+  "Rollout statistics (hand-built)": 0.595322369252524,
+  "Static stability (no simulation)": 0.4391764813011701,
+  "Appearance (SigLIP2)": 0.35355200364342176
+ },
+ "repeat consistency R2 (same asset, same probe, small yaw/speed jitter)": 0.823190156316114,
+ "cross-engine: PhysX, same hulls": {
+  "n_assets": 2166,
+  "n_test_queries": 1890,
+  "MuJoCo neighbors scored on PhysX outcomes": {
+   "JEPA behavior embedding": {
+    "R2": 0.3309529600627315,
+    "R2 seed std": 0.0009621761072227565,
+    "R2 95% CI": [
+     0.30933747304359155,
+     0.3520937809947028
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.5449637702377482,
+     "push final tilt": 0.4676263660991736,
+     "push displacement": 0.17573663076271473,
+     "push toppled": 0.498739276890299,
+     "ramp slip angle": 0.4786236825301165,
+     "ramp tip angle": 0.455905630106966,
+     "ramp final tilt": 0.41105726146459026,
+     "drop final tilt": 0.24732604049331477,
+     "drop displacement": 0.10014990710550513,
+     "drop bounces": -0.09033613445380739,
+     "drop settle time": 0.3506901294534257
+    }
+   },
+   "Rollout statistics (hand-built)": {
+    "R2": 0.4077491739064368,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.3861514989662504,
+     0.42851598778504496
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.5747721075724943,
+     "push final tilt": 0.4861036477472842,
+     "push displacement": 0.24684919777544634,
+     "push toppled": 0.5233996625305651,
+     "ramp slip angle": 0.7286530190435587,
+     "ramp tip angle": 0.5168836858023866,
+     "ramp final tilt": 0.4379325082581641,
+     "drop final tilt": 0.2926721608900613,
+     "drop displacement": 0.1264932604188953,
+     "drop bounces": 0.05096638655459851,
+     "drop settle time": 0.5005152763773502
+    }
+   },
+   "Static stability (no simulation)": {
+    "R2": 0.3120865348861696,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.283747809574615,
+     0.3402098846591866
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.29477332976001436,
+     "push final tilt": 0.3010588494541375,
+     "push displacement": 0.13024279720037646,
+     "push toppled": 0.3253332106473129,
+     "ramp slip angle": 0.6098491958614194,
+     "ramp tip angle": 0.41372117265490904,
+     "ramp final tilt": 0.33018096495060023,
+     "drop final tilt": 0.261671989490047,
+     "drop displacement": 0.19583476261776478,
+     "drop bounces": 0.12810924369745635,
+     "drop settle time": 0.4421763674138277
+    }
+   },
+   "Physics metadata": {
+    "R2": 0.24094638605035784,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.21266797413751307,
+     0.2698174754607127
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.12515888549248266,
+     "push final tilt": 0.18044575744749214,
+     "push displacement": -0.007911629087550498,
+     "push toppled": 0.22568895863200877,
+     "ramp slip angle": 0.5227894370105202,
+     "ramp tip angle": 0.25782883509066457,
+     "ramp final tilt": 0.22786690392431064,
+     "drop final tilt": 0.25957113848789626,
+     "drop displacement": 0.2554200753282281,
+     "drop bounces": 0.25579831932771335,
+     "drop settle time": 0.34775356490017006
+    }
+   },
+   "Appearance (SigLIP2)": {
+    "R2": 0.1528638018731979,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.12411417020175769,
+     0.17942693034879093
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.14912441661664055,
+     "push final tilt": 0.09733918726979829,
+     "push displacement": 0.04251092048971028,
+     "push toppled": 0.13694917193158762,
+     "ramp slip angle": 0.31448723215294583,
+     "ramp tip angle": 0.2881578888740729,
+     "ramp final tilt": 0.28364306080703017,
+     "drop final tilt": 0.1164402877097176,
+     "drop displacement": 0.07329378153102306,
+     "drop bounces": -0.09701680672271795,
+     "drop settle time": 0.2765726799453685
+    }
+   },
+   "Category words (TF-IDF of names)": {
+    "R2": -0.1200549724269553,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     -0.15411721158009695,
+     -0.09240217035503143
+    ],
+    "R2 per outcome": {
+     "push max tilt": -0.06418374743084065,
+     "push final tilt": -0.07080874683559801,
+     "push displacement": -0.02505010998357471,
+     "push toppled": -0.05237490689749147,
+     "ramp slip angle": -0.18126561166971356,
+     "ramp tip angle": -0.08231433045996872,
+     "ramp final tilt": -6.683310149591115e-05,
+     "drop final tilt": -0.1253217353118561,
+     "drop displacement": -0.276008034366251,
+     "drop bounces": -0.22100000000002762,
+     "drop settle time": -0.22221064063969065
+    }
+   },
+   "Random": {
+    "R2": -0.19635033111400682,
+    "R2 seed std": 0.009549118493506658,
+    "R2 95% CI": [
+     -0.21346111962687125,
+     -0.1833515027920731
+    ],
+    "R2 per outcome": {
+     "push max tilt": -0.18333390757344623,
+     "push final tilt": -0.1793818399328789,
+     "push displacement": -0.248061455279634,
+     "push toppled": -0.18498323222100246,
+     "ramp slip angle": -0.2080751346262816,
+     "ramp tip angle": -0.18774496297890178,
+     "ramp final tilt": -0.17684229079262725,
+     "drop final tilt": -0.17502032928114467,
+     "drop displacement": -0.202546110420995,
+     "drop bounces": -0.20102521008406252,
+     "drop settle time": -0.21283916906310055
+    }
+   }
+  },
+  "same queries scored on MuJoCo outcomes (reference)": {
+   "JEPA behavior embedding": 0.45894012034131665,
+   "Appearance (SigLIP2)": 0.14670803227000367
+  },
+  "JEPA minus appearance on PhysX outcomes": {
+   "difference": 0.17808915818953322,
+   "95% CI": [
+    0.15081015711887802,
+    0.20665247308670717
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "held-out outcome correlation (MuJoCo vs PhysX)": {
+   "push max tilt": 0.8004084449903488,
+   "push final tilt": 0.7294388774796821,
+   "push displacement": 0.7313035060757209,
+   "push toppled": 0.7664085131251368,
+   "ramp slip angle": 0.8862045553795478,
+   "ramp tip angle": 0.6923237206021571,
+   "ramp final tilt": 0.6963288307191051,
+   "drop final tilt": 0.6628479804008109,
+   "drop displacement": 0.4360619842486522,
+   "drop bounces": 0.32645181945359575,
+   "drop settle time": 0.6616740062301353
+  },
+  "topple/no-topple agreement, all probe runs": 0.83116698629164,
+  "topple agreement away from the tipping point (max tilt outside 25-65 deg in both)": 0.8854524627720504,
+  "share of probe runs near the tipping point": 0.2869166844236096,
+  "rest tilt > 10 deg in MuJoCo / PhysX / both": [
+   355,
+   379,
+   322
+  ]
+ },
+ "cross-engine: PhysX, SDF collision (NVIDIA's PhysX variant)": {
+  "n_assets": 505,
+  "n_test_queries": 446,
+  "MuJoCo neighbors scored on PhysX outcomes": {
+   "JEPA behavior embedding": {
+    "R2": 0.258191910568246,
+    "R2 seed std": 0.002895807570763808,
+    "R2 95% CI": [
+     0.20881254355581352,
+     0.3014777687818656
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.32547273923505865,
+     "push final tilt": 0.24359681388350804,
+     "push displacement": -0.007603272510534757,
+     "push toppled": 0.298744529695943,
+     "ramp slip angle": 0.4710006664714381,
+     "ramp tip angle": 0.6468525042014558,
+     "ramp final tilt": 0.4784559517996377,
+     "drop final tilt": 0.19434021227914508,
+     "drop displacement": -0.013647813860781177,
+     "drop bounces": -0.11111624942565095,
+     "drop settle time": 0.3140149344814866
+    }
+   },
+   "Rollout statistics (hand-built)": {
+    "R2": 0.3192838678193125,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.26991146745631805,
+     0.36833234718537883
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.3723457643525693,
+     "push final tilt": 0.26974857139746455,
+     "push displacement": 0.1068526016070539,
+     "push toppled": 0.33613299232737204,
+     "ramp slip angle": 0.5938999000068621,
+     "ramp tip angle": 0.6804482549840282,
+     "ramp final tilt": 0.44639962638326947,
+     "drop final tilt": 0.277523649564992,
+     "drop displacement": 0.05402119861560295,
+     "drop bounces": -0.027095024234075282,
+     "drop settle time": 0.40184501100729886
+    }
+   },
+   "Static stability (no simulation)": {
+    "R2": 0.3436812791440126,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.2924758220933242,
+     0.39095054624173586
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.3478763053101539,
+     "push final tilt": 0.23082353071942197,
+     "push displacement": 0.2084267619578366,
+     "push toppled": 0.3433572037510728,
+     "ramp slip angle": 0.560998445544726,
+     "ramp tip angle": 0.6395885358785902,
+     "ramp final tilt": 0.48930382919257676,
+     "drop final tilt": 0.24268584526194603,
+     "drop displacement": 0.1401543039685459,
+     "drop bounces": 0.17578549513094954,
+     "drop settle time": 0.4014938138683186
+    }
+   },
+   "Physics metadata": {
+    "R2": 0.2827210545708318,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.22436893039565733,
+     0.3318464106880685
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.3206148673423189,
+     "push final tilt": 0.24569821572963502,
+     "push displacement": 0.1563259490004324,
+     "push toppled": 0.32624722932652017,
+     "ramp slip angle": 0.4149076707995798,
+     "ramp tip angle": 0.459186198419438,
+     "ramp final tilt": 0.4107388177152115,
+     "drop final tilt": 0.11684778375359073,
+     "drop displacement": 0.1058793978876692,
+     "drop bounces": 0.1898661567877593,
+     "drop settle time": 0.36361931351699484
+    }
+   },
+   "Appearance (SigLIP2)": {
+    "R2": 0.14484914022721904,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     0.07494544746187157,
+     0.2040328617470752
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.24581147554821636,
+     "push final tilt": 0.16082901719062803,
+     "push displacement": 0.225565009118327,
+     "push toppled": 0.20837851662404716,
+     "ramp slip angle": 0.22248115925757528,
+     "ramp tip angle": 0.2878529185305754,
+     "ramp final tilt": 0.1773768503737988,
+     "drop final tilt": -0.02970284286590341,
+     "drop displacement": -0.033610072717390915,
+     "drop bounces": -0.053669794121576464,
+     "drop settle time": 0.18202830556111238
+    }
+   },
+   "Category words (TF-IDF of names)": {
+    "R2": -0.1460084930863825,
+    "R2 seed std": 0.0,
+    "R2 95% CI": [
+     -0.22420510698556143,
+     -0.0802566494980092
+    ],
+    "R2 per outcome": {
+     "push max tilt": 0.016493659390810933,
+     "push final tilt": -0.00027673966317021126,
+     "push displacement": -0.041017745166025854,
+     "push toppled": -0.006446717817556458,
+     "ramp slip angle": -0.2133404228023319,
+     "ramp tip angle": -0.1858026382100304,
+     "ramp final tilt": -0.1758557641765739,
+     "drop final tilt": -0.12084274946792561,
+     "drop displacement": -0.19168555070275617,
+     "drop bounces": -0.20340077371159948,
+     "drop settle time": -0.48391798162304855
+    }
+   },
+   "Random": {
+    "R2": -0.1974419869674088,
+    "R2 seed std": 0.022246548699254107,
+    "R2 95% CI": [
+     -0.2397893137234853,
+     -0.1708034564897102
+    ],
+    "R2 per outcome": {
+     "push max tilt": -0.1931678722121478,
+     "push final tilt": -0.19253160043978576,
+     "push displacement": -0.23695030070316844,
+     "push toppled": -0.18692526285876077,
+     "ramp slip angle": -0.15889679167009998,
+     "ramp tip angle": -0.1684987492525567,
+     "ramp final tilt": -0.15668101320201613,
+     "drop final tilt": -0.1651171557127721,
+     "drop displacement": -0.20367769810135808,
+     "drop bounces": -0.28603376465532054,
+     "drop settle time": -0.2233816478335108
+    }
+   }
+  },
+  "same queries scored on MuJoCo outcomes (reference)": {
+   "JEPA behavior embedding": 0.4040739613156341,
+   "Appearance (SigLIP2)": 0.08857936545053101
+  },
+  "JEPA minus appearance on PhysX outcomes": {
+   "difference": 0.11334277034102683,
+   "95% CI": [
+    0.05450145291043032,
+    0.17824121356616493
+   ],
+   "fraction of resamples where first is better": 1.0
+  },
+  "held-out outcome correlation (MuJoCo vs PhysX)": {
+   "push max tilt": 0.5638454639692673,
+   "push final tilt": 0.4372658258868584,
+   "push displacement": 0.5706643032497385,
+   "push toppled": 0.5418829840329739,
+   "ramp slip angle": 0.7819463736811786,
+   "ramp tip angle": 0.7991715937188661,
+   "ramp final tilt": 0.612979177080208,
+   "drop final tilt": 0.6039818061870729,
+   "drop displacement": 0.40762997485902336,
+   "drop bounces": 0.19025234370261224,
+   "drop settle time": 0.685604524200608
+  },
+  "topple/no-topple agreement, all probe runs": 0.7812642802741813,
+  "topple agreement away from the tipping point (max tilt outside 25-65 deg in both)": 0.8117744610281924,
+  "share of probe runs near the tipping point": 0.26519421172886515,
+  "rest tilt > 10 deg in MuJoCo / PhysX / both": [
+   81,
+   67,
+   55
+  ]
+ }
+}

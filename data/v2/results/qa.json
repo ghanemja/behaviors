@@ -1,0 +1,3666 @@
+{
+ "n_assets_checked": 2175,
+ "counts": {
+  "unstable_at_rest": 325,
+  "no_friction": 99,
+  "density": 98,
+  "inertia_impossible": 82,
+  "com_outside": 14,
+  "com_at_base": 16
+ },
+ "variant_mass_mismatches": [
+  "bodyPart_side_skirt_left_a01",
+  "bodyPart_tailLight_b01",
+  "bodyPart_tailLight_c01",
+  "bodyPart_wiper_blades_b01",
+  "bodyPart_wiper_blades_c01",
+  "food_packaged_mix_brownie_a01",
+  "trashCan_wheeled_green_a01"
+ ],
+ "assets": {
+  "TV_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 112.0,
+    "rest_tilt_physx_deg": 108.9
+   }
+  },
+  "airSystem_air_filter_a01": {
+   "no_friction": {}
+  },
+  "airSystem_air_filter_box_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 106.5,
+    "rest_tilt_physx_deg": 106.4
+   }
+  },
+  "appliance_handDryer_automatic_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "barrier_wall_plastic_orange_a03": {
+   "density": {
+    "mass_kg": 6.8035,
+    "hull_volume_m3": 1.146,
+    "kg_per_m3": 5.9
+   }
+  },
+  "bedding_a01": {
+   "density": {
+    "mass_kg": 3.7754,
+    "hull_volume_m3": 0.5252,
+    "kg_per_m3": 7.2
+   }
+  },
+  "blinds_window_2m_closed_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 2.2415,
+    "farthest_point_m": 1.987,
+    "ratio": 1.13
+   }
+  },
+  "blinds_window_2m_open_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 2.2411,
+    "farthest_point_m": 1.9859,
+    "ratio": 1.13
+   }
+  },
+  "blinds_window_4m_closed_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 2.2965,
+    "farthest_point_m": 2.0153,
+    "ratio": 1.14
+   }
+  },
+  "blinds_window_4m_closed_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 3.0184,
+    "farthest_point_m": 2.6562,
+    "ratio": 1.14
+   }
+  },
+  "blinds_window_4m_open_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 3.0181,
+    "farthest_point_m": 2.6574,
+    "ratio": 1.14
+   }
+  },
+  "bodyPart_boot_lid_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 29.7,
+    "rest_tilt_physx_deg": 29.7
+   }
+  },
+  "bodyPart_boot_lid_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 34.4,
+    "rest_tilt_physx_deg": 26.4
+   }
+  },
+  "bodyPart_boot_lid_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 33.5,
+    "rest_tilt_physx_deg": 33.5
+   }
+  },
+  "bodyPart_bumper_rear_c01": {
+   "density": {
+    "mass_kg": 3.4876,
+    "hull_volume_m3": 0.3269,
+    "kg_per_m3": 10.7
+   }
+  },
+  "bodyPart_car_side_mirror_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 83.3,
+    "rest_tilt_physx_deg": 76.4
+   },
+   "no_friction": {}
+  },
+  "bodyPart_car_side_mirror_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 59.3,
+    "rest_tilt_physx_deg": 53.2
+   },
+   "no_friction": {}
+  },
+  "bodyPart_car_side_mirror_c01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.176,
+    "authored_com": [
+     0.0282,
+     -0.0424,
+     0.0037
+    ]
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.3,
+    "rest_tilt_physx_deg": 23.1
+   },
+   "no_friction": {}
+  },
+  "bodyPart_car_view_mirror_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 67.9,
+    "rest_tilt_physx_deg": 67.9
+   }
+  },
+  "bodyPart_car_view_mirror_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 54.0,
+    "rest_tilt_physx_deg": 53.7
+   }
+  },
+  "bodyPart_door_assembled_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 68.0,
+    "rest_tilt_physx_deg": 67.1
+   }
+  },
+  "bodyPart_door_front_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 73.2,
+    "rest_tilt_physx_deg": 72.7
+   }
+  },
+  "bodyPart_door_front_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 86.9,
+    "rest_tilt_physx_deg": 86.9
+   }
+  },
+  "bodyPart_door_front_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 86.4,
+    "rest_tilt_physx_deg": 84.9
+   }
+  },
+  "bodyPart_door_rear_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 53.5,
+    "rest_tilt_physx_deg": 51.9
+   }
+  },
+  "bodyPart_door_rear_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 75.0,
+    "rest_tilt_physx_deg": 75.4
+   },
+   "no_friction": {}
+  },
+  "bodyPart_door_rear_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 76.0,
+    "rest_tilt_physx_deg": 76.9
+   }
+  },
+  "bodyPart_door_rear_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 65.6,
+    "rest_tilt_physx_deg": 66.6
+   }
+  },
+  "bodyPart_fender_front_c01": {
+   "no_friction": {}
+  },
+  "bodyPart_fender_front_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 21.9,
+    "rest_tilt_physx_deg": 21.9
+   }
+  },
+  "bodyPart_fender_rear_a01": {
+   "no_friction": {}
+  },
+  "bodyPart_grille_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 91.2,
+    "rest_tilt_physx_deg": 91.4
+   }
+  },
+  "bodyPart_grille_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 55.7,
+    "rest_tilt_physx_deg": 55.7
+   }
+  },
+  "bodyPart_grille_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 61.9,
+    "rest_tilt_physx_deg": 51.9
+   }
+  },
+  "bodyPart_headLight_left_a01": {
+   "no_friction": {}
+  },
+  "bodyPart_interior_roof_panel_b01": {
+   "density": {
+    "mass_kg": 2.7358,
+    "hull_volume_m3": 0.3246,
+    "kg_per_m3": 8.4
+   }
+  },
+  "bodyPart_interior_roof_panel_c01": {
+   "no_friction": {},
+   "density": {
+    "mass_kg": 1.6597,
+    "hull_volume_m3": 0.1508,
+    "kg_per_m3": 11.0
+   }
+  },
+  "bodyPart_interior_roof_panel_d01": {
+   "no_friction": {},
+   "density": {
+    "mass_kg": 3.6311,
+    "hull_volume_m3": 0.643,
+    "kg_per_m3": 5.6
+   }
+  },
+  "bodyPart_side_skirt_left_a01": {
+   "no_friction": {}
+  },
+  "bodyPart_side_skirt_left_b01": {
+   "no_friction": {}
+  },
+  "bodyPart_side_skirt_left_c01": {
+   "no_friction": {}
+  },
+  "bodyPart_spoiler_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 22.1,
+    "rest_tilt_physx_deg": 23.8
+   }
+  },
+  "bodyPart_tailLight_a01": {
+   "no_friction": {}
+  },
+  "bodyPart_tailLight_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 103.9,
+    "rest_tilt_physx_deg": 120.9
+   }
+  },
+  "bodyPart_wiper_blades_a01": {
+   "no_friction": {}
+  },
+  "bodyPart_wiper_blades_b01": {
+   "no_friction": {}
+  },
+  "bottle_laboratory_a03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 109.7,
+    "rest_tilt_physx_deg": 113.8
+   }
+  },
+  "box_cardboard_a01": {
+   "density": {
+    "mass_kg": 1.0,
+    "hull_volume_m3": 0.1851,
+    "kg_per_m3": 5.4
+   }
+  },
+  "box_cardboard_a02": {
+   "density": {
+    "mass_kg": 1.0,
+    "hull_volume_m3": 0.1851,
+    "kg_per_m3": 5.4
+   }
+  },
+  "box_cardboard_a03": {
+   "density": {
+    "mass_kg": 1.0,
+    "hull_volume_m3": 0.1851,
+    "kg_per_m3": 5.4
+   }
+  },
+  "box_cardboard_b01": {
+   "density": {
+    "mass_kg": 0.8008,
+    "hull_volume_m3": 0.1348,
+    "kg_per_m3": 5.9
+   }
+  },
+  "box_cardboard_b02": {
+   "density": {
+    "mass_kg": 0.8008,
+    "hull_volume_m3": 0.1348,
+    "kg_per_m3": 5.9
+   }
+  },
+  "box_cardboard_b03": {
+   "density": {
+    "mass_kg": 0.8008,
+    "hull_volume_m3": 0.1348,
+    "kg_per_m3": 5.9
+   }
+  },
+  "box_cardboard_c01": {
+   "density": {
+    "mass_kg": 0.5359,
+    "hull_volume_m3": 0.06739,
+    "kg_per_m3": 8.0
+   }
+  },
+  "box_cardboard_c02": {
+   "density": {
+    "mass_kg": 0.5359,
+    "hull_volume_m3": 0.06739,
+    "kg_per_m3": 8.0
+   }
+  },
+  "box_cardboard_c03": {
+   "density": {
+    "mass_kg": 0.5359,
+    "hull_volume_m3": 0.06739,
+    "kg_per_m3": 8.0
+   }
+  },
+  "box_cardboard_d01": {
+   "density": {
+    "mass_kg": 0.1964,
+    "hull_volume_m3": 0.015,
+    "kg_per_m3": 13.1
+   }
+  },
+  "box_cardboard_d02": {
+   "density": {
+    "mass_kg": 0.1964,
+    "hull_volume_m3": 0.015,
+    "kg_per_m3": 13.1
+   }
+  },
+  "box_cardboard_d03": {
+   "density": {
+    "mass_kg": 0.1964,
+    "hull_volume_m3": 0.015,
+    "kg_per_m3": 13.1
+   }
+  },
+  "box_cardboard_large_b01": {
+   "density": {
+    "mass_kg": 4.6731,
+    "hull_volume_m3": 0.5732,
+    "kg_per_m3": 8.2
+   }
+  },
+  "box_cardboard_large_b02": {
+   "density": {
+    "mass_kg": 4.6335,
+    "hull_volume_m3": 0.5736,
+    "kg_per_m3": 8.1
+   }
+  },
+  "box_cardboard_open_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5688,
+    "farthest_point_m": 0.4935,
+    "ratio": 1.15
+   },
+   "density": {
+    "mass_kg": 1.1681,
+    "hull_volume_m3": 0.08709,
+    "kg_per_m3": 13.4
+   }
+  },
+  "box_cardboard_open_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5416,
+    "farthest_point_m": 0.4438,
+    "ratio": 1.22
+   },
+   "density": {
+    "mass_kg": 1.1642,
+    "hull_volume_m3": 0.08593,
+    "kg_per_m3": 13.5
+   }
+  },
+  "box_cardboard_open_a03": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5416,
+    "farthest_point_m": 0.4438,
+    "ratio": 1.22
+   },
+   "density": {
+    "mass_kg": 1.1642,
+    "hull_volume_m3": 0.08593,
+    "kg_per_m3": 13.5
+   }
+  },
+  "box_cardboard_open_a04": {
+   "density": {
+    "mass_kg": 1.1649,
+    "hull_volume_m3": 0.0876,
+    "kg_per_m3": 13.3
+   }
+  },
+  "box_cardboard_open_a05": {
+   "density": {
+    "mass_kg": 1.1636,
+    "hull_volume_m3": 0.08573,
+    "kg_per_m3": 13.6
+   }
+  },
+  "box_cardboard_open_a06": {
+   "density": {
+    "mass_kg": 1.164,
+    "hull_volume_m3": 0.0854,
+    "kg_per_m3": 13.6
+   }
+  },
+  "box_corrugated_brown_b12": {
+   "density": {
+    "mass_kg": 1.9362,
+    "hull_volume_m3": 0.1376,
+    "kg_per_m3": 14.1
+   }
+  },
+  "box_corrugated_brown_b13": {
+   "density": {
+    "mass_kg": 2.7104,
+    "hull_volume_m3": 0.2279,
+    "kg_per_m3": 11.9
+   }
+  },
+  "box_corrugated_white_a12": {
+   "density": {
+    "mass_kg": 1.8861,
+    "hull_volume_m3": 0.1373,
+    "kg_per_m3": 13.7
+   }
+  },
+  "box_corrugated_white_a13": {
+   "density": {
+    "mass_kg": 2.6668,
+    "hull_volume_m3": 0.228,
+    "kg_per_m3": 11.7
+   }
+  },
+  "box_corrugated_white_a18": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3412,
+    "farthest_point_m": 0.3004,
+    "ratio": 1.14
+   }
+  },
+  "box_corrugated_white_b19": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5287,
+    "farthest_point_m": 0.3416,
+    "ratio": 1.55
+   }
+  },
+  "box_corrugated_white_b20": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.6504,
+    "farthest_point_m": 0.4221,
+    "ratio": 1.54
+   }
+  },
+  "box_corrugated_white_b21": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.4522,
+    "farthest_point_m": 0.3023,
+    "ratio": 1.5
+   }
+  },
+  "box_corrugated_white_b22": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.4881,
+    "farthest_point_m": 0.3276,
+    "ratio": 1.49
+   }
+  },
+  "box_corrugated_white_b25": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3706,
+    "farthest_point_m": 0.2431,
+    "ratio": 1.52
+   }
+  },
+  "box_corrugated_white_b26": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.4047,
+    "farthest_point_m": 0.2741,
+    "ratio": 1.48
+   }
+  },
+  "box_corrugated_white_b28": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3343,
+    "farthest_point_m": 0.2144,
+    "ratio": 1.56
+   }
+  },
+  "box_corrugated_white_b33": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.259,
+    "farthest_point_m": 0.1729,
+    "ratio": 1.5
+   }
+  },
+  "box_cube_a08": {
+   "density": {
+    "mass_kg": 3.2185,
+    "hull_volume_m3": 0.2258,
+    "kg_per_m3": 14.3
+   }
+  },
+  "box_cube_a09": {
+   "density": {
+    "mass_kg": 5.0815,
+    "hull_volume_m3": 0.4527,
+    "kg_per_m3": 11.2
+   }
+  },
+  "box_cube_a10": {
+   "density": {
+    "mass_kg": 7.6351,
+    "hull_volume_m3": 0.7608,
+    "kg_per_m3": 10.0
+   }
+  },
+  "box_cube_brown_b04": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2917,
+    "farthest_point_m": 0.2525,
+    "ratio": 1.16
+   }
+  },
+  "box_cube_white_b04": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2815,
+    "farthest_point_m": 0.2519,
+    "ratio": 1.12
+   }
+  },
+  "box_cube_white_b05": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3529,
+    "farthest_point_m": 0.3037,
+    "ratio": 1.16
+   }
+  },
+  "box_long_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3518,
+    "farthest_point_m": 0.3034,
+    "ratio": 1.16
+   }
+  },
+  "box_long_a05": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3112,
+    "farthest_point_m": 0.2689,
+    "ratio": 1.16
+   }
+  },
+  "box_long_a10": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1945,
+    "farthest_point_m": 0.1754,
+    "ratio": 1.11
+   }
+  },
+  "box_long_a11": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1669,
+    "farthest_point_m": 0.1501,
+    "ratio": 1.11
+   }
+  },
+  "box_long_a12": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1436,
+    "farthest_point_m": 0.1297,
+    "ratio": 1.11
+   }
+  },
+  "box_multiDepth_a03": {
+   "density": {
+    "mass_kg": 0.2323,
+    "hull_volume_m3": 0.01983,
+    "kg_per_m3": 11.7
+   }
+  },
+  "box_multiDepth_a05": {
+   "density": {
+    "mass_kg": 0.3001,
+    "hull_volume_m3": 0.02933,
+    "kg_per_m3": 10.2
+   }
+  },
+  "box_multiDepth_a08": {
+   "density": {
+    "mass_kg": 0.2794,
+    "hull_volume_m3": 0.0226,
+    "kg_per_m3": 12.4
+   }
+  },
+  "box_multiDepth_a09": {
+   "density": {
+    "mass_kg": 0.5215,
+    "hull_volume_m3": 0.06821,
+    "kg_per_m3": 7.6
+   }
+  },
+  "box_multiDepth_a10": {
+   "density": {
+    "mass_kg": 0.3937,
+    "hull_volume_m3": 0.04266,
+    "kg_per_m3": 9.2
+   }
+  },
+  "box_multiDepth_a11": {
+   "density": {
+    "mass_kg": 0.5132,
+    "hull_volume_m3": 0.0638,
+    "kg_per_m3": 8.0
+   }
+  },
+  "box_multiDepth_a12": {
+   "density": {
+    "mass_kg": 0.5639,
+    "hull_volume_m3": 0.06403,
+    "kg_per_m3": 8.8
+   }
+  },
+  "box_multiDepth_brown_b06": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2964,
+    "farthest_point_m": 0.2324,
+    "ratio": 1.28
+   }
+  },
+  "box_multiDepth_brown_b07": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.353,
+    "farthest_point_m": 0.278,
+    "ratio": 1.27
+   },
+   "density": {
+    "mass_kg": 0.2539,
+    "hull_volume_m3": 0.01973,
+    "kg_per_m3": 12.9
+   }
+  },
+  "box_multiDepth_brown_b08": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3803,
+    "farthest_point_m": 0.2955,
+    "ratio": 1.29
+   },
+   "density": {
+    "mass_kg": 0.2816,
+    "hull_volume_m3": 0.02263,
+    "kg_per_m3": 12.4
+   }
+  },
+  "box_multiDepth_brown_b09": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5328,
+    "farthest_point_m": 0.4129,
+    "ratio": 1.29
+   },
+   "density": {
+    "mass_kg": 0.5235,
+    "hull_volume_m3": 0.06819,
+    "kg_per_m3": 7.7
+   }
+  },
+  "box_multiDepth_brown_b10": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.4847,
+    "farthest_point_m": 0.3699,
+    "ratio": 1.31
+   },
+   "density": {
+    "mass_kg": 0.3961,
+    "hull_volume_m3": 0.04271,
+    "kg_per_m3": 9.3
+   }
+  },
+  "box_multiDepth_brown_b11": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.4909,
+    "farthest_point_m": 0.4111,
+    "ratio": 1.19
+   },
+   "density": {
+    "mass_kg": 0.516,
+    "hull_volume_m3": 0.06395,
+    "kg_per_m3": 8.1
+   }
+  },
+  "box_multiDepth_white_b05": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3988,
+    "farthest_point_m": 0.3134,
+    "ratio": 1.27
+   },
+   "density": {
+    "mass_kg": 0.3018,
+    "hull_volume_m3": 0.02936,
+    "kg_per_m3": 10.3
+   }
+  },
+  "box_multiDepth_white_b06": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2964,
+    "farthest_point_m": 0.2324,
+    "ratio": 1.28
+   }
+  },
+  "brakeSystem_brake_booster_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 59.8,
+    "rest_tilt_physx_deg": 61.1
+   }
+  },
+  "brakeSystem_brake_booster_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 37.3,
+    "rest_tilt_physx_deg": 37.6
+   }
+  },
+  "brakeSystem_brake_master_cylinder_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0683,
+    "farthest_point_m": 0.0592,
+    "ratio": 1.15
+   },
+   "no_friction": {}
+  },
+  "brakeSystem_brake_master_cylinder_b01": {
+   "no_friction": {}
+  },
+  "brakeSystem_brake_pad_a01": {
+   "no_friction": {}
+  },
+  "brakeSystem_brake_pad_b01": {
+   "no_friction": {}
+  },
+  "brakeSystem_brakes_assembly_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.0,
+    "rest_tilt_physx_deg": 16.0
+   }
+  },
+  "brakeSystem_brakes_assembly_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.4,
+    "rest_tilt_physx_deg": 15.8
+   }
+  },
+  "cabinet_file_b02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.6,
+    "rest_tilt_physx_deg": 23.4
+   }
+  },
+  "cabinet_file_b04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 28.7,
+    "rest_tilt_physx_deg": 47.5
+   }
+  },
+  "cabinet_file_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 68.4,
+    "rest_tilt_physx_deg": 10.2
+   }
+  },
+  "cabinet_file_d02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 91.7,
+    "rest_tilt_physx_deg": 28.8
+   }
+  },
+  "cabinet_file_d03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 35.7,
+    "rest_tilt_physx_deg": 15.8
+   }
+  },
+  "cabinet_file_d04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 93.9,
+    "rest_tilt_physx_deg": 38.2
+   }
+  },
+  "case_c02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.6592,
+    "farthest_point_m": 0.5105,
+    "ratio": 1.29
+   }
+  },
+  "cleaning_cloth_a02": {
+   "density": {
+    "mass_kg": 31.0519,
+    "hull_volume_m3": 0.001032,
+    "kg_per_m3": 30080.9
+   }
+  },
+  "cleaning_sponge_f01": {
+   "density": {
+    "mass_kg": 0.0019,
+    "hull_volume_m3": 0.0001845,
+    "kg_per_m3": 10.3
+   }
+  },
+  "cleaning_towel_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 97.3,
+    "rest_tilt_physx_deg": 97.2
+   }
+  },
+  "computer_scanner_barcode_a01": {
+   "density": {
+    "mass_kg": 0.2219,
+    "hull_volume_m3": 0.01518,
+    "kg_per_m3": 14.6
+   }
+  },
+  "consumable_additive_dpf_cleaner_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 96.8,
+    "rest_tilt_physx_deg": 94.8
+   }
+  },
+  "consumable_additive_oil_smoke_stop_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 91.6,
+    "rest_tilt_physx_deg": 91.0
+   }
+  },
+  "consumable_bearing_ball_d01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0343,
+    "farthest_point_m": 0.0122,
+    "ratio": 2.81
+   }
+  },
+  "consumable_brake_fluid_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 46.9,
+    "rest_tilt_physx_deg": 53.1
+   }
+  },
+  "consumable_fuse_midi_yellow_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.1,
+    "rest_tilt_physx_deg": 90.3
+   }
+  },
+  "consumable_lightBulb_h11_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 25.7,
+    "rest_tilt_physx_deg": 25.9
+   }
+  },
+  "consumable_lightBulb_h1_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 21.5,
+    "rest_tilt_physx_deg": 15.8
+   }
+  },
+  "consumable_lightBulb_h7_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.9,
+    "rest_tilt_physx_deg": 15.1
+   }
+  },
+  "consumable_lightBulb_p21w_clear_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.2,
+    "rest_tilt_physx_deg": 12.0
+   }
+  },
+  "consumable_lightBulb_py21w_amber_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 30.5,
+    "rest_tilt_physx_deg": 30.9
+   }
+  },
+  "consumable_lightBulb_w5w_a01": {
+   "density": {
+    "mass_kg": 0.0876,
+    "hull_volume_m3": 1.507e-06,
+    "kg_per_m3": 58160.2
+   }
+  },
+  "consumable_microfiber_towel_wrinkled_c01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.035,
+    "authored_com": [
+     0.0084,
+     0.0042,
+     -0.0112
+    ]
+   }
+  },
+  "container_jar_glass_silver_a02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.2,
+    "rest_tilt_physx_deg": 14.3
+   }
+  },
+  "container_orange_c04": {
+   "density": {
+    "mass_kg": 0.9816,
+    "hull_volume_m3": 0.1092,
+    "kg_per_m3": 9.0
+   }
+  },
+  "container_recycle_blue_wheeled_a01": {
+   "density": {
+    "mass_kg": 2.3374,
+    "hull_volume_m3": 0.2735,
+    "kg_per_m3": 8.5
+   }
+  },
+  "container_recycle_green_a03": {
+   "density": {
+    "mass_kg": 0.4575,
+    "hull_volume_m3": 0.0482,
+    "kg_per_m3": 9.5
+   }
+  },
+  "container_recycle_green_b02": {
+   "density": {
+    "mass_kg": 1.2608,
+    "hull_volume_m3": 0.1859,
+    "kg_per_m3": 6.8
+   }
+  },
+  "container_recycle_green_b04": {
+   "density": {
+    "mass_kg": 1.765,
+    "hull_volume_m3": 0.3001,
+    "kg_per_m3": 5.9
+   }
+  },
+  "container_recycle_square_blue_a02": {
+   "density": {
+    "mass_kg": 1.3542,
+    "hull_volume_m3": 0.1942,
+    "kg_per_m3": 7.0
+   }
+  },
+  "container_system_sterilising_e01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5781,
+    "farthest_point_m": 0.297,
+    "ratio": 1.95
+   }
+  },
+  "coolingSystem_coolant_reservoir_tank_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 76.8,
+    "rest_tilt_physx_deg": 86.7
+   }
+  },
+  "coolingSystem_coolant_reservoir_tank_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 58.1,
+    "rest_tilt_physx_deg": 53.5
+   }
+  },
+  "coolingSystem_radiator_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 89.0,
+    "rest_tilt_physx_deg": 83.5
+   }
+  },
+  "coolingSystem_radiator_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 67.7,
+    "rest_tilt_physx_deg": 73.6
+   },
+   "no_friction": {}
+  },
+  "coolingSystem_radiator_c01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.6898,
+    "farthest_point_m": 0.4028,
+    "ratio": 1.71
+   }
+  },
+  "coolingSystem_radiator_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 24.4,
+    "rest_tilt_physx_deg": 29.3
+   }
+  },
+  "coolingSystem_thermostat_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 67.0,
+    "rest_tilt_physx_deg": 67.3
+   },
+   "no_friction": {}
+  },
+  "crate_black_a14": {
+   "density": {
+    "mass_kg": 0.3072,
+    "hull_volume_m3": 0.03619,
+    "kg_per_m3": 8.5
+   }
+  },
+  "crate_blue_a08": {
+   "density": {
+    "mass_kg": 0.3333,
+    "hull_volume_m3": 0.04157,
+    "kg_per_m3": 8.0
+   }
+  },
+  "detector_smoke_fire_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.085,
+    "farthest_point_m": 0.0745,
+    "ratio": 1.14
+   }
+  },
+  "device_insulin_lancing_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 96.6,
+    "rest_tilt_physx_deg": 94.2
+   }
+  },
+  "digitalSystem_displayPanel_wall_a01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.064,
+    "authored_com": [
+     0.456,
+     -0.019,
+     0.8142
+    ]
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 88.7,
+    "rest_tilt_physx_deg": 89.5
+   }
+  },
+  "disinfectant_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 87.2,
+    "rest_tilt_physx_deg": 86.2
+   }
+  },
+  "disinfectant_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 102.0
+   }
+  },
+  "drainage_pumpSystem_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.1,
+    "rest_tilt_physx_deg": 18.3
+   }
+  },
+  "drivetrain_axle_shaft_d01": {
+   "no_friction": {}
+  },
+  "drivetrain_front_axle_differential_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.7,
+    "rest_tilt_physx_deg": 16.8
+   }
+  },
+  "drivetrain_transfer_case_b01": {
+   "no_friction": {}
+  },
+  "drivetrain_transfer_case_c01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3611,
+    "farthest_point_m": 0.2581,
+    "ratio": 1.4
+   }
+  },
+  "drivetrain_transmission_auto_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 96.0,
+    "rest_tilt_physx_deg": 96.0
+   }
+  },
+  "drum_plastic_black_a05": {
+   "density": {
+    "mass_kg": 0.9377,
+    "hull_volume_m3": 0.1323,
+    "kg_per_m3": 7.1
+   }
+  },
+  "drum_plastic_blue_a01": {
+   "density": {
+    "mass_kg": 0.1753,
+    "hull_volume_m3": 0.02358,
+    "kg_per_m3": 7.4
+   }
+  },
+  "drum_plastic_blue_a03": {
+   "density": {
+    "mass_kg": 0.4055,
+    "hull_volume_m3": 0.06399,
+    "kg_per_m3": 6.3
+   }
+  },
+  "drum_plastic_natural_a03": {
+   "density": {
+    "mass_kg": 0.4057,
+    "hull_volume_m3": 0.06399,
+    "kg_per_m3": 6.3
+   }
+  },
+  "electricalSystem_alternator_c01": {
+   "no_friction": {}
+  },
+  "electricalSystem_battery_c01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2275,
+    "farthest_point_m": 0.1631,
+    "ratio": 1.39
+   }
+  },
+  "electricalSystem_battery_d01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.7268,
+    "farthest_point_m": 0.5753,
+    "ratio": 1.26
+   }
+  },
+  "electricalSystem_starter_b01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2828,
+    "farthest_point_m": 0.2253,
+    "ratio": 1.25
+   }
+  },
+  "electricalSystem_starter_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 39.7,
+    "rest_tilt_physx_deg": 40.4
+   }
+  },
+  "electrical_cable_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 63.3,
+    "rest_tilt_physx_deg": 44.4
+   }
+  },
+  "electrical_cable_a02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.3,
+    "rest_tilt_physx_deg": 12.3
+   },
+   "density": {
+    "mass_kg": 90.6246,
+    "hull_volume_m3": 96.73,
+    "kg_per_m3": 0.9
+   }
+  },
+  "engineAssembly_electric_engine_a01": {
+   "no_friction": {}
+  },
+  "engineAssembly_v6_engine_a01": {
+   "no_friction": {}
+  },
+  "engineComponent_belt_tensioner_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 70.5,
+    "rest_tilt_physx_deg": 65.1
+   }
+  },
+  "engineComponent_camshaft_b01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.044,
+    "authored_com": [
+     -0.1544,
+     -0.0,
+     0.0
+    ]
+   },
+   "no_friction": {}
+  },
+  "engineComponent_crankshaft_b01": {
+   "no_friction": {}
+  },
+  "engineComponent_cylinder_piston_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 53.7,
+    "rest_tilt_physx_deg": 76.4
+   }
+  },
+  "engineComponent_cylinder_piston_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 82.7,
+    "rest_tilt_physx_deg": 169.8
+   }
+  },
+  "engineComponent_cylinder_piston_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 65.6,
+    "rest_tilt_physx_deg": 62.7
+   }
+  },
+  "engineComponent_engine_mount_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 101.1,
+    "rest_tilt_physx_deg": 129.0
+   }
+  },
+  "engineComponent_engine_mount_e01": {
+   "no_friction": {}
+  },
+  "engineComponent_spark_plug_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 29.9,
+    "rest_tilt_physx_deg": 29.9
+   }
+  },
+  "engineComponent_supercharger_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 81.8,
+    "rest_tilt_physx_deg": 102.7
+   }
+  },
+  "engineComponent_timing_chain_a01": {
+   "density": {
+    "mass_kg": 1.229,
+    "hull_volume_m3": 3.449e-05,
+    "kg_per_m3": 35631.3
+   }
+  },
+  "engineComponent_timing_chain_b01": {
+   "density": {
+    "mass_kg": 1.7017,
+    "hull_volume_m3": 4.339e-05,
+    "kg_per_m3": 39223.9
+   }
+  },
+  "engineComponent_timing_chain_clip_a01": {
+   "density": {
+    "mass_kg": 0.0118,
+    "hull_volume_m3": 4.218e-07,
+    "kg_per_m3": 28089.9
+   }
+  },
+  "engineComponent_timing_chain_interSprocket_a01": {
+   "no_friction": {}
+  },
+  "engineComponent_turbocompressor_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.9,
+    "rest_tilt_physx_deg": 24.0
+   }
+  },
+  "engineComponent_water_pump_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 42.6,
+    "rest_tilt_physx_deg": 41.4
+   },
+   "no_friction": {}
+  },
+  "environment_fence_b01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 5.1561,
+    "farthest_point_m": 3.3085,
+    "ratio": 1.56
+   }
+  },
+  "environment_fence_c01": {
+   "no_friction": {}
+  },
+  "equipment_airHoseReel_retractable_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 63.0,
+    "rest_tilt_physx_deg": 60.8
+   }
+  },
+  "equipment_alarm_siren_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 13.5,
+    "rest_tilt_physx_deg": 13.7
+   }
+  },
+  "equipment_buffer_polisher_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 21.4,
+    "rest_tilt_physx_deg": 20.7
+   }
+  },
+  "exhaustSystem_exhaust_manifold_c01": {
+   "no_friction": {}
+  },
+  "exhaustSystem_exhaust_manifold_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.5,
+    "rest_tilt_physx_deg": 10.4
+   }
+  },
+  "exhaustSystem_exhaust_manifold_f01": {
+   "density": {
+    "mass_kg": 501225.8438,
+    "hull_volume_m3": 0.09817,
+    "kg_per_m3": 5105528.4
+   }
+  },
+  "exhaustSystem_muffler_d01": {
+   "no_friction": {}
+  },
+  "exhaustSystem_resonator_b01": {
+   "no_friction": {}
+  },
+  "extractor_ceiling_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 1.8044,
+    "farthest_point_m": 0.6738,
+    "ratio": 2.68
+   },
+   "density": {
+    "mass_kg": 0.6453,
+    "hull_volume_m3": 0.05557,
+    "kg_per_m3": 11.6
+   }
+  },
+  "fixture_faucet_singleLever_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 29.0,
+    "rest_tilt_physx_deg": 28.9
+   }
+  },
+  "fixture_soapDispenser_wallMounted_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_beverage_beerBottle_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 99.3,
+    "rest_tilt_physx_deg": 99.9
+   }
+  },
+  "food_beverage_bottledDrink_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 83.2,
+    "rest_tilt_physx_deg": 80.4
+   }
+  },
+  "food_beverage_bottledDrink_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 88.2,
+    "rest_tilt_physx_deg": 95.0
+   }
+  },
+  "food_beverage_bottledWater_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.4,
+    "rest_tilt_physx_deg": 99.3
+   }
+  },
+  "food_beverage_bottledWater_n01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 89.5,
+    "rest_tilt_physx_deg": 95.7
+   }
+  },
+  "food_beverage_bottledWater_o01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 91.5,
+    "rest_tilt_physx_deg": 90.7
+   }
+  },
+  "food_beverage_boxedDrink_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.7,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_beverage_boxedDrink_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 96.6,
+    "rest_tilt_physx_deg": 102.3
+   }
+  },
+  "food_beverage_boxedDrink_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 102.5,
+    "rest_tilt_physx_deg": 90.1
+   }
+  },
+  "food_beverage_boxedDrink_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 97.8,
+    "rest_tilt_physx_deg": 101.4
+   }
+  },
+  "food_beverage_boxedDrink_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 99.1
+   }
+  },
+  "food_beverage_ginBottle_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 101.0,
+    "rest_tilt_physx_deg": 104.0
+   }
+  },
+  "food_egg_chicken_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.2,
+    "rest_tilt_physx_deg": 12.3
+   }
+  },
+  "food_egg_chicken_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.9,
+    "rest_tilt_physx_deg": 11.9
+   }
+  },
+  "food_egg_chicken_b02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 82.1,
+    "rest_tilt_physx_deg": 134.8
+   }
+  },
+  "food_egg_chicken_b03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 82.1,
+    "rest_tilt_physx_deg": 134.8
+   }
+  },
+  "food_egg_chicken_b04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.1,
+    "rest_tilt_physx_deg": 60.1
+   }
+  },
+  "food_egg_chicken_b05": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.1,
+    "rest_tilt_physx_deg": 60.1
+   }
+  },
+  "food_egg_chicken_b06": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.1,
+    "rest_tilt_physx_deg": 60.1
+   }
+  },
+  "food_egg_chicken_b07": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.1,
+    "rest_tilt_physx_deg": 60.1
+   }
+  },
+  "food_egg_chicken_b08": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.1,
+    "rest_tilt_physx_deg": 60.1
+   }
+  },
+  "food_egg_chicken_b09": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.0,
+    "rest_tilt_physx_deg": 139.6
+   }
+  },
+  "food_egg_chicken_b10": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.0,
+    "rest_tilt_physx_deg": 139.6
+   }
+  },
+  "food_egg_chicken_b11": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 108.0,
+    "rest_tilt_physx_deg": 139.6
+   }
+  },
+  "food_egg_chicken_b12": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 104.8,
+    "rest_tilt_physx_deg": 147.1
+   }
+  },
+  "food_packaged_bread_loaf_a01": {
+   "no_friction": {}
+  },
+  "food_packaged_mix_brownie_a01": {
+   "no_friction": {}
+  },
+  "food_prepared_bar_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.3,
+    "rest_tilt_physx_deg": 92.5
+   }
+  },
+  "food_prepared_bar_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 91.2,
+    "rest_tilt_physx_deg": 91.4
+   }
+  },
+  "food_prepared_bar_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.2,
+    "rest_tilt_physx_deg": 92.3
+   }
+  },
+  "food_prepared_bar_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 87.1,
+    "rest_tilt_physx_deg": 89.0
+   }
+  },
+  "food_prepared_bar_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.3,
+    "rest_tilt_physx_deg": 90.4
+   }
+  },
+  "food_prepared_bar_h01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.8,
+    "rest_tilt_physx_deg": 88.1
+   }
+  },
+  "food_prepared_bar_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 62.8,
+    "rest_tilt_physx_deg": 63.0
+   }
+  },
+  "food_prepared_bar_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.4,
+    "rest_tilt_physx_deg": 90.8
+   }
+  },
+  "food_prepared_bread_harvestBread_a01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.046,
+    "authored_com": [
+     0.0059,
+     0.0096,
+     -0.0077
+    ]
+   },
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3821,
+    "farthest_point_m": 0.1299,
+    "ratio": 2.94
+   }
+  },
+  "food_prepared_bread_panDiCasa_a01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.56,
+    "authored_com": [
+     0.0045,
+     0.0095,
+     0.1808
+    ]
+   },
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3864,
+    "farthest_point_m": 0.2019,
+    "ratio": 1.91
+   }
+  },
+  "food_prepared_bread_sourdoughBatard_a01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.372,
+    "authored_com": [
+     -0.0061,
+     0.0031,
+     -0.0569
+    ]
+   },
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3295,
+    "farthest_point_m": 0.1386,
+    "ratio": 2.38
+   }
+  },
+  "food_prepared_cupcake_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0613,
+    "farthest_point_m": 0.0497,
+    "ratio": 1.23
+   }
+  },
+  "food_prepared_cupcake_b01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0753,
+    "farthest_point_m": 0.0387,
+    "ratio": 1.94
+   }
+  },
+  "food_prepared_cupcake_d01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1081,
+    "farthest_point_m": 0.0599,
+    "ratio": 1.8
+   }
+  },
+  "food_prepared_cupcake_e01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.494,
+    "authored_com": [
+     -0.0039,
+     -0.002,
+     0.0868
+    ]
+   },
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1159,
+    "farthest_point_m": 0.0921,
+    "ratio": 1.26
+   }
+  },
+  "food_processed_chips_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.3,
+    "rest_tilt_physx_deg": 12.4
+   }
+  },
+  "food_processed_chips_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.4,
+    "rest_tilt_physx_deg": 11.4
+   }
+  },
+  "food_processed_chips_l01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.2,
+    "rest_tilt_physx_deg": 14.5
+   }
+  },
+  "food_processed_chips_m01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.8,
+    "rest_tilt_physx_deg": 10.6
+   }
+  },
+  "food_processed_chocolate_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_processed_chocolate_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_processed_chocolate_d01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.427,
+    "authored_com": [
+     -0.0,
+     0.0,
+     0.0653
+    ]
+   }
+  },
+  "food_processed_chocolate_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.4,
+    "rest_tilt_physx_deg": 84.1
+   }
+  },
+  "food_processed_chocolate_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_processed_chocolate_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_processed_chocolate_k01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_processed_chocolate_m01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "food_processed_ketchup_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 99.4,
+    "rest_tilt_physx_deg": 95.0
+   }
+  },
+  "food_produce_apple_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 157.5,
+    "rest_tilt_physx_deg": 159.8
+   }
+  },
+  "food_produce_apple_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 21.2,
+    "rest_tilt_physx_deg": 22.2
+   }
+  },
+  "food_produce_apple_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.1,
+    "rest_tilt_physx_deg": 11.1
+   }
+  },
+  "food_produce_apple_grannySmith_a01": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.0
+   },
+   "no_friction": {}
+  },
+  "food_produce_apple_l01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.1,
+    "rest_tilt_physx_deg": 11.1
+   }
+  },
+  "food_produce_apple_o01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 166.9,
+    "rest_tilt_physx_deg": 167.8
+   }
+  },
+  "food_produce_apple_t01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 65.1,
+    "rest_tilt_physx_deg": 62.0
+   }
+  },
+  "food_produce_avocado_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 106.0,
+    "rest_tilt_physx_deg": 120.8
+   }
+  },
+  "food_produce_avocado_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 104.2,
+    "rest_tilt_physx_deg": 145.5
+   }
+  },
+  "food_produce_avocado_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.1,
+    "rest_tilt_physx_deg": 63.5
+   }
+  },
+  "food_produce_banana_bunch_a01": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     -0.0,
+     -0.0
+    ],
+    "com_height_fraction": 0.001
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.2,
+    "rest_tilt_physx_deg": 10.2
+   },
+   "no_friction": {}
+  },
+  "food_produce_banana_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.8,
+    "rest_tilt_physx_deg": 14.9
+   }
+  },
+  "food_produce_banana_h01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.4,
+    "rest_tilt_physx_deg": 15.3
+   }
+  },
+  "food_produce_banana_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.7,
+    "rest_tilt_physx_deg": 23.7
+   }
+  },
+  "food_produce_bellPepper_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 97.3,
+    "rest_tilt_physx_deg": 91.9
+   }
+  },
+  "food_produce_bitterMelon_a01": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     -0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.001
+   },
+   "no_friction": {}
+  },
+  "food_produce_bocChoy_a01": {
+   "com_at_base": {
+    "authored_com": [
+     -0.0,
+     -0.0,
+     -0.0
+    ],
+    "com_height_fraction": -0.004
+   },
+   "no_friction": {},
+   "density": {
+    "mass_kg": 0.0024,
+    "hull_volume_m3": 0.00222,
+    "kg_per_m3": 1.1
+   }
+  },
+  "food_produce_bocChoy_a02": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.004
+   },
+   "no_friction": {}
+  },
+  "food_produce_bocChoy_a03": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.016
+   },
+   "no_friction": {}
+  },
+  "food_produce_cornCob_a01": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     -0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.005
+   },
+   "no_friction": {}
+  },
+  "food_produce_corn_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1533,
+    "farthest_point_m": 0.093,
+    "ratio": 1.65
+   }
+  },
+  "food_produce_corn_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1985,
+    "farthest_point_m": 0.092,
+    "ratio": 2.16
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.8,
+    "rest_tilt_physx_deg": 14.6
+   }
+  },
+  "food_produce_corn_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 165.6,
+    "rest_tilt_physx_deg": 96.4
+   }
+  },
+  "food_produce_cucumber_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 28.7,
+    "rest_tilt_physx_deg": 33.1
+   }
+  },
+  "food_produce_cucumber_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 94.8,
+    "rest_tilt_physx_deg": 111.9
+   }
+  },
+  "food_produce_cucumber_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.4,
+    "rest_tilt_physx_deg": 21.8
+   }
+  },
+  "food_produce_dragonFruit_a01": {
+   "com_at_base": {
+    "authored_com": [
+     -0.0,
+     0.0,
+     -0.0
+    ],
+    "com_height_fraction": -0.001
+   },
+   "no_friction": {}
+  },
+  "food_produce_eggplant_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 70.2,
+    "rest_tilt_physx_deg": 74.8
+   }
+  },
+  "food_produce_eggplant_a02": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.004
+   },
+   "no_friction": {}
+  },
+  "food_produce_eggplant_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.1,
+    "rest_tilt_physx_deg": 22.1
+   }
+  },
+  "food_produce_eggplant_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 77.4,
+    "rest_tilt_physx_deg": 107.0
+   }
+  },
+  "food_produce_eggplant_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 132.5,
+    "rest_tilt_physx_deg": 129.8
+   }
+  },
+  "food_produce_eggplant_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 52.2,
+    "rest_tilt_physx_deg": 20.6
+   }
+  },
+  "food_produce_freshCarrot_a03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 62.6,
+    "rest_tilt_physx_deg": 53.6
+   }
+  },
+  "food_produce_freshCarrot_a04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 40.6,
+    "rest_tilt_physx_deg": 170.1
+   }
+  },
+  "food_produce_freshCarrot_a06": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.09,
+    "authored_com": [
+     -0.0009,
+     -0.0818,
+     0.0236
+    ]
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 127.9,
+    "rest_tilt_physx_deg": 124.8
+   }
+  },
+  "food_produce_freshCarrot_a07": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.05,
+    "authored_com": [
+     -0.0007,
+     0.011,
+     0.0028
+    ]
+   }
+  },
+  "food_produce_garlic_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 137.1,
+    "rest_tilt_physx_deg": 129.0
+   }
+  },
+  "food_produce_garlic_bulb_a01": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     -0.0,
+     -0.0
+    ],
+    "com_height_fraction": -0.001
+   },
+   "no_friction": {}
+  },
+  "food_produce_garlic_bulb_a02": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": -0.001
+   },
+   "no_friction": {}
+  },
+  "food_produce_garlic_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.4,
+    "rest_tilt_physx_deg": 21.0
+   }
+  },
+  "food_produce_garlic_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.0,
+    "rest_tilt_physx_deg": 53.2
+   }
+  },
+  "food_produce_grape_a01": {
+   "com_at_base": {
+    "authored_com": [
+     -0.0,
+     0.0,
+     -0.0
+    ],
+    "com_height_fraction": -0.001
+   },
+   "no_friction": {}
+  },
+  "food_produce_kiwi_a00": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 93.9,
+    "rest_tilt_physx_deg": 78.8
+   }
+  },
+  "food_produce_kiwi_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 103.0,
+    "rest_tilt_physx_deg": 112.0
+   }
+  },
+  "food_produce_kiwi_a02": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.037,
+    "authored_com": [
+     -0.0016,
+     0.0021,
+     0.0595
+    ]
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 157.7,
+    "rest_tilt_physx_deg": 157.1
+   }
+  },
+  "food_produce_kiwi_a04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 44.3,
+    "rest_tilt_physx_deg": 46.7
+   }
+  },
+  "food_produce_lemon_a00": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3702,
+    "farthest_point_m": 0.0553,
+    "ratio": 6.7
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 43.7,
+    "rest_tilt_physx_deg": 44.4
+   },
+   "density": {
+    "mass_kg": 23.3984,
+    "hull_volume_m3": 9.268e-05,
+    "kg_per_m3": 252466.5
+   }
+  },
+  "food_produce_lemon_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.7,
+    "rest_tilt_physx_deg": 11.0
+   }
+  },
+  "food_produce_lemon_a03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 36.0,
+    "rest_tilt_physx_deg": 16.6
+   }
+  },
+  "food_produce_lime_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.3,
+    "rest_tilt_physx_deg": 17.6
+   }
+  },
+  "food_produce_lime_a02": {
+   "no_friction": {}
+  },
+  "food_produce_lime_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 125.0,
+    "rest_tilt_physx_deg": 141.4
+   }
+  },
+  "food_produce_lime_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 177.2,
+    "rest_tilt_physx_deg": 165.7
+   }
+  },
+  "food_produce_lime_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 80.6,
+    "rest_tilt_physx_deg": 139.7
+   }
+  },
+  "food_produce_mango_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.3,
+    "rest_tilt_physx_deg": 10.3
+   }
+  },
+  "food_produce_mango_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.6,
+    "rest_tilt_physx_deg": 13.4
+   }
+  },
+  "food_produce_mango_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 52.2,
+    "rest_tilt_physx_deg": 35.0
+   }
+  },
+  "food_produce_mango_h01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.4,
+    "rest_tilt_physx_deg": 15.0
+   }
+  },
+  "food_produce_mango_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.8,
+    "rest_tilt_physx_deg": 13.5
+   }
+  },
+  "food_produce_mango_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.3,
+    "rest_tilt_physx_deg": 13.7
+   }
+  },
+  "food_produce_mushroom_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 122.0,
+    "rest_tilt_physx_deg": 119.0
+   }
+  },
+  "food_produce_mushroom_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 20.6,
+    "rest_tilt_physx_deg": 21.0
+   }
+  },
+  "food_produce_mushroom_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 101.6,
+    "rest_tilt_physx_deg": 89.0
+   }
+  },
+  "food_produce_mushroom_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 30.2,
+    "rest_tilt_physx_deg": 19.3
+   }
+  },
+  "food_produce_onion_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 59.6,
+    "rest_tilt_physx_deg": 121.8
+   }
+  },
+  "food_produce_onion_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 53.7,
+    "rest_tilt_physx_deg": 55.0
+   }
+  },
+  "food_produce_onion_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 39.7,
+    "rest_tilt_physx_deg": 44.9
+   }
+  },
+  "food_produce_orange_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 39.4,
+    "rest_tilt_physx_deg": 38.0
+   }
+  },
+  "food_produce_orange_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 103.0,
+    "rest_tilt_physx_deg": 145.8
+   }
+  },
+  "food_produce_orange_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 19.0,
+    "rest_tilt_physx_deg": 39.6
+   }
+  },
+  "food_produce_peach_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.1,
+    "rest_tilt_physx_deg": 11.9
+   }
+  },
+  "food_produce_pear_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 60.3,
+    "rest_tilt_physx_deg": 122.6
+   }
+  },
+  "food_produce_pear_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 170.8,
+    "rest_tilt_physx_deg": 156.8
+   }
+  },
+  "food_produce_pear_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 93.2,
+    "rest_tilt_physx_deg": 81.1
+   }
+  },
+  "food_produce_pear_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 26.3,
+    "rest_tilt_physx_deg": 26.1
+   }
+  },
+  "food_produce_pear_h01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 144.3,
+    "rest_tilt_physx_deg": 151.6
+   }
+  },
+  "food_produce_pear_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 134.9,
+    "rest_tilt_physx_deg": 166.7
+   }
+  },
+  "food_produce_pear_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 177.8,
+    "rest_tilt_physx_deg": 176.0
+   }
+  },
+  "food_produce_pear_l01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 145.2,
+    "rest_tilt_physx_deg": 162.7
+   }
+  },
+  "food_produce_pear_m01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 100.6,
+    "rest_tilt_physx_deg": 95.7
+   }
+  },
+  "food_produce_pear_o01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 176.2,
+    "rest_tilt_physx_deg": 177.1
+   }
+  },
+  "food_produce_potato_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 55.1,
+    "rest_tilt_physx_deg": 57.7
+   }
+  },
+  "food_produce_potato_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 67.0,
+    "rest_tilt_physx_deg": 36.0
+   }
+  },
+  "food_produce_potato_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 58.2,
+    "rest_tilt_physx_deg": 25.5
+   }
+  },
+  "food_produce_potato_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 61.6,
+    "rest_tilt_physx_deg": 130.9
+   }
+  },
+  "food_produce_potato_l01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 48.0,
+    "rest_tilt_physx_deg": 22.0
+   }
+  },
+  "food_produce_potato_o01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 102.1,
+    "rest_tilt_physx_deg": 79.8
+   }
+  },
+  "food_produce_squash_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 37.7,
+    "rest_tilt_physx_deg": 15.3
+   }
+  },
+  "food_produce_squash_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 56.4,
+    "rest_tilt_physx_deg": 62.9
+   }
+  },
+  "food_produce_strawberry_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 33.3,
+    "rest_tilt_physx_deg": 33.0
+   },
+   "no_friction": {}
+  },
+  "food_produce_sweetPotato_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 163.7,
+    "rest_tilt_physx_deg": 166.3
+   }
+  },
+  "food_produce_sweetPotato_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 30.2,
+    "rest_tilt_physx_deg": 15.7
+   }
+  },
+  "food_produce_tangerine_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 19.0,
+    "rest_tilt_physx_deg": 22.2
+   }
+  },
+  "food_produce_tangerine_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 13.4,
+    "rest_tilt_physx_deg": 13.5
+   }
+  },
+  "food_produce_tangerine_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 31.2,
+    "rest_tilt_physx_deg": 12.1
+   }
+  },
+  "food_produce_tangerine_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.4,
+    "rest_tilt_physx_deg": 10.4
+   }
+  },
+  "food_produce_tomato_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 31.2,
+    "rest_tilt_physx_deg": 32.0
+   }
+  },
+  "food_produce_tomato_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 13.2,
+    "rest_tilt_physx_deg": 11.0
+   }
+  },
+  "food_produce_tomato_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 166.3,
+    "rest_tilt_physx_deg": 163.9
+   }
+  },
+  "food_produce_tomato_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 81.5,
+    "rest_tilt_physx_deg": 160.1
+   }
+  },
+  "food_produce_tomato_g01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.3,
+    "rest_tilt_physx_deg": 47.7
+   }
+  },
+  "food_produce_zucchini_a01": {
+   "com_at_base": {
+    "authored_com": [
+     -0.0,
+     0.0,
+     -0.0
+    ],
+    "com_height_fraction": -0.001
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.6,
+    "rest_tilt_physx_deg": 15.7
+   },
+   "no_friction": {}
+  },
+  "fuelSystem_carburetor_a01": {
+   "no_friction": {}
+  },
+  "fuelSystem_fuel_injector_a01": {
+   "no_friction": {}
+  },
+  "fuelSystem_fuel_injector_c01": {
+   "no_friction": {}
+  },
+  "fuelSystem_fuel_pump_assembly_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 89.8
+   },
+   "no_friction": {}
+  },
+  "fuelSystem_fuel_tank_c01": {
+   "no_friction": {}
+  },
+  "fuelSystem_intake_manifold_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.7,
+    "rest_tilt_physx_deg": 12.7
+   },
+   "no_friction": {}
+  },
+  "fuelSystem_intake_manifold_d01": {
+   "no_friction": {}
+  },
+  "fuelSystem_intake_manifold_e01": {
+   "no_friction": {}
+  },
+  "furniture_workbench_standard_d01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 1.9391,
+    "farthest_point_m": 1.2571,
+    "ratio": 1.54
+   }
+  },
+  "handTool_air_ratchet_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 13.8,
+    "rest_tilt_physx_deg": 14.6
+   }
+  },
+  "handTool_extension_bar_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 116.9,
+    "rest_tilt_physx_deg": 54.2
+   }
+  },
+  "handTool_hammer_crossPeen_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2636,
+    "farthest_point_m": 0.2279,
+    "ratio": 1.16
+   }
+  },
+  "handTool_screwdriver_phillips_ph2_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.8,
+    "rest_tilt_physx_deg": 18.0
+   }
+  },
+  "handTool_screwdriver_slotted_4mm_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 163.4,
+    "rest_tilt_physx_deg": 172.6
+   }
+  },
+  "handTool_screwdriver_slotted_55mm_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.2,
+    "rest_tilt_physx_deg": 15.2
+   }
+  },
+  "handTool_screwdriver_slotted_65mm_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.0,
+    "rest_tilt_physx_deg": 15.3
+   }
+  },
+  "handTool_screwdriver_torx_t30_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.8,
+    "rest_tilt_physx_deg": 19.7
+   }
+  },
+  "humidifier_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 1.7308,
+    "farthest_point_m": 0.7575,
+    "ratio": 2.28
+   }
+  },
+  "hvac_vent_system_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.9,
+    "rest_tilt_physx_deg": 10.8
+   }
+  },
+  "hvac_vent_system_center_a01": {
+   "no_friction": {}
+  },
+  "instrument_bone_hook_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.0,
+    "rest_tilt_physx_deg": 16.7
+   }
+  },
+  "instrument_mallet_a01": {
+   "no_friction": {}
+  },
+  "instrument_mirror_a01": {
+   "no_friction": {}
+  },
+  "instrument_punche_a01": {
+   "no_friction": {}
+  },
+  "instrument_raspatory_a01": {
+   "no_friction": {}
+  },
+  "instrument_redonspike_a01": {
+   "no_friction": {}
+  },
+  "instrument_scalpel_handle_a01": {
+   "no_friction": {},
+   "density": {
+    "mass_kg": 0.1356,
+    "hull_volume_m3": 3.857e-06,
+    "kg_per_m3": 35147.2
+   }
+  },
+  "instrument_spoon_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.4,
+    "rest_tilt_physx_deg": 14.9
+   }
+  },
+  "instrument_stripper_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 29.3,
+    "rest_tilt_physx_deg": 56.1
+   }
+  },
+  "interiorPart_dashboard_panel_assembly_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 57.1,
+    "rest_tilt_physx_deg": 59.1
+   }
+  },
+  "interiorPart_dashboard_panel_assembly_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.4,
+    "rest_tilt_physx_deg": 18.4
+   }
+  },
+  "interiorPart_sun_visor_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 85.7,
+    "rest_tilt_physx_deg": 85.7
+   }
+  },
+  "interiorPart_sun_visor_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 79.4,
+    "rest_tilt_physx_deg": 79.4
+   }
+  },
+  "kitchenware_cuttingBoard_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 87.5,
+    "rest_tilt_physx_deg": 94.0
+   }
+  },
+  "kitchenware_cuttingBoard_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 59.1,
+    "rest_tilt_physx_deg": 55.1
+   }
+  },
+  "kitchenware_cuttingBoard_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 25.0,
+    "rest_tilt_physx_deg": 82.2
+   }
+  },
+  "kitchenware_cuttingBoard_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 87.9,
+    "rest_tilt_physx_deg": 84.0
+   }
+  },
+  "kitchenware_cuttingBoard_i01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "kitchenware_cuttingBoard_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "kitchenware_fork_k01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.677,
+    "authored_com": [
+     0.0002,
+     0.0,
+     0.1514
+    ]
+   }
+  },
+  "kitchenware_kettle_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 54.5,
+    "rest_tilt_physx_deg": 54.6
+   }
+  },
+  "kitchenware_knife_j01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 19.8,
+    "rest_tilt_physx_deg": 19.7
+   }
+  },
+  "kitchenware_knife_x01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.7,
+    "rest_tilt_physx_deg": 92.6
+   }
+  },
+  "kitchenware_knife_y01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.9,
+    "rest_tilt_physx_deg": 14.9
+   }
+  },
+  "kitchenware_ladle_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 43.0,
+    "rest_tilt_physx_deg": 48.2
+   }
+  },
+  "kitchenware_ladle_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 32.2,
+    "rest_tilt_physx_deg": 37.5
+   }
+  },
+  "kitchenware_ladle_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 157.2,
+    "rest_tilt_physx_deg": 171.1
+   }
+  },
+  "kitchenware_mug_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.6,
+    "rest_tilt_physx_deg": 101.2
+   }
+  },
+  "kitchenware_mug_f01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 50.3,
+    "rest_tilt_physx_deg": 50.3
+   }
+  },
+  "kitchenware_mug_h01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 24.7,
+    "rest_tilt_physx_deg": 24.8
+   }
+  },
+  "kitchenware_mug_k01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.5
+   }
+  },
+  "kitchenware_mug_r01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.1,
+    "rest_tilt_physx_deg": 93.2
+   }
+  },
+  "kitchenware_pan_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.6,
+    "rest_tilt_physx_deg": 17.7
+   }
+  },
+  "kitchenware_pan_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.3,
+    "rest_tilt_physx_deg": 10.3
+   }
+  },
+  "kitchenware_pan_n01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.1,
+    "rest_tilt_physx_deg": 12.0
+   }
+  },
+  "kitchenware_pan_t01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 30.7,
+    "rest_tilt_physx_deg": 30.7
+   }
+  },
+  "kitchenware_pan_v01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.1,
+    "rest_tilt_physx_deg": 10.1
+   }
+  },
+  "kitchenware_spoon_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.1,
+    "rest_tilt_physx_deg": 16.2
+   }
+  },
+  "ladder_multiPurpose_aluminium_a03": {
+   "density": {
+    "mass_kg": 11.2513,
+    "hull_volume_m3": 2.842,
+    "kg_per_m3": 4.0
+   }
+  },
+  "ladder_multiPurpose_aluminium_a05": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.2,
+    "rest_tilt_physx_deg": 12.0
+   },
+   "no_friction": {}
+  },
+  "ladder_step_aluminium_b02": {
+   "density": {
+    "mass_kg": 3.3386,
+    "hull_volume_m3": 0.2966,
+    "kg_per_m3": 11.3
+   }
+  },
+  "ladder_step_aluminium_b05": {
+   "density": {
+    "mass_kg": 5.1108,
+    "hull_volume_m3": 0.6655,
+    "kg_per_m3": 7.7
+   }
+  },
+  "ladder_step_aluminium_c03": {
+   "density": {
+    "mass_kg": 3.1352,
+    "hull_volume_m3": 0.3774,
+    "kg_per_m3": 8.3
+   }
+  },
+  "lamp_uvc_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 47.3,
+    "rest_tilt_physx_deg": 47.0
+   }
+  },
+  "light_head_bed_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.4,
+    "rest_tilt_physx_deg": 22.5
+   }
+  },
+  "light_surgical_ceiling_frame_a01": {
+   "no_friction": {},
+   "density": {
+    "mass_kg": 58.5752,
+    "hull_volume_m3": 14.04,
+    "kg_per_m3": 4.2
+   }
+  },
+  "lighting_overheadLed_rectangularFrame_a01": {
+   "density": {
+    "mass_kg": 135.8529,
+    "hull_volume_m3": 11.76,
+    "kg_per_m3": 11.5
+   }
+  },
+  "lighting_taskLight_adjustableArmBench_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 44.4,
+    "rest_tilt_physx_deg": 43.6
+   }
+  },
+  "mask_nebulization_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 41.7,
+    "rest_tilt_physx_deg": 44.8
+   }
+  },
+  "mirror_bathroom_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "misc_basket_plastic_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.2482,
+    "farthest_point_m": 0.1697,
+    "ratio": 1.46
+   }
+  },
+  "misc_golfBall_a02": {
+   "com_at_base": {
+    "authored_com": [
+     -0.0,
+     0.0,
+     -0.0
+    ],
+    "com_height_fraction": -0.0
+   },
+   "no_friction": {}
+  },
+  "misc_golfBall_a03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.1,
+    "rest_tilt_physx_deg": 12.1
+   },
+   "no_friction": {}
+  },
+  "misc_golfBall_a04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.1,
+    "rest_tilt_physx_deg": 11.9
+   },
+   "no_friction": {}
+  },
+  "misc_notebook_a02": {
+   "no_friction": {}
+  },
+  "misc_notebook_a03": {
+   "no_friction": {}
+  },
+  "misc_notebook_a04": {
+   "no_friction": {}
+  },
+  "misc_tape_refill_a03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.1
+   }
+  },
+  "misc_toy_phantomMask_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 105.1,
+    "rest_tilt_physx_deg": 100.5
+   }
+  },
+  "misc_toy_pongPaddle_ball_a01": {
+   "com_at_base": {
+    "authored_com": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": 0.0
+   },
+   "no_friction": {}
+  },
+  "misc_toy_pongPaddle_ball_a02": {
+   "com_at_base": {
+    "authored_com": [
+     -0.0,
+     0.0,
+     0.0
+    ],
+    "com_height_fraction": 0.0
+   },
+   "no_friction": {}
+  },
+  "misc_toy_pongPaddle_bat_a01": {
+   "no_friction": {}
+  },
+  "misc_toy_pongPaddle_bat_a02": {
+   "no_friction": {}
+  },
+  "monitor_surgical_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 37.3,
+    "rest_tilt_physx_deg": 37.9
+   }
+  },
+  "needle_48mm_a01": {
+   "no_friction": {}
+  },
+  "needle_58mm_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0487,
+    "farthest_point_m": 0.03,
+    "ratio": 1.62
+   },
+   "no_friction": {}
+  },
+  "needle_68mm_a01": {
+   "no_friction": {}
+  },
+  "needle_78mm_a01": {
+   "no_friction": {}
+  },
+  "needle_88mm_a01": {
+   "no_friction": {}
+  },
+  "paint_container_jar_orange_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1458,
+    "farthest_point_m": 0.0719,
+    "ratio": 2.03
+   }
+  },
+  "paint_container_jar_pink_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1482,
+    "farthest_point_m": 0.0723,
+    "ratio": 2.05
+   }
+  },
+  "paint_container_jar_violet_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.1442,
+    "farthest_point_m": 0.0716,
+    "ratio": 2.01
+   }
+  },
+  "paint_supplies_brush_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 100.1,
+    "rest_tilt_physx_deg": 102.0
+   }
+  },
+  "paint_supplies_brush_a02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 47.8,
+    "rest_tilt_physx_deg": 56.6
+   }
+  },
+  "paint_supplies_brush_a04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 36.3,
+    "rest_tilt_physx_deg": 44.0
+   }
+  },
+  "paint_supplies_brush_a06": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.8,
+    "rest_tilt_physx_deg": 12.1
+   }
+  },
+  "paint_supplies_brush_a07": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 168.5,
+    "rest_tilt_physx_deg": 90.3
+   }
+  },
+  "paint_supplies_brush_a08": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 129.8,
+    "rest_tilt_physx_deg": 128.0
+   }
+  },
+  "paint_supplies_brush_a09": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 75.6,
+    "rest_tilt_physx_deg": 18.5
+   }
+  },
+  "paint_supplies_brush_a10": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 43.0,
+    "rest_tilt_physx_deg": 42.6
+   }
+  },
+  "paint_supplies_brush_a11": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.3,
+    "rest_tilt_physx_deg": 15.1
+   }
+  },
+  "pallet_steel_galvanized_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 1.1394,
+    "farthest_point_m": 0.8729,
+    "ratio": 1.31
+   }
+  },
+  "paper_stack_a01": {
+   "density": {
+    "mass_kg": 0.0024,
+    "hull_volume_m3": 0.002011,
+    "kg_per_m3": 1.2
+   }
+  },
+  "paper_stack_a02": {
+   "density": {
+    "mass_kg": 0.0097,
+    "hull_volume_m3": 0.001571,
+    "kg_per_m3": 6.2
+   }
+  },
+  "paper_stack_a03": {
+   "no_friction": {},
+   "density": {
+    "mass_kg": 0.0061,
+    "hull_volume_m3": 0.00213,
+    "kg_per_m3": 2.8
+   }
+  },
+  "powerTool_cutting_tool_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 89.9,
+    "rest_tilt_physx_deg": 89.9
+   }
+  },
+  "powerTool_saw_bodyAir_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.3,
+    "rest_tilt_physx_deg": 11.0
+   }
+  },
+  "ppe_faceProtection_faceShield_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 38.0,
+    "rest_tilt_physx_deg": 38.4
+   }
+  },
+  "safetyBoard_hseInformation_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 13.6,
+    "rest_tilt_physx_deg": 14.2
+   }
+  },
+  "safety_msdsBinder_wallMounted_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 37.0,
+    "rest_tilt_physx_deg": 94.2
+   }
+  },
+  "screen_hospital_b01": {
+   "density": {
+    "mass_kg": 37.7828,
+    "hull_volume_m3": 32.65,
+    "kg_per_m3": 1.2
+   }
+  },
+  "screen_hospital_b02": {
+   "density": {
+    "mass_kg": 30.7469,
+    "hull_volume_m3": 30.31,
+    "kg_per_m3": 1.0
+   }
+  },
+  "screen_hospital_b03": {
+   "density": {
+    "mass_kg": 30.8169,
+    "hull_volume_m3": 30.19,
+    "kg_per_m3": 1.0
+   }
+  },
+  "screen_hospital_b04": {
+   "density": {
+    "mass_kg": 30.7314,
+    "hull_volume_m3": 30.06,
+    "kg_per_m3": 1.0
+   }
+  },
+  "screen_hospital_b05": {
+   "density": {
+    "mass_kg": 30.8079,
+    "hull_volume_m3": 30.22,
+    "kg_per_m3": 1.0
+   }
+  },
+  "screen_hospital_b06": {
+   "density": {
+    "mass_kg": 23.6937,
+    "hull_volume_m3": 20.82,
+    "kg_per_m3": 1.1
+   }
+  },
+  "screen_hospital_b07": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 51.3,
+    "rest_tilt_physx_deg": 50.5
+   },
+   "density": {
+    "mass_kg": 23.7715,
+    "hull_volume_m3": 20.77,
+    "kg_per_m3": 1.1
+   }
+  },
+  "screen_hospital_b08": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 51.1,
+    "rest_tilt_physx_deg": 48.7
+   },
+   "density": {
+    "mass_kg": 23.7715,
+    "hull_volume_m3": 20.77,
+    "kg_per_m3": 1.1
+   }
+  },
+  "screen_hospital_b09": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 49.9,
+    "rest_tilt_physx_deg": 49.8
+   },
+   "density": {
+    "mass_kg": 23.752,
+    "hull_volume_m3": 20.24,
+    "kg_per_m3": 1.2
+   }
+  },
+  "serviceTool_waste_oil_tank_b01": {
+   "density": {
+    "mass_kg": 26.8716,
+    "hull_volume_m3": 2.498,
+    "kg_per_m3": 10.8
+   }
+  },
+  "sign_hospital_board_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 61.1,
+    "rest_tilt_physx_deg": 86.9
+   }
+  },
+  "sign_hospital_board_b02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 45.4,
+    "rest_tilt_physx_deg": 58.9
+   }
+  },
+  "sign_hospital_sidewall_b02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.5,
+    "rest_tilt_physx_deg": 83.6
+   }
+  },
+  "socket_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.1
+   }
+  },
+  "socket_a02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 92.4,
+    "rest_tilt_physx_deg": 92.6
+   }
+  },
+  "socket_a03": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 92.4,
+    "rest_tilt_physx_deg": 92.6
+   }
+  },
+  "socket_a04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 93.8,
+    "rest_tilt_physx_deg": 93.8
+   }
+  },
+  "sofa_visitor_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.0,
+    "rest_tilt_physx_deg": 14.2
+   }
+  },
+  "stationery_chalk_stick_a04": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.5,
+    "rest_tilt_physx_deg": 35.9
+   }
+  },
+  "stationery_chalk_stick_a05": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 24.5,
+    "rest_tilt_physx_deg": 16.5
+   }
+  },
+  "stationery_marker_thin_blue_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.0,
+    "rest_tilt_physx_deg": 18.1
+   }
+  },
+  "stationery_marker_thin_peach_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 12.1,
+    "rest_tilt_physx_deg": 22.9
+   }
+  },
+  "stationery_pen_plastic_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 25.5,
+    "rest_tilt_physx_deg": 22.0
+   }
+  },
+  "stationery_pencil_watercolor_plum_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.2,
+    "rest_tilt_physx_deg": 15.5
+   }
+  },
+  "stationery_pencil_watercolor_softPeach_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.8,
+    "rest_tilt_physx_deg": 11.1
+   }
+  },
+  "stationery_pencil_watercolor_yellow_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 16.8,
+    "rest_tilt_physx_deg": 24.3
+   }
+  },
+  "steeringSystem_power_steering_pump_b01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5475,
+    "farthest_point_m": 0.1944,
+    "ratio": 2.82
+   }
+  },
+  "steeringSystem_steering_gearbox_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 17.7,
+    "rest_tilt_physx_deg": 17.5
+   }
+  },
+  "steeringSystem_steering_gearbox_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 56.3,
+    "rest_tilt_physx_deg": 64.3
+   }
+  },
+  "steering_tieRod_inner_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.266,
+    "farthest_point_m": 0.1959,
+    "ratio": 1.36
+   }
+  },
+  "storage_toolbox_carry_hardCase_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 177.6,
+    "rest_tilt_physx_deg": 13.1
+   }
+  },
+  "suspension_coilover_front_remoteReservoir_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 23.2,
+    "rest_tilt_physx_deg": 23.3
+   }
+  },
+  "suspension_coilover_rear_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 92.9,
+    "rest_tilt_physx_deg": 94.2
+   }
+  },
+  "suspension_shock_absorber_d01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 169.1,
+    "rest_tilt_physx_deg": 146.4
+   }
+  },
+  "suspension_stabilizerLink_front_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 92.0,
+    "rest_tilt_physx_deg": 142.4
+   }
+  },
+  "suspension_strut_assembly_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 79.9,
+    "rest_tilt_physx_deg": 78.1
+   }
+  },
+  "suspension_strut_assembly_b01": {
+   "no_friction": {}
+  },
+  "suspension_strut_assembly_b02": {
+   "no_friction": {}
+  },
+  "tool_cutting_hobbyknife_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 42.8,
+    "rest_tilt_physx_deg": 21.0
+   }
+  },
+  "tool_pen_surgical_marking_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.2,
+    "rest_tilt_physx_deg": 22.1
+   }
+  },
+  "toy_marble_a02": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a03": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.3
+   }
+  },
+  "toy_marble_a04": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a05": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a06": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a07": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a08": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a09": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a10": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "toy_marble_a11": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.0669,
+    "farthest_point_m": 0.018,
+    "ratio": 3.72
+   },
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 18.5,
+    "rest_tilt_physx_deg": 31.5
+   }
+  },
+  "trashCan_fireResistant_a03": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.4592,
+    "farthest_point_m": 0.3709,
+    "ratio": 1.24
+   },
+   "density": {
+    "mass_kg": 0.35,
+    "hull_volume_m3": 0.0455,
+    "kg_per_m3": 7.7
+   }
+  },
+  "trashCan_office_beige_a03": {
+   "density": {
+    "mass_kg": 0.4546,
+    "hull_volume_m3": 0.0482,
+    "kg_per_m3": 9.4
+   }
+  },
+  "trashCan_office_black_a03": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5382,
+    "farthest_point_m": 0.3749,
+    "ratio": 1.44
+   },
+   "density": {
+    "mass_kg": 0.35,
+    "hull_volume_m3": 0.0482,
+    "kg_per_m3": 7.3
+   }
+  },
+  "trashCan_office_gray_a03": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.5382,
+    "farthest_point_m": 0.3749,
+    "ratio": 1.44
+   },
+   "density": {
+    "mass_kg": 0.35,
+    "hull_volume_m3": 0.0482,
+    "kg_per_m3": 7.3
+   }
+  },
+  "trashCan_wheeled_black_a01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 1.8263,
+    "farthest_point_m": 0.7855,
+    "ratio": 2.33
+   }
+  },
+  "tube_a02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 92.9,
+    "rest_tilt_physx_deg": 92.1
+   }
+  },
+  "unit_head_bed_b01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 90.0,
+    "rest_tilt_physx_deg": 90.0
+   }
+  },
+  "utensil_fork_wooden_b01": {
+   "no_friction": {}
+  },
+  "utensil_spatula_silicone_b01": {
+   "no_friction": {}
+  },
+  "utensil_spatula_silicone_c01": {
+   "no_friction": {}
+  },
+  "utensil_spatula_silicone_d01": {
+   "no_friction": {}
+  },
+  "utensil_spatula_wooden_a01": {
+   "no_friction": {}
+  },
+  "utensil_spoon_slotted_a01": {
+   "no_friction": {}
+  },
+  "utensil_spoon_slotted_wooden_a01": {
+   "no_friction": {}
+  },
+  "utensil_spoon_wooden_a01": {
+   "com_outside": {
+    "distance_outside_as_fraction_of_size": 0.021,
+    "authored_com": [
+     0.0387,
+     -0.0,
+     0.0187
+    ]
+   }
+  },
+  "ventilation_ceilingFan_hvls_a01": {
+   "density": {
+    "mass_kg": 84.859,
+    "hull_volume_m3": 14.5,
+    "kg_per_m3": 5.9
+   }
+  },
+  "warehouse_box_cube_a10": {
+   "density": {
+    "mass_kg": 7.134,
+    "hull_volume_m3": 0.7608,
+    "kg_per_m3": 9.4
+   }
+  },
+  "warehouse_chair_office_amf_black_a01": {
+   "density": {
+    "mass_kg": 1.6681,
+    "hull_volume_m3": 0.1605,
+    "kg_per_m3": 10.4
+   }
+  },
+  "warehouse_h10m_straight_a04": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 15.0586,
+    "farthest_point_m": 10.8558,
+    "ratio": 1.39
+   }
+  },
+  "washBasin_long_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 15.4,
+    "rest_tilt_physx_deg": 13.3
+   }
+  },
+  "wasteManagement_trashCan_roundPlastic_a01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 139.2,
+    "rest_tilt_physx_deg": 58.0
+   }
+  },
+  "wheelAssembly_tire_b01": {
+   "no_friction": {}
+  },
+  "wheelAssembly_tire_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 14.4,
+    "rest_tilt_physx_deg": 18.4
+   },
+   "no_friction": {}
+  },
+  "wheelAssembly_wheel_rim_c01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 11.0,
+    "rest_tilt_physx_deg": 19.9
+   },
+   "no_friction": {}
+  },
+  "wheelAssembly_wheel_rim_e01": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 10.7,
+    "rest_tilt_physx_deg": 13.6
+   },
+   "no_friction": {},
+   "density": {
+    "mass_kg": 1.0,
+    "hull_volume_m3": 0.07548,
+    "kg_per_m3": 13.2
+   }
+  },
+  "wheelAssembly_wheel_rim_f01": {
+   "inertia_impossible": {
+    "max_radius_of_gyration_m": 0.3267,
+    "farthest_point_m": 0.2761,
+    "ratio": 1.18
+   }
+  },
+  "wire_machineGuard_a02": {
+   "unstable_at_rest": {
+    "rest_tilt_mujoco_deg": 21.7,
+    "rest_tilt_physx_deg": 21.6
+   }
+  }
+ },
+ "definitions": "Physics data-quality checks on the authored SimReady values, each with the evidence needed to verify it.\n\nErrors (physically impossible as authored):\n  com_at_base        centerOfMass authored at the mesh origin, and that origin sits in the bottom 10% of the object\n  com_outside        center of mass lies outside the convex hull of the collision geometry (by more than 2% of size)\n  inertia_impossible a principal radius of gyration exceeds 1.1x the farthest collision point from the center of mass\nWarnings (suspicious, not impossible):\n  unstable_at_rest   tips more than 10 deg from the authored pose when released, in BOTH MuJoCo and PhysX (SDF)\n  no_friction        no physics material sets friction, so engines fall back to their own defaults\n  density            mass / hull volume below 15 or above 25,000 kg/m^3\nEvery check reads the authored values; the PhysX and MuJoCo variants of SimReady author identical mass properties\n(verified per asset), so a flag applies to both."
+}

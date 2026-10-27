@@ -1,0 +1,37 @@
+# Environment
+.venv/
+__pycache__/
+
+# Downloaded and regenerable data (run_all.sh rebuilds it)
+data/raw/
+data/licenses/
+data/assets/
+data/sim/
+data/v2/assets_mj/
+data/v2/assets_px/
+data/v2/sim_*/
+data/v2/thumbs/
+data/v2/smoke/
+data/v2/results/emb_s*.npz
+
+# Large build outputs for the web demo (rebuilt by export.py / build_glb.py)
+out/site/m/
+out/site/mc/
+out/preview/mc/
+out/preview/mt/
+out/preview/data.json
+out/site/mt/
+out/site/d/
+
+# Local-only files
+out/preview/
+out/linkedin_post.txt
+out/*.mp4
+out/*.jpg
+video/data.json
+video/mt/
+data/meta/asset_rows.json
+data/meta/one.txt
+data/meta/picked.txt
+pages_build/
+data/results/

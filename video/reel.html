@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Figtree:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg:#F1F3EC; --card:#FFFFFF; --soft:#F7F5FF; --ink:#1E1B2E; --ink-2:#4F4B63; --ink-3:#6A6680; --line:#C9C6D6;
+  --accent:#FF7A3D; --butter:#FFD86B; --pink:#FF9BB0; --mint:#8EE0C3; --sky:#9CCBFF; --here:#FFF2C7;
+  --stage:#F6EEE2; --grid:#E0D2BC; --clay:#8592A0; --pusher:#FF7A3D; --warn:#FF9BB0;
+  --bw:3px; --sh:5px 5px 0 var(--ink); --sh-lg:8px 8px 0 var(--ink);
+  --display:"Bricolage Grotesque", "Figtree", sans-serif; --sans:"Figtree", Arial, sans-serif; --mono:"DM Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1080px; height: 1350px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+.scene { position: absolute; inset: 0; padding: 64px 60px; display: none; }
+.scene.on { display: block; }
+.eyebrow { display: inline-block; padding: 10px 20px 12px; border-radius: 16px; background: var(--butter); border: var(--bw) solid var(--ink); transform: rotate(-2deg); font-size: 22px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+h1, h2 { font-family: var(--display); font-weight: 800; letter-spacing: -.035em; }
+h1 { font-size: 94px; line-height: .98; margin: 36px 0 0; }
+h2 { font-size: 58px; line-height: 1.02; margin: 26px 0 0; }
+h1 em, h2 em, .big em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(transparent 60%, var(--accent) 60%, var(--accent) 92%, transparent 92%); }
+.sub { font-size: 32px; line-height: 1.38; color: var(--ink-2); margin-top: 30px; max-width: 920px; font-weight: 500; }
+.view { position: absolute; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 26px; box-shadow: var(--sh); padding: 8px; }
+.view.hot { background: var(--accent); box-shadow: var(--sh-lg); }
+.view.warn { background: var(--pink); }
+.stg { width: 100%; height: 100%; border-radius: 18px; overflow: hidden; background: var(--stage); }
+.stg canvas { display: block; }
+.lbl { position: absolute; font-size: 26px; font-weight: 800; line-height: 1.15; }
+.lbl small { display: block; font-family: var(--mono); font-size: 19px; font-weight: 400; color: var(--ink-3); margin-top: 4px; }
+.rowlbl { position: absolute; display: flex; align-items: center; gap: 14px; }
+.rowlbl b { font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: -.02em; padding: 5px 20px 8px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--card); box-shadow: 3px 3px 0 var(--ink); }
+.rowlbl.beh b { background: var(--sky); }
+.rowlbl span { color: var(--ink-3); font-size: 22px; font-weight: 500; }
+.callout { position: absolute; left: 60px; right: 60px; bottom: 50px; margin: 0; padding: 20px 28px 22px; background: var(--card); border: var(--bw) solid var(--ink); border-radius: 24px; box-shadow: var(--sh-lg); font-size: 30px; line-height: 1.32; font-weight: 600; opacity: 0; }
+.callout b, .callout .w { font-weight: 800; padding: 0 8px; border-radius: 8px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.callout b { background: var(--accent); }
+.callout .w { background: var(--pink); }
+.ring { position: absolute; border: 6px solid var(--accent); border-radius: 30px; opacity: 0; }
+.big { font-family: var(--display); font-size: 168px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-top: 64px; font-variant-numeric: tabular-nums; }
+.big span { color: var(--ink-3); font-size: 84px; letter-spacing: -.02em; margin: 0 .12em; }
+.big .lo { color: var(--ink-2); }
+.credit { position: absolute; left: 60px; right: 60px; bottom: 56px; font-size: 22px; color: var(--ink-3); line-height: 1.45; }
+</style></head>
+<body>
+
+<section class="scene" id="s1">
+  <div class="eyebrow">NVIDIA SimReady · behavior search</div>
+  <h1>Search 3D objects by <em>how they move</em>, not how they look</h1>
+  <p class="sub"><span id="nA">2,167</span> rigid assets from NVIDIA's SimReady library. The same simulated pokes for every one, in MuJoCo and in NVIDIA's own PhysX.</p>
+  <div class="view" data-v="t0" style="left:60px; top:820px; width:300px; height:300px"></div>
+  <div class="view" data-v="t1" style="left:390px; top:820px; width:300px; height:300px"></div>
+  <div class="view" data-v="t2" style="left:720px; top:820px; width:300px; height:300px"></div>
+</section>
+
+<section class="scene" id="s2">
+  <div class="eyebrow">Query · pushed high</div>
+  <h2 id="qname">Canned peaches</h2>
+  <div class="view" data-v="q" style="left:60px; top:226px; width:960px; height:262px"></div>
+  <div class="rowlbl beh" style="left:60px; top:512px"><b>Behaves like</b><span>simulated behavior</span></div>
+  <div id="behSlots"></div>
+  <div class="rowlbl" style="left:60px; top:822px"><b>Looks like</b><span>image embedding, like NVIDIA's search</span></div>
+  <div id="appSlots"></div>
+  <div class="ring" id="ring"></div>
+  <p class="callout" id="c2">Behavior search finds <b>a mug, a steel drum, two sockets</b>. All stay up. The look-alike cans: <span class="w">every one topples</span>.</p>
+</section>
+
+<section class="scene" id="s3">
+  <div class="eyebrow">Different looks, same behavior</div>
+  <h2>To a robot, these are <em>the same object</em></h2>
+  <div id="pairSlots"></div>
+  <p class="callout" id="c3">Neighbors in behavior space tip, slide and land alike, whatever they look like.</p>
+</section>
+
+<section class="scene" id="s4">
+  <div class="eyebrow">Physics QA for free</div>
+  <h2>Same fruit, <em>different physics</em></h2>
+  <div id="bugSlots"></div>
+  <p class="callout" id="c4">This apple's center of mass was authored at its base, so it behaves like a doorstop. <span class="w"><span id="nBug">16</span> assets in the library</span> have this bug.</p>
+</section>
+
+<section class="scene" id="s5">
+  <div class="eyebrow">Tested on probes no model saw</div>
+  <div class="big"><em id="r2b">0.54</em><span>vs</span><b class="lo" id="r2a">0.15</b></div>
+  <p class="sub" style="font-size:34px; color:var(--ink)" id="s5a">How well an object's five nearest neighbors predict its reaction to three new probes. Simulated behavior vs appearance search, on 1,891 test objects.</p>
+  <p class="sub" id="s5b">Checked in NVIDIA's PhysX too. A self-supervised JEPA does far better than looks, but plain statistics of the same simulations do better still.</p>
+  <p class="credit">3D assets: NVIDIA SimReady on Hugging Face, CC BY 4.0. Physics: MuJoCo and PhysX (SAPIEN). Appearance: SigLIP2. Everything ran on a 4-core CPU.</p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/meshopt_decoder.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function b64(s, T) { const bin = atob(s); const u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new T(u.buffer); }
+const canvas = document.createElement("canvas");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(1080, 1350, false); renderer.setClearColor(0, 0);
+let A, NF;
+const trackCache = new Map();
+const sphereGeo = new THREE.SphereGeometry(1, 24, 16);
+const floorGeo = new THREE.PlaneGeometry(8, 8);
+const col = (v) => new THREE.Color(css(v)).convertSRGBToLinear();
+renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+const envTex = new THREE.PMREMGenerator(renderer).fromScene(new THREE.RoomEnvironment(), 0.04).texture;
+const loader = new THREE.GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
+const MODELS = {};
+const loadModel = (i) => fetch(A[i].glb).then((r) => r.text()).then((t) => new Promise((res, rej) => loader.parse(b64(t.trim(), Uint8Array).buffer, "", (g) => { MODELS[i] = { root: g.scene, box: new THREE.Box3().setFromObject(g.scene) }; res(); }, rej)));
+const shadowTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"); const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, "rgba(0,0,0,0.6)"); r.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+const mats = {
+  clay: new THREE.MeshStandardMaterial({ roughness: 0.6, color: col("--clay") }),
+  hot: new THREE.MeshStandardMaterial({ roughness: 0.55, color: col("--accent") }),
+  warn: new THREE.MeshStandardMaterial({ roughness: 0.55, color: col("--warn") }),
+  pusher: new THREE.MeshStandardMaterial({ roughness: 0.4, color: col("--pusher") }),
+  floor: new THREE.MeshBasicMaterial({ color: col("--stage"), toneMapped: false }),
+  grid: new THREE.LineBasicMaterial({ color: col("--grid"), toneMapped: false }),
+  shadow: new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, toneMapped: false }),
+  fog: new THREE.Fog(col("--stage"), 4.4, 9.5),
+};
+const gridGeo = (() => { const pts = []; const n = 16, h = 4; for (let i = 0; i <= n; i++) { const v = -h + (2 * h * i) / n; pts.push(v, -h, 0.001, v, h, 0.001, -h, v, 0.001, h, v, 0.001); } const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3)); return g; })();
+function track(i, p) {
+  const key = i + ":" + p; if (trackCache.has(key)) return trackCache.get(key);
+  const raw = b64(A[i].tracks[p], Int16Array), cols = raw.length / NF, tr = { pos: [], quat: [], push: [], ang: [] };
+  for (let k = 0; k < NF; k++) { const r = k * cols;
+    tr.pos.push(new THREE.Vector3(raw[r] / 8000, raw[r + 1] / 8000, raw[r + 2] / 8000));
+    tr.quat.push(new THREE.Quaternion(raw[r + 4] / 32767, raw[r + 5] / 32767, raw[r + 6] / 32767, raw[r + 3] / 32767).normalize());
+    if (p.startsWith("push")) tr.push.push(raw[r + 7] === -32768 ? null : new THREE.Vector3(raw[r + 7] / 8000, raw[r + 8] / 8000, raw[r + 9] / 8000));
+    if (p === "ramp") tr.ang.push(raw[r + 7] / 100); }
+  trackCache.set(key, tr); return tr;
+}
+const CAM = { push_high: { target: [0.45, 0, 0.34], off: [1.5, -3.6, 1.6] }, push_low: { target: [0.45, 0, 0.32], off: [1.5, -3.6, 1.6] }, ramp: { target: [0.55, 0, -0.25], off: [1.3, -3.9, 1.6] }, drop: { target: [0.1, 0, 0.42], off: [1.4, -3.6, 1.5] } };
+class View {
+  constructor(el, i, p, mat, zoom = 1, tshift = 0) {
+    this.el = el; this.scene = new THREE.Scene(); this.scene.fog = new THREE.Fog(mats.fog.color, 4.4 * zoom, 9.5 * zoom);
+    this.scene.environment = envTex;
+    const dl = new THREE.DirectionalLight(0xffffff, 0.7); dl.position.set(2.5, -3, 5); this.scene.add(dl);
+    this.camera = new THREE.PerspectiveCamera(26, 1, 0.01, 100); this.camera.up.set(0, 0, 1);
+    this.floor = new THREE.Group(); this.floor.add(new THREE.Mesh(floorGeo, mats.floor)); this.floor.add(new THREE.LineSegments(gridGeo, mats.grid));
+    this.shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mats.shadow); this.floor.add(this.shadow); this.scene.add(this.floor);
+    this.obj = new THREE.Group(); const md = MODELS[i], S = A[i].S, mdl = md.root.clone(); mdl.scale.setScalar(1 / S); this.obj.add(mdl); this.scene.add(this.obj);
+    if (mat === mats.warn) el.classList.add("warn"); if (mat === mats.hot) el.classList.add("hot");
+    this.stg = document.createElement("div"); this.stg.className = "stg"; this.cv = document.createElement("canvas"); this.stg.appendChild(this.cv); el.appendChild(this.stg); this.ctx = this.cv.getContext("2d");
+    this.pusher = new THREE.Mesh(sphereGeo, mats.pusher); this.pusher.scale.setScalar(A[i].r); this.scene.add(this.pusher);
+    this.tr = track(i, p); this.p = p; this.center = md.box.getCenter(new THREE.Vector3()).multiplyScalar(1 / S);
+    const ext = md.box.getSize(new THREE.Vector3()).multiplyScalar(1 / S); this.ss = Math.max(ext.x, ext.y) * 1.25;
+    const c = CAM[p], tg = [c.target[0] + tshift, c.target[1], c.target[2]]; this.camera.position.set(tg[0] + c.off[0] * zoom, tg[1] + c.off[1] * zoom, tg[2] + c.off[2] * zoom); this.camera.lookAt(...tg);
+  }
+  draw(u) {
+    const tr = this.tr, f = u * (NF - 1), k = Math.min(Math.floor(f), NF - 2), w = f - k;
+    this.obj.position.lerpVectors(tr.pos[k], tr.pos[k + 1], w); this.obj.quaternion.copy(tr.quat[k]).slerp(tr.quat[k + 1], w);
+    const ang = this.p === "ramp" ? THREE.MathUtils.degToRad(tr.ang[k] + (tr.ang[k + 1] - tr.ang[k]) * w) : 0;
+    this.floor.rotation.set(0, ang, 0);
+    const pp = tr.push.length ? tr.push[k] : null; this.pusher.visible = !!pp; if (pp) this.pusher.position.copy(pp);
+    const c = this.center.clone().applyQuaternion(this.obj.quaternion).add(this.obj.position);
+    const lx = c.x * Math.cos(ang) - c.z * Math.sin(ang), lz = c.x * Math.sin(ang) + c.z * Math.cos(ang), h = Math.max(lz, 0);
+    this.shadow.position.set(lx, c.y, 0.003); const s = this.ss * (1 + h * 0.6); this.shadow.scale.set(s, s, 1);
+    const W = this.stg.clientWidth, H = this.stg.clientHeight; if (W < 2) return;
+    if (this.cv.width !== W || this.cv.height !== H) { this.cv.width = W; this.cv.height = H; }
+    this.camera.aspect = W / H; this.camera.updateProjectionMatrix();
+    renderer.setViewport(0, 0, W, H); renderer.setScissor(0, 0, W, H);
+    renderer.render(this.scene, this.camera);
+    this.ctx.clearRect(0, 0, W, H); this.ctx.drawImage(canvas, 0, 1350 - H, W, H, 0, 0, W, H);
+  }
+}
+const id = (s) => A.findIndex((a) => a.id === s);
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const fmt = (a) => (a.S >= 1 ? a.S.toFixed(2) + " m" : Math.round(a.S * 100) + " cm") + " · " + (a.mass >= 1 ? a.mass.toFixed(1) + " kg" : Math.round(a.mass * 1000) + " g");
+function slot(parent, i, x, y, w, h, extra) {
+  const v = document.createElement("div"); v.className = "view"; Object.assign(v.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" }); parent.appendChild(v);
+  const l = document.createElement("div"); l.className = "lbl"; l.style.left = x + "px"; l.style.top = (y + h + 18) + "px"; l.style.width = w + "px";
+  l.innerHTML = `${(NAME[A[i].id] || A[i].name).toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}<small>${extra || fmt(A[i])}</small>`; parent.appendChild(l); return v;
+}
+const SCENES = [];
+const NAME = { drum_steel_a02: "steel drum", handTool_socket_9_16in_a01: "socket", handTool_socket_5_8in_a01: "socket", consumable_spray_solvent_a01: "solvent spray",
+  cleaning_abrasivePowder_a01: "abrasive powder", consumable_threadlocker_blue_stick_a01: "threadlocker stick", food_processed_milk_a01: "milk carton", food_canned_peach_a03: "canned peaches" };
+function scene(elId, start, end, motionStart, motionLen, views, extra) { SCENES.push({ el: document.getElementById(elId), start, end, motionStart, motionLen, views, extra }); }
+
+window.setup = async function () {
+  const d = await (await fetch("data.json")).json(); A = d.assets; NF = d.nframes;
+  const qi0 = id("food_canned_peach_a03");
+  const PAIRS = [["food_processed_milk_a01", "consumable_spray_solvent_a01"], ["cleaning_abrasivePowder_a01", "consumable_threadlocker_blue_stick_a01"]];
+  const need = ["cleaning_dishSoap_a01", "fireProtection_extinguisher_portable_b01", "sign_wetFloor_a01", "food_produce_apple_redDelicous_a01", "food_produce_apple_grannySmith_a01", ...PAIRS.flat()].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
+  await Promise.all([...new Set(need)].map(loadModel));
+  const E = d.eval, f2 = (x) => x.toFixed(2);
+  document.getElementById("nA").textContent = A.length.toLocaleString();
+  document.getElementById("nBug").textContent = A.filter((a) => a.qa.includes("com_at_base")).length;
+  document.getElementById("r2b").textContent = f2(E.main["Rollout statistics (hand-built)"].R2);
+  document.getElementById("r2a").textContent = f2(E.main["Appearance (SigLIP2)"].R2);
+  document.getElementById("s5a").textContent = `How well an object's five nearest neighbors predict its reaction to three new probes. Simulated behavior vs appearance search, on ${E.n_test.toLocaleString()} test objects.`;
+  const px = E.cross["cross-engine: PhysX, same hulls"].R2;
+  document.getElementById("s5b").textContent = `Checked in NVIDIA's PhysX too: ${f2(px["Rollout statistics (hand-built)"].R2)} vs ${f2(px["Appearance (SigLIP2)"].R2)}. A self-supervised JEPA reaches ${f2(E.main["JEPA behavior embedding"].R2)}: far better than looks, behind plain statistics of the same simulations.`;
+  // s1: three tippers
+  const s1v = ["cleaning_dishSoap_a01", "fireProtection_extinguisher_portable_b01", "sign_wetFloor_a01"].map(id);
+  scene("s1", 0, 3.2, 0.2, 3.0, [...document.querySelectorAll("#s1 .view")].map((el, k) => new View(el, s1v[k], "push_high", null, 1.4, 0.4)));
+  // s2: canned peaches query, pushed high
+  const q = qi0, qa = A[q];
+  const s2 = document.getElementById("s2");
+  const v2 = [new View(s2.querySelector('[data-v="q"]'), q, "push_high", mats.hot, 1.0, 0.4)];
+  const tw = 225, gap = 20, fate = (j) => (A[j].sum.th > 0.5 ? "topples" : "stays up");
+  qa.beh.slice(0, 4).forEach((j, k) => v2.push(new View(slot(document.getElementById("behSlots"), j, 60 + k * (tw + gap), 582, tw, 150, fate(j)), j, "push_high", null, 1.35, 0.5)));
+  qa.app.slice(0, 4).forEach((j, k) => v2.push(new View(slot(document.getElementById("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150, fate(j)), j, "push_high", null, 1.35, 0.5)));
+  const ring = document.getElementById("ring");
+  Object.assign(ring.style, { left: "46px", top: "878px", width: (4 * tw + 3 * gap + 28) + "px", height: "254px" });
+  scene("s2", 3.2, 12.6, 3.8, 4.6, v2, (t) => { const on = t > 8.6; document.getElementById("c2").style.opacity = on ? 1 : 0; ring.style.opacity = on ? 1 : 0; });
+  // s3: two pairs
+  const ps = document.getElementById("pairSlots"), v3 = [];
+  PAIRS.forEach(([a, b], r) => { [a, b].forEach((n, c) => { const i = id(n); v3.push(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300, `tips if pushed high · slides at ${Math.round(A[i].sum.sl)}°`), i, "push_high", null, 1.45, 0.5)); }); });
+  scene("s3", 12.6, 19.4, 13.0, 4.6, v3, (t) => { document.getElementById("c3").style.opacity = t > 17.0 ? 1 : 0; });
+  // s4: apples
+  const bs = document.getElementById("bugSlots"), v4 = [];
+  [["food_produce_apple_redDelicous_a01", "authored center of mass: middle"], ["food_produce_apple_grannySmith_a01", "authored center of mass: at the base"]].forEach(([n, note], c) => {
+    const i = id(n); v4.push(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, note), i, "push_high", c === 1 ? mats.warn : mats.clay, 2.3, 0.75));
+  });
+  scene("s4", 19.4, 25.8, 19.8, 4.6, v4, (t) => { document.getElementById("c4").style.opacity = t > 22.6 ? 1 : 0; });
+  scene("s5", 25.8, 30.5, 0, 1, []);
+  await document.fonts.ready;
+  return 30.5;
+};
+window.renderAt = function (t) {
+  renderer.setScissorTest(true);
+  for (const s of SCENES) {
+    const on = t >= s.start && t < s.end; s.el.classList.toggle("on", on);
+    if (!on) continue;
+    if (s.extra) s.extra(t);
+    const u = Math.min(Math.max((t - s.motionStart) / s.motionLen, 0), 1);
+    for (const v of s.views) v.draw(u);
+  }
+  return true;
+};
+</script>
+</body></html>

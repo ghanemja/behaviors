@@ -1,0 +1,117 @@
+{
+ "cases": [
+  [
+   "squat box",
+   "push h=0.2",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "squat box",
+   "push h=0.85",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "squat box",
+   "ramp",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "tall box",
+   "push h=0.2",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "tall box",
+   "push h=0.85",
+   "tips",
+   {
+    "mujoco": "tips",
+    "physx": "tips"
+   }
+  ],
+  [
+   "tall box",
+   "ramp",
+   "tips",
+   {
+    "mujoco": "tips",
+    "physx": "tips"
+   }
+  ],
+  [
+   "tall grippy box",
+   "push h=0.2",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "tall grippy box",
+   "push h=0.85",
+   "tips",
+   {
+    "mujoco": "tips",
+    "physx": "tips"
+   }
+  ],
+  [
+   "tall grippy box",
+   "ramp",
+   "tips",
+   {
+    "mujoco": "tips",
+    "physx": "tips"
+   }
+  ],
+  [
+   "flat tile",
+   "push h=0.2",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "flat tile",
+   "push h=0.85",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ],
+  [
+   "flat tile",
+   "ramp",
+   "slides",
+   {
+    "mujoco": "slides",
+    "physx": "slides"
+   }
+  ]
+ ],
+ "score": {
+  "mujoco": 12,
+  "physx": 12
+ },
+ "n": 12
+}
