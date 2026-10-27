@@ -245,15 +245,17 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
 .mc-label .live { min-width: 0; font-family: var(--mono); font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); font-size: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #map { display: block; width: 100%; height: calc((var(--rail) - 24px) * .62); border-radius: 14px; background: var(--soft); cursor: zoom-in; touch-action: manipulation; }
 .mc-intro, .mc-foot { display: none; }
-.mapcard.open { width: 100%; padding: 22px 24px 20px; gap: 14px; border-radius: var(--r-hero); box-shadow: var(--sh-lg); max-height: calc(100dvh - 32px); overflow-y: auto; }
+.mapcard.open { display: flex; flex-direction: column; width: 100%; padding: 22px 24px 20px; gap: 14px; border-radius: var(--r-hero); box-shadow: var(--sh-lg); max-height: calc(100dvh - 32px); overflow: hidden; }
+.mapcard.open > * { flex: none; }
 .mapcard.open .mc-head { height: auto; }
 .mapcard.open .mc-label { padding: 6px 12px 7px; border-radius: 12px; background: var(--butter); border: var(--bw) solid var(--ink); transform: rotate(-2deg); }
 .mapcard.open .mc-label .live { display: none; }
 .mapcard.open .mc-intro { display: grid; gap: 8px; }
 .mapcard.open .mc-foot { display: flex; }
-.mapcard.open #map { height: min(52vh, 540px); cursor: crosshair; }
+.mapcard.open #map { flex: 0 1 min(52vh, 540px); height: auto; min-height: 120px; cursor: crosshair; }
 .mc-intro h2 { font-size: clamp(24px, 3.2vw, 38px); font-weight: 800; letter-spacing: -.02em; line-height: 1.05; }
 .mc-intro p { color: var(--ink-2); max-width: 74ch; }
+.mc-intro .short { display: none; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; font-weight: 600; padding-top: 4px; }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
 .mc-foot { flex-wrap: wrap; align-items: center; gap: 12px 18px; }
@@ -299,8 +301,12 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
   .searchbar input { height: 54px; }
   .searchbar kbd, .searchbar .btn { display: none; }
   .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .mapcard.open { padding: 16px; }
-  .mapcard.open #map { height: 46vh; }
+  .mapcard.open { padding: 14px 16px 16px; gap: 10px; }
+  .mapcard.open #map { flex-basis: 50vh; }
+  .mc-intro .long, .mc-foot .hint, .legend > span:last-child { display: none; }
+  .mc-intro .short { display: block; font-size: 15px; }
+  .legend { gap: 4px 12px; font-size: 12px; }
+  .mc-foot .btn { flex: 1 1 auto; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } .mc-timer { display: none; } }
 </style>
@@ -341,7 +347,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
         <div class="hero-foot">
           <div class="lede">
             <p>Every rigid asset in NVIDIA's SimReady library (<span class="nA">2,000+</span> of them) got the same pokes in a physics simulator: pushed low, pushed high, tilted on a ramp, dropped. Search ranks objects by how they reacted, not by how they look. It was tested on probes no model saw, with MuJoCo and NVIDIA's own PhysX engine. Pick an object and compare what moves like it with what merely looks like it.</p>
-            <button type="button" class="linkish" data-goto="how">How it works and what we found</button>
+            <button type="button" class="linkish" data-goto="how">How it works and what I found</button>
           </div>
           <div class="stats">
             <div class="stat"><b class="nA">…</b><span>rigid assets, CC BY 4.0</span></div>
@@ -376,14 +382,14 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
     <div id="panel-info" role="tabpanel" aria-labelledby="tab-info" hidden>
       <header class="info-head">
         <div class="eyebrow">Info</div>
-        <h1>What we found, and how it works</h1>
+        <h1>What I found, and how it works</h1>
         <p>Findings from running all <span class="nA">2,000+</span> rigid SimReady assets through the same pokes, the physics bugs that fell out of it, and how the behavior model was built and tested.</p>
         <nav class="chips" aria-label="Jump to">
           <button type="button" class="chip" data-goto="same">Different looks, same behavior</button>
           <button type="button" class="chip" data-goto="diff">Same looks, different behavior</button>
           <button type="button" class="chip" data-goto="qa">Physics QA</button>
           <button type="button" class="chip" data-goto="how">How it works</button>
-          <button type="button" class="chip" data-goto="test">How we tested it</button>
+          <button type="button" class="chip" data-goto="test">How I tested it</button>
         </nav>
       </header>
 
@@ -425,7 +431,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
 
       <section class="block" id="test" aria-labelledby="test-h">
         <div class="block-head">
-          <h2 id="test-h">How we tested it</h2>
+          <h2 id="test-h">How I tested it</h2>
           <p id="testIntro"></p>
         </div>
         <div class="chart" id="chart">
@@ -435,7 +441,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
           <div id="crossBars"></div>
           <details><summary>Show the full table</summary><div class="tablewrap"><table id="evalTable"></table></div></details>
         </div>
-        <h3 class="subhead">What we checked</h3>
+        <h3 class="subhead">What I checked</h3>
         <ul class="checks" id="checks"></ul>
         <h3 class="subhead">What could still be wrong</h3>
         <ul class="limits" id="limits"></ul>
@@ -472,7 +478,8 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
       </div>
       <div class="mc-intro">
         <h2 id="mc-title">Every object, placed by how it moves</h2>
-        <p>Each dot is one of <span class="nA">2,000+</span> SimReady assets. Dots that sit close together react to pushes, ramps and drops alike, whatever they look like. Hover to peek, click one to search from it.</p>
+        <p class="long">Each dot is one of <span class="nA">2,000+</span> SimReady assets. Dots that sit close together react to pushes, ramps and drops alike, whatever they look like. Hover to peek, click one to search from it.</p>
+        <p class="short">Each dot is an asset. Dots close together react alike, whatever they look like. Tap one to search from it.</p>
         <div class="legend" id="legend"></div>
       </div>
       <canvas id="map" aria-label="Scatter plot of SimReady assets placed by behavior similarity"></canvas>
@@ -1084,7 +1091,7 @@ function buildChecks() {
     `<b>Engines disagree near tipping points.</b> About ${parts ? pc(parts.near) : "–"} of probe runs end near the tipping point, where small modelling differences flip the outcome. Scored against PhysX, the same neighbors keep a clear lead over appearance, at lower absolute values.`,
     sdf ? `<b>Simulation's edge over geometry depends on the engine.</b> In MuJoCo, simulation statistics beat a no-simulation stability descriptor (${r2("Rollout statistics (hand-built)")} vs ${r2("Static stability (no simulation)")}). Against PhysX with NVIDIA's SDF collision they don't (${sdf.R2["Rollout statistics (hand-built)"].R2.toFixed(2)} vs ${sdf.R2["Static stability (no simulation)"].R2.toFixed(2)}). Every behavior method still beats appearance (${sdf.R2["Appearance (SigLIP2)"].R2.toFixed(2)}). Search should use the engine you will train in.` : "",
     `<b>The learned model is not the best method.</b> The JEPA trails simple statistics of the same probe runs by ${Math.abs(dJ.difference).toFixed(2)} R² (95% interval ${Math.abs(dJ["95% CI"][1]).toFixed(2)} to ${Math.abs(dJ["95% CI"][0]).toFixed(2)}). Here the simulator does the heavy lifting; a learned model earns its place when you don't know what to measure, such as video.`,
-    `<b>Our probes, not every task.</b> Pushes, a tilting floor and drops. Grasping, stacking and contact with other materials are not tested.`,
+    `<b>My probes, not every task.</b> Pushes, a tilting floor and drops. Grasping, stacking and contact with other materials are not tested.`,
     `<b>Rigid objects only.</b> Objects with 2 to 4 rigid parts are frozen into one body; 371 articulated assets with more parts are left out.`,
     `<b>Size-normalized.</b> Neighbors behave alike at their own scale; size and mass are shown separately so you can filter.`,
   ];
