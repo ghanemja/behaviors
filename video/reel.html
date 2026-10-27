@@ -74,9 +74,7 @@ h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-brea
   <div class="eyebrow">NVIDIA SimReady · behavior search</div>
   <h1>Search 3D objects by <em>how they move</em>, not how they look</h1>
   <p class="byline">by <b>Janelle Ghanem</b></p>
-  <div class="view" data-v="t0" style="left:60px; top:590px; width:300px; height:330px"></div>
-  <div class="view" data-v="t1" style="left:390px; top:590px; width:300px; height:330px"></div>
-  <div class="view" data-v="t2" style="left:720px; top:590px; width:300px; height:330px"></div>
+  <div id="hookSlots"></div>
 </section>
 
 <section class="scene" id="s2">
@@ -91,8 +89,8 @@ h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-brea
 </section>
 
 <section class="scene" id="s3">
-  <div class="eyebrow">Different looks, same behavior</div>
-  <h2>To a robot, these are <em>the same object</em></h2>
+  <div class="eyebrow">Different size, same behavior</div>
+  <h2>Size and weight <em>don't fool it</em></h2>
   <div id="pairSlots"></div>
 </section>
 
@@ -146,7 +144,7 @@ renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESF
 const envTex = new THREE.PMREMGenerator(renderer).fromScene(new THREE.RoomEnvironment(), 0.04).texture;
 const loader = new THREE.GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
 const MODELS = {};
-const loadModel = (i) => fetch(A[i].glb).then((r) => r.text()).then((t) => new Promise((res, rej) => loader.parse(b64(t.trim(), Uint8Array).buffer, "", (g) => { MODELS[i] = { root: g.scene, box: new THREE.Box3().setFromObject(g.scene) }; res(); }, rej)));
+const loadModel = (i) => fetch(A[i].glb || `mt/${A[i].id}.txt`).then((r) => r.text()).then((t) => new Promise((res, rej) => loader.parse(b64(t.trim(), Uint8Array).buffer, "", (g) => { MODELS[i] = { root: g.scene, box: new THREE.Box3().setFromObject(g.scene) }; res(); }, rej)));
 const shadowTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"); const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, "rgba(0,0,0,0.6)"); r.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
 const mats = {
   pusher: new THREE.MeshStandardMaterial({ roughness: 0.4, color: col("--pusher") }),
@@ -166,7 +164,7 @@ function track(i, p) {
     if (p === "ramp") tr.ang.push(raw[r + 7] / 100); }
   trackCache.set(key, tr); return tr;
 }
-const CAM = { push_high: { target: [0.45, 0, 0.34], off: [1.5, -3.6, 1.6] } };
+const CAM = { push_high: { target: [0.45, 0, 0.34], off: [1.5, -3.6, 1.6] }, push_low: { target: [0.45, 0, 0.32], off: [1.5, -3.6, 1.6] } };
 class View {
   constructor(el, i, p, zoom = 1, tshift = 0) {
     this.el = el; this.scene = new THREE.Scene(); this.scene.fog = new THREE.Fog(mats.fog.color, 4.4 * zoom, 9.5 * zoom);
@@ -201,7 +199,8 @@ const id = (s) => A.findIndex((a) => a.id === s);
 const $ = (s) => document.getElementById(s);
 const fmt = (a) => (a.S >= 1 ? a.S.toFixed(2) + " m" : Math.round(a.S * 100) + " cm") + " · " + (a.mass >= 1 ? a.mass.toFixed(1) + " kg" : Math.round(a.mass * 1000) + " g");
 const NAME = { drum_steel_a02: "steel drum", handTool_socket_9_16in_a01: "socket", handTool_socket_5_8in_a01: "socket", consumable_spray_solvent_a01: "solvent spray",
-  cleaning_abrasivePowder_a01: "abrasive powder", consumable_threadlocker_blue_stick_a01: "threadlocker stick", food_processed_milk_a01: "milk carton", food_canned_peach_a03: "canned peaches" };
+  food_canned_peach_a03: "canned peaches", cabinet_file_b03: "filing cabinet", food_beverage_beerBottle_b01: "beer bottle", decor_candle_i01: "candlestick",
+  machine_coffee_vending_a01: "vending machine", dishware_plastic_cup_a01: "plastic cup", drum_plastic_natural_a05: "plastic drum", food_processed_cannedFood_j01: "food can" };
 function slot(parent, i, x, y, w, h, extra) {
   const v = document.createElement("div"); v.className = "view"; Object.assign(v.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" }); parent.appendChild(v);
   const l = document.createElement("div"); l.className = "lbl"; l.style.left = x + "px"; l.style.top = (y + h + 18) + "px"; l.style.width = w + "px";
@@ -209,7 +208,7 @@ function slot(parent, i, x, y, w, h, extra) {
 }
 
 // --- Timing. Everything sits on the soundtrack's grid: 150 bpm, a beat is 0.4 s, a bar 1.6 s (see soundtrack.song.js).
-const CUT = [0, 4.8, 17.6, 24.0, 32.0, 38.4, 43.2];   // scene boundaries, on bar lines
+const CUT = [0, 8.0, 27.2, 36.8, 49.6, 60.8, 67.2];   // scene boundaries, on bar lines
 const prog = (t, start, dur) => Math.min(1, Math.max(0, (t - start) / dur));
 const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
 const outCubic = (x) => 1 - (1 - x) ** 3;
@@ -223,7 +222,8 @@ window.CUES = CUES;
 // Play a view's push from `start`, and stamp its outcome on it the moment it is clear:
 // a fall when the object lands, a stay-up a second after the touch, a bounce-back when it is upright again.
 const LABEL = { fell: "falls over", stayed: "stays up", back: "pops back up" };
-function play(v, start, len = 4, label = {}, big = false) {
+const LEN = 6;   // seconds of video per rollout
+function play(v, start, len = LEN, label = {}, big = false) {
   v.m0 = start; v.ml = len;
   const tr = v.tr, n = tr.quat.length, inv = tr.quat[0].clone().invert(), up = new THREE.Vector3(0, 0, 1);
   const tilt = tr.quat.map((q) => THREE.MathUtils.radToDeg(Math.acos(THREE.MathUtils.clamp(up.clone().applyQuaternion(q.clone().multiply(inv)).z, -1, 1))));
@@ -231,7 +231,7 @@ function play(v, start, len = 4, label = {}, big = false) {
   const touch = T(Math.max(0, tr.pos.findIndex((p) => p.distanceTo(tr.pos[0]) > 0.004)));
   const fin = tilt[n - 1], max = Math.max(...tilt), km = tilt.indexOf(max);
   const kind = fin > 45 ? "fell" : max > 25 ? "back" : "stayed";
-  const at = kind === "fell" ? T(tilt.findIndex((a) => a > 0.92 * fin)) : kind === "back" ? T(km + Math.max(0, tilt.slice(km).findIndex((a) => a < 12))) : touch + 1.0;
+  const at = kind === "fell" ? T(tilt.findIndex((a) => a > 0.92 * fin)) : kind === "back" ? T(km + Math.max(0, tilt.slice(km).findIndex((a) => a < 12))) : touch + 1.5;
   const x = parseFloat(v.el.style.left) + parseFloat(v.el.style.width) / 2, pan = +((x / 1080 * 2 - 1) * 0.7).toFixed(2);
   CUES.touches.push(+touch.toFixed(2));
   if (kind === "fell") CUES.lands.push({ t: +at.toFixed(2), pan });
@@ -246,7 +246,7 @@ function play(v, start, len = 4, label = {}, big = false) {
 
 // Live captions: [start, end, text]. *mint*, _pink_ and ^butter^ mark highlighted words.
 let CAPS = [];
-const WORD = 0.09;   // seconds per word, sped up so a long caption is fully shown by 45% of its time
+const WORD = 0.12;   // seconds per word, sped up when needed so a caption is fully shown by 45% of its time
 function capHTML(text) {
   let cls = "";
   return text.split(" ").map((w) => {
@@ -276,30 +276,34 @@ function scene(elId, start, end, views, extra) { SCENES.push({ el: $(elId), star
 window.setup = async function () {
   const d = await (await fetch("data.json")).json(); A = d.assets; NF = d.nframes;
   const qi0 = id("food_canned_peach_a03");
-  const PAIRS = [["food_processed_milk_a01", "consumable_spray_solvent_a01"], ["cleaning_abrasivePowder_a01", "consumable_threadlocker_blue_stick_a01"]];
+  const HOOK = ["cabinet_file_b03", "food_beverage_beerBottle_b01", "decor_candle_i01"];
+  const PAIRS = [["machine_coffee_vending_a01", "dishware_plastic_cup_a01"], ["drum_plastic_natural_a05", "food_processed_cannedFood_j01"]];
   const APPLES = ["food_produce_apple_redDelicous_a01", "food_produce_apple_grannySmith_a01"];
-  const S1 = ["cleaning_dishSoap_a01", "fireProtection_extinguisher_portable_b01", "sign_wetFloor_a01"];
-  const need = [...S1, ...APPLES, ...PAIRS.flat()].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
+  const need = [...HOOK, ...APPLES, ...PAIRS.flat()].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
   await Promise.all([...new Set(need)].map(loadModel));
   const E = d.eval, f2 = (x) => x.toFixed(2), n = (x) => x.toLocaleString();
   const R = { b: E.main["Rollout statistics (hand-built)"].R2, a: E.main["Appearance (SigLIP2)"].R2 };
   const px = E.cross["cross-engine: PhysX, same hulls"].R2, P = { b: px["Rollout statistics (hand-built)"].R2, a: px["Appearance (SigLIP2)"].R2 };
   const nBug = A.filter((a) => a.qa.includes("com_at_base")).length;
   const nm = (i) => NAME[A[i].id] || A[i].name;
+  // a no-break space keeps a number and its unit on one caption line
+  const size = (i) => (A[i].S >= 1 ? `${+A[i].S.toFixed(1)}\u00a0m` : `${Math.round(A[i].S * 100)}\u00a0cm`);
+  const kg = (i) => (A[i].mass >= 1 ? `${Math.round(A[i].mass)}\u00a0kg` : `${Math.round(A[i].mass * 1000)}\u00a0g`);
 
-  // s1: the test. Three objects, the same push.
-  const v1 = [...document.querySelectorAll("#s1 .view")].map((el, k) => play(new View(el, id(S1[k]), "push_high", 1.4, 0.4), 2.4, 4));
-  scene("s1", CUT[0], CUT[1], v1, (t) => {});
+  // s1: a filing cabinet and its two nearest behavior neighbors, the same low push
+  const hs = $("hookSlots");
+  const v1 = HOOK.map((nn, k) => { const i = id(nn); const v = play(new View(slot(hs, i, 60 + k * 330, 590, 300, 330), i, "push_low", 1.4, 0.4), 3.6, LEN, { fell: "tips over", cls: "meh" }); if (k === 0) v.el.classList.add("hot"); return v; });
+  scene("s1", CUT[0], CUT[1], v1);
 
-  // s2: canned peaches, then its behavior neighbors, then its look-alikes; each row pushed in turn.
+  // s2: canned peaches, then its behavior neighbors, then its look-alikes; each row pushed in turn
   const q = qi0, qa = A[q], s2 = $("s2");
-  const vq = play(new View(s2.querySelector('[data-v="q"]'), q, "push_high", 1.0, 0.4), 5.6, 4, {}, true);
+  const vq = play(new View(s2.querySelector('[data-v="q"]'), q, "push_high", 1.0, 0.4), 11.6, LEN, {}, true);
   vq.el.classList.add("hot");
   const tw = 225, gap = 20;
-  const beh = qa.beh.slice(0, 4).map((j, k) => play(new View(slot($("behSlots"), j, 60 + k * (tw + gap), 582, tw, 150), j, "push_high", 1.35, 0.5), 9.2, 4));
-  const app = qa.app.slice(0, 4).map((j, k) => play(new View(slot($("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150), j, "push_high", 1.35, 0.5), 13.2, 4));
+  const beh = qa.beh.slice(0, 4).map((j, k) => play(new View(slot($("behSlots"), j, 60 + k * (tw + gap), 582, tw, 150), j, "push_high", 1.35, 0.5), 16.4));
+  const app = qa.app.slice(0, 4).map((j, k) => play(new View(slot($("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150), j, "push_high", 1.35, 0.5), 21.2));
   const ring = $("ring");
-  const FOCUS = [[4.8, "q", 212, 290], [8.0, "beh", 498, 316], [12.0, "app", 808, 316], [15.6, "all"]];
+  const FOCUS = [[8.0, "q", 212, 290], [15.2, "beh", 498, 316], [20.0, "app", 808, 316], [24.0, "all"]];
   scene("s2", CUT[1], CUT[2], [vq, ...beh, ...app], (t) => {
     const f = FOCUS.filter(([a]) => t >= a).at(-1);
     const dim = (on) => (f[1] === "all" || on ? 1 : 0.28);
@@ -310,16 +314,16 @@ window.setup = async function () {
     ring.style.opacity = f[1] === "all" ? 0 : prog(t, f[0], .25);
   });
 
-  // s3: two look-different, behave-alike pairs
+  // s3: matches across size and weight, one row at a time
   const ps = $("pairSlots"), v3 = [];
-  PAIRS.forEach(([a, b], r) => { [a, b].forEach((nn, c) => { const i = id(nn);
-    v3.push(play(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300, `tips if pushed high · slides at ${Math.round(A[i].sum.sl)}°`), i, "push_high", 1.45, 0.5), 19.4, 4, { fell: "tips over", cls: "meh" })); }); });
+  PAIRS.forEach((pair, r) => pair.forEach((nn, c) => { const i = id(nn);
+    v3.push(play(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300), i, "push_high", 1.45, 0.5), [29.6, 32.8][r], LEN, { fell: ["tips over", "rolls away"][r], cls: "meh" })); }));
   scene("s3", CUT[2], CUT[3], v3);
 
   // s4: two apples; one has its center of mass authored at its base
   const bs = $("bugSlots"), notes = ["authored center of mass: middle", "authored center of mass: at the base"];
-  const v4 = APPLES.map((nn, c) => { const i = id(nn); return play(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, notes[c]), i, "push_high", 2.3, 0.75), 25.6, 4, { fell: "rolls over" }); });
-  const REVEAL = 28.8;
+  const v4 = APPLES.map((nn, c) => { const i = id(nn); return play(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, notes[c]), i, "push_high", 2.3, 0.75), 39.6, LEN, { fell: "rolls over" }); });
+  const REVEAL = 44.8;
   CUES.pops.push(REVEAL);
   scene("s4", CUT[3], CUT[4], v4, (t) => {
     v4[1].el.classList.toggle("warn", t >= REVEAL);
@@ -328,7 +332,7 @@ window.setup = async function () {
 
   // s5: the held-out test, as bars (R², 0 to 1 across 900 px)
   $("s5eye").textContent = `Tested on ${n(E.n_test)} objects no model saw`;
-  const BARS = [["barB", "valB", R.b, 33.6], ["barA", "valA", R.a, 35.2], ["barPB", "valPB", P.b, 36.8], ["barPA", "valPA", P.a, 36.8]];
+  const BARS = [["barB", "valB", R.b, 52.0], ["barA", "valA", R.a, 54.4], ["barPB", "valPB", P.b, 56.8], ["barPA", "valPA", P.a, 56.8]];
   BARS.forEach(([, v, x]) => ($(v).textContent = f2(x)));
   BARS.forEach(([, , , s]) => CUES.pops.push(s));
   scene("s5", CUT[4], CUT[5], [], (t) => {
@@ -337,32 +341,36 @@ window.setup = async function () {
   });
 
   // s6: end card
-  CUES.pops.push(38.8, 39.2, 39.6);
-  scene("s6", CUT[5], CUT[6], [], (t) => { pop($("d-url"), t, 38.8, .5, 4); pop($("d-who"), t, 39.2, .5, -4); pop($("d-series"), t, 39.6, .45, -8, -3); });
+  const END = [61.2, 61.6, 62.0];
+  CUES.pops.push(...END);
+  scene("s6", CUT[5], CUT[6], [], (t) => { pop($("d-url"), t, END[0], .5, 4); pop($("d-who"), t, END[1], .5, -4); pop($("d-series"), t, END[2], .45, -8, -3); });
   CUES.pops.push(0.15);
 
+  const [hc, hb, hk] = HOOK.map(id), [[vm, cup], [drum, can]] = PAIRS.map((p) => p.map(id));
   CAPS = [
-    [0.3, 2.0, `${n(A.length)} 3D objects from NVIDIA's SimReady library.`],
-    [2.0, 4.7, "Each one gets the ^same push^ in a physics simulator."],
-    [4.9, 6.8, "Take a can of peaches and push it high up."],
-    [6.8, 8.0, "It *stays up*."],
-    [8.0, 10.4, `Search by ^behavior^ finds two sockets, a steel drum and a mug.`],
-    [10.4, 12.0, "Push them: they *stay up too*."],
-    [12.0, 14.0, "Search by ^looks^ finds other cans."],
-    [14.0, 15.6, "Push them: _every one falls over_."],
-    [15.6, 17.5, "Looking alike doesn't mean moving alike."],
-    [17.7, 19.4, "And things that look nothing alike can move the same:"],
-    [19.4, 21.6, `a ${nm(id(PAIRS[0][0]))} tips over just like a can of ${nm(id(PAIRS[0][1]))},`],
-    [21.6, 23.9, `and ${nm(id(PAIRS[1][0]))} just like a ${nm(id(PAIRS[1][1]))}.`],
-    [24.1, 25.6, "It also catches broken physics."],
-    [25.6, 27.2, "Two apples, same push."],
-    [27.2, 28.8, "One rolls over. The other _pops back up_."],
-    [28.8, 30.4, "Its center of mass sits at its base: an authoring bug."],
-    [30.4, 31.9, `_${nBug} assets_ in the library have this bug.`],
-    [32.1, 33.6, "Does it hold up on objects it never saw?"],
-    [33.6, 35.2, `Neighbors by behavior predict how they react: ^${f2(R.b)}^`],
-    [35.2, 36.8, `Neighbors by looks: _${f2(R.a)}_`],
-    [36.8, 38.3, `Checked in NVIDIA's PhysX too: ^${f2(P.b)}^ vs _${f2(P.a)}_`],
+    [0.4, 3.2, `I pushed ${n(A.length)} 3D objects from NVIDIA's SimReady library in a physics simulator.`],
+    [3.2, 5.6, "Same push for every one. Watch:"],
+    [5.6, 7.9, `a ${size(hc)} ${nm(hc)} tips over just like a ${nm(hb)} and a ${nm(hk)}.`],
+    [8.1, 11.2, "So I built a search that finds objects that ^move alike^."],
+    [11.2, 13.6, "Push a can of peaches high up:"],
+    [13.6, 15.2, "it *stays up*."],
+    [15.2, 18.4, "Search by ^behavior^ finds two sockets, a steel drum and a mug."],
+    [18.4, 20.0, "They *stay up too*."],
+    [20.0, 22.4, "Search by ^looks^ finds other cans."],
+    [22.4, 24.0, "_Every one falls over_."],
+    [24.0, 27.1, "Looking alike doesn't mean moving alike."],
+    [27.3, 29.6, "Size and weight don't fool it:"],
+    [29.6, 32.8, `a ${kg(vm)} ${nm(vm)} tips over just like a ${kg(cup)} ${nm(cup)},`],
+    [32.8, 36.7, `and a ${size(drum)} ${nm(drum)} rolls away just like a ${nm(can)}.`],
+    [36.9, 39.2, "It also catches broken physics."],
+    [39.2, 41.6, "Two apples, same push."],
+    [41.6, 44.8, "One rolls over. The other _pops back up_."],
+    [44.8, 47.2, "Its center of mass sits at its base: an authoring bug."],
+    [47.2, 49.5, `_${nBug} assets_ in the library have this bug.`],
+    [49.7, 52.0, "Does it work on objects it never saw?"],
+    [52.0, 54.4, `Neighbors by behavior predict how they react: ^${f2(R.b)}^`],
+    [54.4, 56.8, `Neighbors by looks: _${f2(R.a)}_`],
+    [56.8, 60.7, `Same result in NVIDIA's PhysX: ^${f2(P.b)}^ vs _${f2(P.a)}_`],
   ];
   for (const k of ["touches", "chimes", "pops"]) CUES[k] = [...new Set(CUES[k])].sort((a, b) => a - b);
   await document.fonts.ready;
@@ -370,7 +378,7 @@ window.setup = async function () {
 };
 window.renderAt = function (t) {
   renderer.setScissorTest(true);
-  const rs = $("r-series"); pop(rs, t, .15, .45, 8, 3); if (t > 4.2) rs.style.opacity = 1 - prog(t, 4.2, .3);
+  const rs = $("r-series"); pop(rs, t, .15, .45, 8, 3); if (t > 7.4) rs.style.opacity = 1 - prog(t, 7.4, .3);
   for (const s of SCENES) {
     const on = t >= s.start && t < s.end; s.el.classList.toggle("on", on);
     if (!on) continue;

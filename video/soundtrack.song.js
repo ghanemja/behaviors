@@ -6,27 +6,27 @@
 // sync if the video is retimed. Render with:
 //   node video/soundtrack.mjs soundtrack.wav
 //
-// 0-4.8s     title: soft keys, three objects pushed over; a riser into the drop
-// 4.8s       the drop, on the canned peaches query
-// 17.6s      the look-alike pairs; the lead rests
-// 24-28.8s   breakdown under the apples; the doorstop apple boings back up
-// 28.8s      the beat drops back in as the bug is revealed
-// 32s        results; 38.4s end card; the last chord lands at 41.6s
+// 0-8s       title: soft keys; a filing cabinet, a beer bottle and a candlestick tip over; a riser into the drop
+// 8s         the drop, as the search is introduced (canned peaches)
+// 27.2s      matches across size and weight; the lead rests
+// 38.4-44.8s breakdown under the apples; the doorstop apple boings back up
+// 44.8s      the beat drops back in as the bug is revealed
+// 49.6s      results; 60.8s end card; the last chord lands at 65.6s
 import cues from './cues.json' with { type: 'json' };
 
 const BAR = 1.6;
-const DROP = 4.8, BREAK = [24.0, 28.8], LAST = 41.6;
+const DROP = 8.0, BREAK = [38.4, 44.8], LAST = 65.6, END_CARD = 60.8;
 
 // The arrangement is math too.
 const DRUMS = `t >= ${DROP} && (t < ${BREAK[0]} || t >= ${BREAK[1]}) && t < ${LAST}`;
 const SOFT = `(t >= ${BREAK[0]} && t < ${BREAK[1]} ? 0.6 : 1)`;
 
-// I-vi-ii-V in C, rotated so the drop (bar 3) lands on Dm9.
+// I-vi-ii-V in C, rotated so the drop (bar 5) lands on Dm9.
 const PROG = [
-  { chord: 'F3+A3+B3+E4', root: 'G1', lead: 'D5 . . F5 . . E5 . . . D5 . B4 . . .' },  // G13
-  { chord: 'E3+G3+B3+D4', root: 'C2', lead: 'E5 . . G5 . . B5 . . . A5 . G5 . . .' },  // Cmaj9
   { chord: 'C3+G3+B3+E4', root: 'A1', lead: 'C5 . . E5 . . D5 . . . C5 . . . . .' },  // Am9
   { chord: 'F3+A3+C4+E4', root: 'D2', lead: 'F5 . . A5 . . C6 . . . A5 . E5 . . .' },  // Dm9
+  { chord: 'F3+A3+B3+E4', root: 'G1', lead: 'D5 . . F5 . . E5 . . . D5 . B4 . . .' },  // G13
+  { chord: 'E3+G3+B3+D4', root: 'C2', lead: 'E5 . . G5 . . B5 . . . A5 . G5 . . .' },  // Cmaj9
 ];
 const bar = (cells) => { const s = Array(16).fill('.'); for (const [k, v] of cells) s[k] = v; return s.join(' '); };
 const CHORDS = PROG.map((p) => p.chord).join(' ');
@@ -106,9 +106,9 @@ export default {
     },
     {
       name: 'Lead',
-      // a marimba-ish pluck with a dotted-eighth echo; it rests under the pairs
+      // a marimba-ish pluck with a dotted-eighth echo; it rests under the size pairs
       equation: '(sin(TAU*f*tau) + 0.25*sin(TAU*4*f*tau)*exp(-30*tau)) * exp(-7*tau)',
-      pattern: PROG.map((p) => p.lead).join(' '), gate: `${DRUMS} && (t < 17.6 || t >= ${BREAK[1]})`, gain: 0.36, pan: -0.15, echo: 0.3,
+      pattern: PROG.map((p) => p.lead).join(' '), gate: `${DRUMS} && (t < 27.2 || t >= ${BREAK[1]})`, gain: 0.36, pan: -0.15, echo: 0.3,
     },
 
     // --- Sound effects, at the video's exact moments ---
@@ -152,7 +152,7 @@ export default {
     {
       name: 'Crash',
       equation: 'noise() * exp(-2.2*tau)',
-      at: [DROP, BREAK[1], 38.4, LAST], len: BAR, hp: 5000, gain: 0.22,
+      at: [DROP, BREAK[1], END_CARD, LAST], len: BAR, hp: 5000, gain: 0.22,
     },
   ],
 };
