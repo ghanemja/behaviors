@@ -1,7 +1,8 @@
 """Assemble the static GitHub Pages site from the demo build in out/site.
 
 The demo page is written as a fragment (styles + body); this wraps it in a full HTML document with link-preview tags,
-a favicon and a link back to the code, and copies the data, shards, textured models and media next to it.
+a favicon, visitor analytics (GoatCounter, see analytics.js) and a link back to the code, and copies the data, shards,
+textured models and media next to it.
 Usage: python src/build_pages.py out/site pages_build https://user.github.io/repo/ https://github.com/user/repo
 """
 import os
@@ -44,6 +45,7 @@ page = f"""<!doctype html>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{BASE}cover.jpg">
 <link rel="icon" href="{FAVICON}">
+<script src="analytics.js" data-goatcounter="ghanemja" data-site="behaviors"></script>
 {head}
 </head>
 <body>
@@ -56,6 +58,7 @@ if os.path.exists(OUT):
 os.makedirs(OUT)
 open(f"{OUT}/index.html", "w").write(page)
 shutil.copy(f"{SITE}/data.json", OUT)
+shutil.copy(f"{SITE}/analytics.js", OUT)
 shutil.copytree(f"{SITE}/d", f"{OUT}/d")
 os.makedirs(f"{OUT}/mt")
 for f in os.listdir(f"{SITE}/mt"):

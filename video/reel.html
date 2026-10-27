@@ -36,10 +36,15 @@ h1 em, h2 em, .big em { font-style: normal; padding: 0 .06em; -webkit-box-decora
 .callout b { background: var(--accent); }
 .callout .w { background: var(--pink); }
 .ring { position: absolute; border: 6px solid var(--accent); border-radius: 30px; opacity: 0; }
-.big { font-family: var(--display); font-size: 168px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-top: 64px; font-variant-numeric: tabular-nums; }
+.big { transform-origin: left center; font-family: var(--display); font-size: 168px; font-weight: 800; letter-spacing: -.04em; line-height: 1; margin-top: 64px; font-variant-numeric: tabular-nums; }
 .big span { color: var(--ink-3); font-size: 84px; letter-spacing: -.02em; margin: 0 .12em; }
 .big .lo { color: var(--ink-2); }
 .credit { position: absolute; left: 60px; right: 60px; bottom: 56px; font-size: 22px; color: var(--ink-3); line-height: 1.45; }
+.series { position: absolute; left: 60px; z-index: 6; font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: -.01em; padding: 10px 26px 13px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--pink); box-shadow: var(--sh); transform-origin: left center; opacity: 0; }
+#r-series { bottom: 64px; }
+#d-series { top: 1010px; }
+.try { position: absolute; left: 60px; top: 770px; margin: 0; font-size: 28px; font-weight: 600; color: var(--ink-2); opacity: 0; }
+.url { position: absolute; left: 60px; top: 824px; font-family: var(--display); font-size: 52px; font-weight: 800; letter-spacing: -.02em; padding: 14px 40px 20px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--accent); box-shadow: var(--sh-lg); transform-origin: left center; opacity: 0; }
 </style></head>
 <body>
 
@@ -83,8 +88,12 @@ h1 em, h2 em, .big em { font-style: normal; padding: 0 .06em; -webkit-box-decora
   <div class="big"><em id="r2b">0.54</em><span>vs</span><b class="lo" id="r2a">0.15</b></div>
   <p class="sub" style="font-size:34px; color:var(--ink)" id="s5a">How well an object's five nearest neighbors predict its reaction to three new probes. Simulated behavior vs appearance search, on 1,891 test objects.</p>
   <p class="sub" id="s5b">Checked in NVIDIA's PhysX too. A self-supervised JEPA does far better than looks, but plain statistics of the same simulations do better still.</p>
+  <p class="try" id="d-try">Try it on any object. Code and data are on GitHub.</p>
+  <span class="url" id="d-url">ghanemja.github.io/behaviors</span>
+  <span class="series" id="d-series">7 Days of Vibes · Day 4</span>
   <p class="credit">3D assets: NVIDIA SimReady on Hugging Face, CC BY 4.0. Physics: MuJoCo and PhysX (SAPIEN). Appearance: SigLIP2. Everything ran on a 4-core CPU.</p>
 </section>
+<span class="series" id="r-series">7 Days of Vibes · Day 4</span>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -174,6 +183,14 @@ const SCENES = [];
 const NAME = { drum_steel_a02: "steel drum", handTool_socket_9_16in_a01: "socket", handTool_socket_5_8in_a01: "socket", consumable_spray_solvent_a01: "solvent spray",
   cleaning_abrasivePowder_a01: "abrasive powder", consumable_threadlocker_blue_stick_a01: "threadlocker stick", food_processed_milk_a01: "milk carton", food_canned_peach_a03: "canned peaches" };
 function scene(elId, start, end, motionStart, motionLen, views, extra) { SCENES.push({ el: document.getElementById(elId), start, end, motionStart, motionLen, views, extra }); }
+const $ = (s) => document.getElementById(s);
+const prog = (t, start, dur) => Math.min(1, Math.max(0, (t - start) / dur));
+const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
+const outCubic = (x) => 1 - (1 - x) ** 3;
+// a sticker popping on: overshoot in scale, settling from a tilt to its resting angle
+function pop(el, t, start, dur = .5, rot = -8, rest = 0) { const k = prog(t, start, dur); el.style.opacity = k > 0 ? 1 : 0; el.style.transform = `scale(${back(k)}) rotate(${rest + (1 - outCubic(k)) * rot}deg)`; }
+// a card landing: a smaller bounce, for callouts
+function land(el, t, start) { const k = prog(t, start, .4); el.style.opacity = Math.min(1, k * 4); el.style.transform = `scale(${.9 + .1 * back(k)})`; }
 
 window.setup = async function () {
   const d = await (await fetch("data.json")).json(); A = d.assets; NF = d.nframes;
@@ -201,23 +218,30 @@ window.setup = async function () {
   qa.app.slice(0, 4).forEach((j, k) => v2.push(new View(slot(document.getElementById("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150, fate(j)), j, "push_high", null, 1.35, 0.5)));
   const ring = document.getElementById("ring");
   Object.assign(ring.style, { left: "46px", top: "878px", width: (4 * tw + 3 * gap + 28) + "px", height: "254px" });
-  scene("s2", 3.2, 12.6, 3.8, 4.6, v2, (t) => { const on = t > 8.6; document.getElementById("c2").style.opacity = on ? 1 : 0; ring.style.opacity = on ? 1 : 0; });
+  scene("s2", 3.2, 12.8, 3.8, 4.6, v2, (t) => { land($("c2"), t, 8.8); ring.style.opacity = prog(t, 8.8, .25); });
   // s3: two pairs
   const ps = document.getElementById("pairSlots"), v3 = [];
   PAIRS.forEach(([a, b], r) => { [a, b].forEach((n, c) => { const i = id(n); v3.push(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300, `tips if pushed high · slides at ${Math.round(A[i].sum.sl)}°`), i, "push_high", null, 1.45, 0.5)); }); });
-  scene("s3", 12.6, 19.4, 13.0, 4.6, v3, (t) => { document.getElementById("c3").style.opacity = t > 17.0 ? 1 : 0; });
+  scene("s3", 12.8, 19.2, 13.2, 4.6, v3, (t) => land($("c3"), t, 16.8));
   // s4: apples
   const bs = document.getElementById("bugSlots"), v4 = [];
   [["food_produce_apple_redDelicous_a01", "authored center of mass: middle"], ["food_produce_apple_grannySmith_a01", "authored center of mass: at the base"]].forEach(([n, note], c) => {
     const i = id(n); v4.push(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, note), i, "push_high", c === 1 ? mats.warn : mats.clay, 2.3, 0.75));
   });
-  scene("s4", 19.4, 25.8, 19.8, 4.6, v4, (t) => { document.getElementById("c4").style.opacity = t > 22.6 ? 1 : 0; });
-  scene("s5", 25.8, 30.5, 0, 1, []);
+  scene("s4", 19.2, 25.6, 19.6, 4.6, v4, (t) => land($("c4"), t, 22.4));
+  scene("s5", 25.6, 31.6, 0, 1, [], (t) => {
+    pop(document.querySelector("#s5 .big"), t, 25.6, .5, -3);
+    $("d-try").style.opacity = prog(t, 26.2, .3);
+    pop($("d-url"), t, 26.4, .5, 4);
+    pop($("d-series"), t, 27.2, .45, -8, -3);
+  });
   await document.fonts.ready;
-  return 30.5;
+  return 31.6;
 };
+// Cuts, callouts and pops sit on the soundtrack's grid (150 bpm: a beat is 0.4 s, a bar 1.6 s); see soundtrack.song.js.
 window.renderAt = function (t) {
   renderer.setScissorTest(true);
+  const rs = $("r-series"); pop(rs, t, .15, .45, -8, -3); if (t > 4.4) rs.style.opacity = 1 - prog(t, 4.4, .3);
   for (const s of SCENES) {
     const on = t >= s.start && t < s.end; s.el.classList.toggle("on", on);
     if (!on) continue;

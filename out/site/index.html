@@ -739,7 +739,7 @@ function renderSugg() {
   suggEl.hidden = false; qIn.setAttribute("aria-expanded", "true");
   if (active >= 0) qIn.setAttribute("aria-activedescendant", "sg" + active); else qIn.removeAttribute("aria-activedescendant");
 }
-function pick(i) { closeSugg(); setQuery(i, true); }
+function pick(i) { closeSugg(); window.track?.("search: " + A[i].id); setQuery(i, true); }
 function buildSearch() {
   qIn.addEventListener("input", () => { filterText = qIn.value.trim().toLowerCase(); active = -1; renderSugg(); drawGrid(); });
   qIn.addEventListener("focus", () => { if (filterText) renderSugg(); });
@@ -992,7 +992,7 @@ function wireMap() {
   mapC.addEventListener("pointerleave", () => { tip.hidden = true; if (hoverI >= 0) { hoverI = -1; drawMap(); } });
   mapC.addEventListener("click", (ev) => {
     if (!mapOpen) { openMap(); return; }
-    const i = nearest(ev); if (i >= 0) { tip.hidden = true; setQuery(i, true); }
+    const i = nearest(ev); if (i >= 0) { tip.hidden = true; window.track?.("map: " + A[i].id); setQuery(i, true); }
   });
   $("#mcToggle").addEventListener("click", () => mapOpen ? dockMap(true) : openMap());
   $("#mcGo").addEventListener("click", () => dockMap(true));
