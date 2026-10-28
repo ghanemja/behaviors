@@ -88,7 +88,8 @@ main { min-width: 0; }
 .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 11px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--surface); font-size: 12.5px; font-weight: 650; cursor: pointer; transition: transform var(--t-fast), box-shadow var(--t-fast); }
 .chip:hover { box-shadow: 2px 2px 0 var(--ink); transform: translate(-1px, -1px); }
 .chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
-.tries .chip { font-size: 13.5px; min-height: 34px; text-transform: capitalize; }
+.tries .chip { font-size: 13.5px; min-height: 34px; }
+#behFilter { margin-top: 16px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; border: 1.5px solid var(--ink); }
 .btn { min-height: 44px; padding: 0 20px; border-radius: 999px; border: var(--bw) solid var(--ink); background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: 14px; box-shadow: var(--sh); cursor: pointer; transition: transform var(--t-fast), box-shadow var(--t-fast); white-space: nowrap; }
 .btn:hover { background: var(--accent-press); }
@@ -322,9 +323,9 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
             <kbd aria-hidden="true">/</kbd>
             <button class="btn" id="go" type="button">Search</button>
           </div>
+          <div class="tries" id="behFilter" role="group" aria-label="Search by behavior"><span>Behavior</span></div>
           <ul id="sugg" role="listbox" aria-label="Matching objects" hidden></ul>
         </div>
-        <div class="tries" id="tries"><span>Try</span></div>
         <div class="hero-foot">
           <div class="lede">
             <p>Every rigid asset in NVIDIA's SimReady library (<span class="nA">2,000+</span> of them) got the same pokes in a physics simulator: pushed low, pushed high, tilted on a ramp, dropped. Search ranks objects by how they reacted, not by how they look. It was tested on probes no model saw, with MuJoCo and NVIDIA's own PhysX engine. Pick an object and compare what moves like it with what merely looks like it.</p>
@@ -491,7 +492,9 @@ const ARCH = {
   "tippy": { label: "Tips easily", c: "--s3" },
   "rolls": { label: "Rolls", c: "--s4" },
 };
-const TRIES = ["food_canned_peach_a03", "food_produce_apple_grannySmith_a01", "food_beverage_beerBottle_a01", "toy_marble_a01", "sign_wetFloor_a01"];
+const searchHint = () => matchMedia("(max-width: 600px)").matches ? `Search ${A.length.toLocaleString()} objects` : `Search ${A.length.toLocaleString()} objects: bottle, apple, crate, sign…`;
+// how each behavior reads in a sentence: "objects that roll"
+const DOES = { "slides": "slide", "tips high": "tip if pushed high", "tippy": "tip easily", "rolls": "roll" };
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (matchMedia("(max-width: 600px)").matches) document.getElementById("q").placeholder = "Search objects";
 let D, A, NF;
@@ -741,18 +744,33 @@ function matches(q) {
   return out.sort((x, y) => x[0] - y[0] || x[1] - y[1]).map((x) => x[2]);
 }
 function closeSugg() { suggEl.hidden = true; qIn.setAttribute("aria-expanded", "false"); qIn.removeAttribute("aria-activedescendant"); active = -1; }
+const archOk = (i) => filterArch === "all" || A[i].arch === filterArch;
+// the clearest examples of a behavior: strongest outcome first, one per product family
+function examples(k) {
+  const key = { "slides": (a) => 1 - a.sum.th, "tips high": (a) => a.sum.th, "tippy": (a) => a.sum.tl, "rolls": (a) => a.sum.ro }[k];
+  const seen = new Set(), out = [];
+  const mix = (i) => Math.sin(i * 12.9898) * 43758.5453 % 1;  // stable shuffle for ties
+  for (const i of A.map((a, i) => i).filter(archOk).sort((x, y) => key(A[y]) - key(A[x]) || mix(x) - mix(y))) {
+    const fam = A[i].id.replace(/_[a-z]\d\d$/, "");
+    if (!seen.has(fam)) { seen.add(fam); out.push(i); }
+    if (out.length === 8) break;
+  }
+  return out;
+}
 function renderSugg() {
-  if (!filterText || !A) { closeSugg(); return; }
-  sugg = matches(filterText).slice(0, 8);
-  suggEl.innerHTML = sugg.length ? sugg.map((i, k) => `<li role="option" id="sg${k}" data-i="${i}" aria-selected="${k === active}"><img src="${thumbOf(A[i])}" alt=""><span><b>${A[i].name}</b><small>${fmtSize(A[i].S)} · ${fmtMass(A[i].mass)}</small></span><span class="arch">${archDot(A[i])}${ARCH[A[i].arch].label}</span></li>`).join("")
-    : `<li class="none" role="option" aria-disabled="true">No objects match “${esc(filterText)}”. Try bottle, apple or crate.</li>`;
+  if (!A || (!filterText && filterArch === "all")) { closeSugg(); return; }
+  sugg = filterText ? matches(filterText).filter(archOk).slice(0, 8) : examples(filterArch);
+  const n = A.filter((a, i) => archOk(i)).length, what = filterArch === "all" ? "objects" : `objects that ${DOES[filterArch]}`;
+  const head = filterText ? "" : `<li class="none" role="presentation">${n.toLocaleString()} ${what}. Some clear examples; type to narrow, like “bottle”.</li>`;
+  suggEl.innerHTML = head + (sugg.length ? sugg.map((i, k) => `<li role="option" id="sg${k}" data-i="${i}" aria-selected="${k === active}"><img src="${thumbOf(A[i])}" alt=""><span><b>${A[i].name}</b><small>${fmtSize(A[i].S)} · ${fmtMass(A[i].mass)}</small></span><span class="arch">${archDot(A[i])}${ARCH[A[i].arch].label}</span></li>`).join("")
+    : `<li class="none" role="option" aria-disabled="true">No ${what} match “${esc(filterText)}”. Try bottle, apple or crate.</li>`);
   suggEl.hidden = false; qIn.setAttribute("aria-expanded", "true");
   if (active >= 0) qIn.setAttribute("aria-activedescendant", "sg" + active); else qIn.removeAttribute("aria-activedescendant");
 }
 function pick(i) { closeSugg(); window.track?.("search: " + A[i].id); setQuery(i, true); }
 function buildSearch() {
   qIn.addEventListener("input", () => { filterText = qIn.value.trim().toLowerCase(); active = -1; renderSugg(); drawGrid(); });
-  qIn.addEventListener("focus", () => { if (filterText) renderSugg(); });
+  qIn.addEventListener("focus", () => { if (filterText || filterArch !== "all") renderSugg(); });
   qIn.addEventListener("keydown", (e) => {
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       if (suggEl.hidden) renderSugg();
@@ -761,25 +779,36 @@ function buildSearch() {
       active = (active + (e.key === "ArrowDown" ? 1 : sugg.length - 1 + (active < 0 ? 1 : 0))) % sugg.length;
       renderSugg(); $("#sg" + active)?.scrollIntoView({ block: "nearest" });
     } else if (e.key === "Enter") {
-      if (filterText && sugg.length) { e.preventDefault(); pick(sugg[Math.max(active, 0)]); }
+      if (sugg.length && !suggEl.hidden) { e.preventDefault(); pick(sugg[Math.max(active, 0)]); }
     } else if (e.key === "Escape") closeSugg();
   });
   suggEl.addEventListener("mousedown", (e) => e.preventDefault());
   suggEl.addEventListener("click", (e) => { const li = e.target.closest("li[data-i]"); if (li) pick(+li.dataset.i); });
   document.addEventListener("click", (e) => { if (!e.target.closest(".searchwrap")) closeSugg(); });
-  $("#go").addEventListener("click", () => { if (filterText && sugg.length) pick(sugg[Math.max(active, 0)]); else qIn.focus(); });
+  $("#go").addEventListener("click", () => { if (sugg.length && !suggEl.hidden) pick(sugg[Math.max(active, 0)]); else qIn.focus(); });
   addEventListener("keydown", (e) => {
     if (e.key === "/" && !mapOpen && document.activeElement !== qIn && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); showTab("search", true); qIn.focus(); }
   });
-  $("#tries").insertAdjacentHTML("beforeend", TRIES.map((id) => A.findIndex((a) => a.id === id)).filter((i) => i >= 0)
-    .map((i) => `<button type="button" class="chip" data-i="${i}">${archDot(A[i])}${A[i].name}</button>`).join(""));
-  $("#tries").addEventListener("click", (e) => { const b = e.target.closest("button[data-i]"); if (b) setQuery(+b.dataset.i, true); });
+}
+// one behavior filter, shown under the search bar and in Browse; picking it in the hero also opens examples
+function archChips() {
+  const counts = {}; A.forEach((a) => counts[a.arch] = (counts[a.arch] || 0) + 1);
+  return `<button type="button" class="chip" data-a="all" aria-pressed="${filterArch === "all"}">All</button>` +
+    Object.entries(ARCH).map(([k, v]) => `<button type="button" class="chip" data-a="${k}" aria-pressed="${filterArch === k}"><span class="dot" style="background:var(${v.c})"></span>${v.label} <span class="count">${(counts[k] || 0).toLocaleString()}</span></button>`).join("");
+}
+function setArch(k, open) {
+  filterArch = k;
+  for (const g of ["#behFilter", "#archFilter"]) $(g).querySelectorAll("button[data-a]").forEach((c) => c.setAttribute("aria-pressed", c.dataset.a === k));
+  qIn.placeholder = k === "all" ? searchHint() : `Search objects that ${DOES[k]}`;
+  drawGrid();
+  if (open) { window.track?.("behavior filter: " + k); active = -1; renderSugg(); if (matchMedia("(pointer: fine)").matches) qIn.focus({ preventScroll: true }); }
+  else if (!suggEl.hidden) renderSugg();
 }
 function buildPicker() {
-  const counts = {}; A.forEach((a) => counts[a.arch] = (counts[a.arch] || 0) + 1);
-  $("#archFilter").innerHTML = `<button type="button" class="chip" data-a="all" aria-pressed="true">All</button>` +
-    Object.entries(ARCH).map(([k, v]) => `<button type="button" class="chip" data-a="${k}" aria-pressed="false"><span class="dot" style="background:var(${v.c})"></span>${v.label} <span class="count">${counts[k] || 0}</span></button>`).join("");
-  $("#archFilter").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; filterArch = b.dataset.a; [...$("#archFilter").children].forEach((c) => c.setAttribute("aria-pressed", c === b)); drawGrid(); });
+  $("#archFilter").innerHTML = archChips();
+  $("#behFilter").insertAdjacentHTML("beforeend", archChips());
+  $("#archFilter").addEventListener("click", (e) => { const b = e.target.closest("button[data-a]"); if (b) setArch(b.dataset.a, false); });
+  $("#behFilter").addEventListener("click", (e) => { const b = e.target.closest("button[data-a]"); if (b) setArch(b.dataset.a, true); });
   $("#grid").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; if (b.id === "gridMore") { drawGrid(true); return; } setQuery(+b.dataset.i, true); });
   drawGrid();
 }
@@ -1086,7 +1115,7 @@ $("#mcGo").focus({ preventScroll: true });
 fetch("data.json").then((r) => r.json()).then((data) => {
   D = data; A = data.assets; NF = data.nframes;
   document.querySelectorAll(".nA").forEach((el) => { el.textContent = A.length.toLocaleString(); });
-  qIn.placeholder = matchMedia("(max-width: 600px)").matches ? `Search ${A.length.toLocaleString()} objects` : `Search ${A.length.toLocaleString()} objects: bottle, apple, crate, sign…`;
+  qIn.placeholder = searchHint();
   if (data.runs) $("#statRuns").textContent = data.runs.toLocaleString();
   const mJ = data.eval.main[data.method === "stats" ? "Rollout statistics (hand-built)" : "JEPA behavior embedding"], mA = data.eval.main["Appearance (SigLIP2)"];
   if (mJ && mA) $("#statR2").textContent = `${mJ.R2.toFixed(2)} vs ${mA.R2.toFixed(2)}`;
