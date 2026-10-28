@@ -35,6 +35,10 @@ HELDOUT_PROBES = [
     ("drop", {"axis": 45, "tilt": 45, "height": 1.0}),
 ]
 REPEATS = 3
+# The pusher is a bar: 2r thick and 2r tall, centered on the object and wide enough (2S) to span any object.
+# A fingertip-sized sphere could slide around a narrow part (a bottle neck) or slip between legs and leave the
+# object untouched; a bar meets whatever sticks out furthest at the probe height.
+BAR_HALF_WIDTH = 1.0  # in units of S
 
 
 def quat_axis_angle(axis, ang):
@@ -188,7 +192,7 @@ class MujocoRig:
       {geoms}
     </body>
     <body name="pusher" mocap="true" pos="0 0 -10">
-      <geom name="pusher" type="sphere" size="{r}" friction="{mu / 2} 0.0001 0.0001" priority="1"/>
+      <geom name="pusher" type="box" size="{r} {BAR_HALF_WIDTH * self.S} {r}" friction="{mu / 2} 0.0001 0.0001" priority="1"/>
     </body>
   </worldbody>
 </mujoco>"""
@@ -198,6 +202,7 @@ class MujocoRig:
         self.floor_mid = self.m.body("floor").mocapid[0]
         self.push_mid = self.m.body("pusher").mocapid[0]
         self.r = float(self.m.geom("pusher").size[0])
+        self.push_gid = self.m.geom("pusher").id
         self.hidden = np.array([0, 0, -10 - 10 * self.S])
 
     def reset(self, quat, lift=0.0):
@@ -221,8 +226,9 @@ class MujocoRig:
         self.d.qpos[:2] -= com[:2]
         self.mj.mj_forward(self.m, self.d)
 
-    def set_pusher(self, pos):
+    def set_pusher(self, pos, quat=(1, 0, 0, 0)):
         self.d.mocap_pos[self.push_mid] = self.hidden if pos is None else pos
+        self.d.mocap_quat[self.push_mid] = quat
 
     def set_floor(self, q):
         self.d.mocap_quat[self.floor_mid] = q
@@ -241,6 +247,10 @@ class MujocoRig:
 
     def pusher_pos(self):
         return self.d.mocap_pos[self.push_mid].copy()
+
+    def touching(self):
+        c = self.d.contact[:self.d.ncon]
+        return bool(np.any((c.geom1 == self.push_gid) | (c.geom2 == self.push_gid)))
 
     def floor_quat(self):
         return self.d.mocap_quat[self.floor_mid].copy()
@@ -280,8 +290,9 @@ class PhysxRig:
         self.floor = self._kinematic(physx.PhysxCollisionShapeBox(np.array([max(3.0, 8 * S)] * 2 + [0.05], np.float32), mat),
                                      sapien.Pose([0, 0, -0.05]))
         self.r = max(0.03 * S, 0.003)
-        # PhysX averages friction, so a frictionless pusher gives mu/2 at the fingertip; MuJoCo's pusher is set to mu/2 to match
-        self.pusher = self._kinematic(physx.PhysxCollisionShapeSphere(self.r, physx.PhysxMaterial(0.0, 0.0, 0.0)), sapien.Pose())
+        # PhysX averages friction, so a frictionless pusher gives mu/2 at the bar; MuJoCo's pusher is set to mu/2 to match
+        self.pusher = self._kinematic(physx.PhysxCollisionShapeBox(np.array([self.r, BAR_HALF_WIDTH * S, self.r], np.float32),
+                                                                   physx.PhysxMaterial(0.0, 0.0, 0.0)), sapien.Pose())
         self.hidden = np.array([0, 0, -10 - 10 * S])
         ent = sapien.Entity()
         body = physx.PhysxRigidDynamicComponent()
@@ -341,13 +352,14 @@ class PhysxRig:
         self.body.linear_velocity = np.zeros(3, np.float32)
         self.body.angular_velocity = np.zeros(3, np.float32)
 
-    def set_pusher(self, pos):
+    def set_pusher(self, pos, quat=(1, 0, 0, 0)):
         target = self.hidden if pos is None else np.asarray(pos, float)
+        q = np.asarray(quat, np.float32)
         if np.linalg.norm(target - self.pusher_pos()) > 0.25 * self.S:
             # a large jump (parking spot <-> start) is a teleport; a kinematic target would turn it into a huge velocity
-            self._place_kinematic(self.pusher, target, [1, 0, 0, 0])
+            self._place_kinematic(self.pusher, target, q)
         else:
-            self.pusher.kinematic_target = self.sp.Pose(target.astype(np.float32))
+            self.pusher.kinematic_target = self.sp.Pose(target.astype(np.float32), q)
 
     def set_floor(self, q):
         self.floor.kinematic_target = self.sp.Pose([0, 0, 0], np.asarray(q, np.float32))
@@ -366,6 +378,9 @@ class PhysxRig:
 
     def pusher_pos(self):
         return np.asarray(self.pusher.entity.pose.p, float)
+
+    def touching(self):
+        return any(self.pusher in c.bodies and any(np.linalg.norm(pt.impulse) > 0 for pt in c.points) for c in self.scene.get_contacts())
 
     def floor_quat(self):
         return np.asarray(self.floor.entity.pose.q, float)
@@ -411,6 +426,7 @@ class Prober:
         every = max(steps // NF, 1)
         feats, play, floor_ang = [], [], []
         th = 0.0
+        touched = False
         if kind == "push":
             hv = (rig.hull @ R0.T) + body_pos
             proj = hv @ e1
@@ -420,7 +436,8 @@ class Prober:
             start += e1 * (proj.min() - start_pos @ e1 - rig.r - 0.02 * S)
             v = 0.1 * self.vref * speed_mult * p.get("speed", 1.0)
             travel = 0.6 * S + rig.r + 0.02 * S
-            rig.set_pusher(start)
+            q_bar = quat_axis_angle([0, 0, 1], dir_ang)  # bar's long axis along e2, across the push
+            rig.set_pusher(start, q_bar)
         ramp_rate = math.radians(45) / (0.8 * self.T)
         done = False
         for k in range(steps):
@@ -434,11 +451,13 @@ class Prober:
                     floor_ang.append(floor_ang[-1])
                 continue
             if kind == "push":
-                rig.set_pusher(start + e1 * min(v * t, travel) if t < travel / v * 1.3 else None)
+                rig.set_pusher(start + e1 * min(v * t, travel) if t < travel / v * 1.3 else None, q_bar)
             elif kind == "ramp":
                 th = min(ramp_rate * t, math.radians(45))
                 rig.set_floor(quat_axis_angle(np.cross(e3, e1), th))
             rig.step()
+            if kind == "push" and not touched and k % 5 == 0:
+                touched = rig.touching()
             if k % every == 0 and len(feats) < NF:
                 Rw, pw, xpos, lv, w = rig.state()
                 if kind == "ramp":
@@ -459,6 +478,7 @@ class Prober:
         feats = np.array(feats, dtype=np.float32)
         if not np.isfinite(feats).all() or np.abs(feats[:, 6:9]).max() > 40:
             return None
+        self.touched = touched
         return feats, np.array(play, dtype=np.float32), np.array(floor_ang, dtype=np.float32)
 
 
@@ -506,7 +526,7 @@ def process(job):
                 return name, f"unstable in probe {kind}{p}"
             feats, pl, fa = res
             reps.append(feats)
-            train_out.append((pi, outcomes(kind, feats, fa)))
+            train_out.append((pi, outcomes(kind, feats, fa) | ({"touched": float(pr.touched)} if kind == "push" else {})))
             if r == 0:
                 play[pi] = pl
         train.append(reps)
@@ -517,7 +537,7 @@ def process(job):
             return name, f"unstable in heldout {kind}"
         feats, pl, fa = res
         held.append(feats)
-        held_out.append(outcomes(kind, feats, fa))
+        held_out.append(outcomes(kind, feats, fa) | ({"touched": float(pr.touched)} if kind == "push" else {}))
     np.savez_compressed(f"{out_dir}/{name}.npz", train=np.array(train), held=np.array(held),
                         play=np.array([play[i] for i in range(len(TRAIN_PROBES))]))
     json.dump({"name": name, "T": pr.T, "S": pr.S, "rest_tilt": rest_tilt, "engine": engine, "geom": geom,

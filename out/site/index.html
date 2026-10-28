@@ -403,7 +403,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
           <h2 id="how-h">How it works</h2>
         </div>
         <ol class="how">
-          <li><h3>Poke every asset the same way</h3><p>Each rigid asset is loaded with the mass, center of mass, inertia, friction and collision shape authored in its USD. It then gets ten pokes, three times each with small jitter: a fingertip push at 20%, 50% and 85% of its height along two axes, a floor that tilts to 45°, and two drops. Push speed and timing scale with √(g × size), so a mug and a fridge are tested alike.</p></li>
+          <li><h3>Poke every asset the same way</h3><p>Each rigid asset is loaded with the mass, center of mass, inertia, friction and collision shape authored in its USD. It then gets ten pokes, three times each with small jitter: a push with a bar at 20%, 50% and 85% of its height along two axes, a floor that tilts to 45°, and two drops. Push speed and timing scale with √(g × size), so a mug and a fridge are tested alike.</p></li>
           <li><h3>Summarize how it reacted</h3><p>Two ways. Simulation statistics: max tilt, slide distance, slip and tip angles, bounces and settle time for each probe, averaged over repeats. And a self-supervised JEPA that sees a few of an object's pokes and predicts the latent of another, with no labels and no hand-picked features.</p></li>
           <li><h3>Search by similarity</h3><p>Neighbors are the objects whose summaries are most similar (cosine similarity). They respond to pushes, ramps and drops alike, whatever their size, color or category. The map in the corner places every object by t-SNE on the default summary.</p></li>
           <li><h3>Check on probes nobody saw</h3><p>Three held-out probes: a diagonal push at 65% height and 1.4x speed, a diagonal ramp, and a 45° drop from twice the height. If an object's five nearest neighbors predict how it reacts to those, the search captured behavior.</p></li>
@@ -480,7 +480,7 @@ footer { border-top: var(--bw) solid var(--ink); padding-block: 22px 40px; font-
 <script>
 (() => {
 const PROBES = {
-  push_high: { label: "Push high", note: "A fingertip pushes at 85% of the object's height, then lets go." },
+  push_high: { label: "Push high", note: "A bar pushes at 85% of the object's height, then pulls away." },
   push_low: { label: "Push low", note: "The same push at 20% of the height. Most things slide; round things roll." },
   ramp: { label: "Ramp", note: "The floor tilts slowly from 0° to 45°. Does it hold, slide or tip?" },
   drop: { label: "Drop", note: "Released half its size above the floor, tilted 25°. Does it land upright?" },
@@ -517,7 +517,8 @@ const envTex = new THREE.PMREMGenerator(renderer).fromScene(new THREE.RoomEnviro
 const loader = new THREE.GLTFLoader();
 loader.setMeshoptDecoder(MeshoptDecoder);
 const modelCache = new Map(), trackCache = new Map();
-const sphereGeo = new THREE.SphereGeometry(1, 20, 14);
+// the pusher is a bar, 2r thick and tall and 2 sizes wide, lying across the push direction (x)
+const barGeo = new THREE.BoxGeometry(1, 1, 1);
 const floorGeo = new THREE.PlaneGeometry(8, 8);
 const shadowTex = (() => { const c = document.createElement("canvas"); c.width = c.height = 64; const g = c.getContext("2d"); const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); r.addColorStop(0, "rgba(0,0,0,0.55)"); r.addColorStop(1, "rgba(0,0,0,0)"); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
 const mats = {};
@@ -614,7 +615,7 @@ class View {
     this.floor.add(this.shadow);
     this.scene.add(this.floor);
     this.obj = new THREE.Group(); this.scene.add(this.obj);
-    this.pusher = new THREE.Mesh(sphereGeo, mats.pusher); this.scene.add(this.pusher);
+    this.pusher = new THREE.Mesh(barGeo, mats.pusher); this.scene.add(this.pusher);
     this.tmpQ = new THREE.Quaternion(); this.tmpV = new THREE.Vector3(); this.center = new THREE.Vector3();
     views.push(this);
   }
@@ -640,7 +641,7 @@ class View {
     this.tr = null;
     const tt = (this.ttoken = {});
     track(i, p).then((tr) => { if (this.ttoken === tt) this.tr = tr; }).catch(() => {});
-    this.pusher.scale.setScalar(A[i].r);
+    this.pusher.scale.set(2 * A[i].r, 2, 2 * A[i].r);
     const c = CAM[p];
     this.camera.position.set(c.target[0] + c.off[0], c.target[1] + c.off[1], c.target[2] + c.off[2]);
     this.camera.lookAt(c.target[0], c.target[1], c.target[2]);

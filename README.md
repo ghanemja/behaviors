@@ -6,7 +6,7 @@ By Janelle Ghanem.
 
 [![Canned peaches: behavior search finds a mug, a steel drum and two sockets that stay up; appearance search finds cans that all topple](media/cover.jpg)](media/behavior_search.mp4)
 
-Every rigid asset in NVIDIA's SimReady library (2,167 objects) gets the same battery of simulated pokes: pushes,
+Every rigid asset in NVIDIA's SimReady library (2,166 objects) gets the same battery of simulated pokes: pushes,
 a tilting ramp, drops. Each asset's reactions are summarized, either as simple statistics of the rollouts or as a
 self-supervised JEPA embedding, and search returns the assets that reacted most alike, whatever they look like.
 It is tested on probes no model saw, on assets never used during development, in MuJoCo and in NVIDIA's PhysX.
@@ -31,11 +31,15 @@ All probes are size-normalized (Froude scaling): push speed is 0.1·√(g·S) an
 
 | Training probes (10) | Held-out probes (3), never seen by any embedding |
 |---|---|
-| fingertip push at 20%, 50%, 85% of height, along x and y | push at 65% height, diagonal, 1.4x speed |
+| bar push at 20%, 50%, 85% of height, along x and y | bar push at 65% height, diagonal, 1.4x speed |
 | floor tilting slowly to 45°, about x and y | ramp tilting about the diagonal |
 | drop from 0.5·S, tilted 25°, about x and y | drop from 1.0·S, tilted 45° about the diagonal |
 
 Each training probe runs 3 times with small yaw and speed jitter (seeded per asset, reproducible).
+
+The pusher is a bar, 2r thick and 2r tall (r = 3% of S) and 2S wide, centered on the object and moved across it, so it
+meets whatever sticks out furthest at the probe height. Every push run records whether the bar touched the object;
+the demo's descriptions count only runs where it did.
 
 ## Engines
 
@@ -64,38 +68,38 @@ Fixed before looking at test results:
 
 ## Results
 
-Test set: 1,891 assets never used during development; 2,167 assets in the index. R² of the
+Test set: 1,890 assets never used during development; 2,166 assets in the index. R² of the
 5-nearest-neighbor prediction of the 11 held-out outcomes, with 95% bootstrap intervals.
 
-| Method | MuJoCo outcomes | PhysX, same hulls (2,166 assets) | PhysX, SDF collision (505 sampled assets) |
+| Method | MuJoCo outcomes | PhysX, same hulls (2,166 assets) | PhysX, SDF collision (498 sampled assets) |
 |---|---|---|---|
-| Simulation statistics (hand-built from the rollouts) | 0.54 [0.52, 0.56] | 0.41 [0.39, 0.43] | 0.32 [0.27, 0.37] |
-| JEPA, self-supervised on the rollouts | 0.46 [0.44, 0.48] | 0.33 [0.31, 0.35] | 0.26 [0.21, 0.30] |
-| JEPA trained on the 276 dev assets only | 0.47 [0.45, 0.49] | – | – |
-| Static stability from geometry, no simulation | 0.33 [0.30, 0.36] | 0.31 [0.28, 0.34] | 0.34 [0.29, 0.39] |
-| Physics metadata | 0.23 [0.20, 0.26] | 0.24 [0.21, 0.27] | 0.28 [0.22, 0.33] |
-| Appearance + metadata | 0.15 [0.12, 0.18] | – | – |
-| Appearance (SigLIP2 on NVIDIA thumbnails) | 0.15 [0.11, 0.18] | 0.15 [0.12, 0.18] | 0.14 [0.07, 0.20] |
-| Words in the asset name | -0.10 [-0.14, -0.07] | -0.12 [-0.15, -0.09] | -0.15 [-0.22, -0.08] |
-| Random vectors | -0.21 [-0.22, -0.19] | -0.20 [-0.21, -0.18] | -0.20 [-0.24, -0.17] |
+| Simulation statistics (hand-built from the rollouts) | 0.53 [0.50, 0.55] | 0.40 [0.38, 0.42] | 0.33 [0.28, 0.37] |
+| JEPA, self-supervised on the rollouts | 0.42 [0.40, 0.44] | 0.31 [0.28, 0.33] | 0.22 [0.17, 0.26] |
+| JEPA trained on the 276 dev assets only | 0.45 [0.42, 0.47] | – | – |
+| Static stability from geometry, no simulation | 0.33 [0.30, 0.36] | 0.31 [0.28, 0.34] | 0.28 [0.23, 0.32] |
+| Physics metadata | 0.23 [0.20, 0.27] | 0.25 [0.23, 0.28] | 0.21 [0.15, 0.26] |
+| Appearance + metadata | 0.17 [0.14, 0.20] | – | – |
+| Appearance (SigLIP2 on NVIDIA thumbnails) | 0.16 [0.13, 0.19] | 0.17 [0.14, 0.19] | 0.10 [0.04, 0.15] |
+| Words in the asset name | -0.09 [-0.12, -0.06] | -0.12 [-0.15, -0.09] | -0.19 [-0.25, -0.12] |
+| Random vectors | -0.21 [-0.22, -0.19] | -0.19 [-0.21, -0.18] | -0.20 [-0.23, -0.17] |
 
-- Simulated behavior beats appearance search by 0.40 R² (paired 95% interval 0.37 to 0.43),
-  and the JEPA beats it by 0.31 (0.28 to 0.34). Behavior beats appearance in every engine setting.
-- The JEPA trails the hand-built statistics by 0.085 (0.068 to 0.103). It generalizes: trained on the
-  276 dev assets only, it scores the same on the test assets.
-- Against PhysX with SDF collision, simulation-based neighbors do no better than the no-simulation stability descriptor.
-  The advantage of simulating over computing static stability is specific to the engine and collision model; search
-  should use the engine you train in.
-- Recolored duplicates matter: without excluding them, appearance search scores 0.35 instead of 0.15.
-- For scale, an asset's own rerun with small yaw/speed jitter predicts its outcomes with R² ≈ 0.82.
-- MuJoCo and PhysX (same hulls) agree on tip vs no tip in 83% of probe runs (89% away from the
-  tipping point); 29% of runs end near the tipping point. With SDF collision: 78% (81%).
+- Simulated behavior beats appearance search by 0.36 R² (paired 95% interval 0.33 to 0.39),
+  and the JEPA beats it by 0.26 (0.22 to 0.29). Behavior beats appearance in every engine setting.
+- The JEPA trails the hand-built statistics by 0.11 (0.09 to 0.13). It generalizes: trained on the
+  276 dev assets only, it scores slightly higher on the test assets (0.45 vs 0.42; paired difference 0.03, 0.02 to 0.04).
+- Against PhysX with SDF collision, simulation statistics (0.33) and the no-simulation stability descriptor (0.28)
+  have overlapping intervals. The advantage of simulating over computing static stability depends on the engine and
+  collision model; search should use the engine you train in.
+- Recolored duplicates matter: without excluding them, appearance search scores 0.37 instead of 0.16.
+- For scale, an asset's own rerun with small yaw/speed jitter predicts its outcomes with R² ≈ 0.81.
+- MuJoCo and PhysX (same hulls) agree on tip vs no tip in 86% of probe runs (90% away from the
+  tipping point); 26% of runs end near the tipping point. With SDF collision: 80% (83%).
 
 Full numbers: `data/v2/results/eval.json`.
 
 ## Data-quality findings
 
-Over the 2,167 assets in the index (evidence per asset in `data/v2/results/qa.json`):
+Over the 2,166 assets in the index (evidence per asset in `data/v2/results/qa.json`):
 
 | Check | Assets | Kind |
 |---|---|---|
@@ -124,6 +128,17 @@ Hardening the first version found and fixed these problems in my own pipeline:
   PhysX cross-check.
 - The first version's claim that the JEPA matches hand-built statistics did not hold at full scale.
 
+Later, at full scale:
+
+- The pusher was a fingertip-sized sphere. On a narrow part (a bottle neck, a thin candle) a slightly off-center hit
+  made it slide around the side, so an object that should topple counted as standing; MuJoCo's softer contact made
+  this more common there than in PhysX. The pusher is now a bar spanning the object, every push run records whether
+  it touched, and all simulations, embeddings and numbers were regenerated. MuJoCo and PhysX now agree on tip vs no
+  tip in 92.0% of push runs (85.6% with the sphere); 8.4% of MuJoCo push runs changed outcome. Ramps and drops are
+  unaffected (bit-identical). One asset whose drop was already numerically unstable now fails the stability check
+  and is left out. In PhysX with SDF collision, the bar's high push destabilizes 9 sampled assets (box-on-SDF
+  contact); they are left out of that column, which now covers 498 assets instead of 505.
+
 ## Repository layout
 
 | Path | What it does |
@@ -142,7 +157,7 @@ Hardening the first version found and fixed these problems in my own pipeline:
 | `src/build_pages.py` | assembles the GitHub Pages site |
 | `src/video_models.py` | textured models for video objects the site does not ship (`video/models.txt`) |
 | `out/site/index.html` | the demo page |
-| `video/` | the 67-second captioned video: composition (`reel.html`), frame renderer (`render.js`) and soundtrack (`soundtrack.song.js`, every sound an equation, made with [equalizer](https://github.com/ghanemja/equalizer); its effects follow `cues.json`, the moments objects land or stay up) |
+| `video/` | the 45-second captioned video: composition (`reel.html`), frame renderer (`render.js`) and soundtrack (`soundtrack.song.js`, every sound an equation, made with [equalizer](https://github.com/ghanemja/equalizer); its effects follow `cues.json`, the moments objects land or stay up) |
 | `data/v2/results/` | `eval.json`, `qa.json`, `findings.json` and the embeddings |
 | `src/legacy/` | scripts from the first, 276-asset version |
 

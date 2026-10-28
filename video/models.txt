@@ -1,6 +1,3 @@
 cabinet_file_b03
 food_beverage_beerBottle_b01
 decor_candle_i01
-machine_coffee_vending_a01
-dishware_plastic_cup_a01
-drum_plastic_natural_a05

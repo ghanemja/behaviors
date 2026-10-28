@@ -6,27 +6,28 @@
 // sync if the video is retimed. Render with:
 //   node video/soundtrack.mjs soundtrack.wav
 //
-// 0-8s       title: soft keys; a filing cabinet, a beer bottle and a candlestick tip over; a riser into the drop
-// 8s         the drop, as the search is introduced (canned peaches)
-// 27.2s      matches across size and weight; the lead rests
-// 38.4-44.8s breakdown under the apples; the doorstop apple boings back up
-// 44.8s      the beat drops back in as the bug is revealed
-// 49.6s      results; 60.8s end card; the last chord lands at 65.6s
+// 0-6.4s     title: soft keys; a filing cabinet, a beer bottle and a candlestick tip over; a riser into the drop
+// 6.4s       the drop, on the canned peaches search
+// 19.2s      the behavior map sweeps in with sparkles; the lead rests
+// 25.6s      results, with the JEPA
+// 35.2-38.4s breakdown under the apples; the doorstop apple boings back up
+// 38.4s      the beat drops back in as the bug is revealed
+// 41.6s      end card; the last chord lands at 43.2s
 import cues from './cues.json' with { type: 'json' };
 
 const BAR = 1.6;
-const DROP = 8.0, BREAK = [38.4, 44.8], LAST = 65.6, END_CARD = 60.8;
+const DROP = 6.4, BREAK = [35.2, 38.4], LAST = 43.2, END_CARD = 41.6, MAP = [19.2, 25.6];
 
 // The arrangement is math too.
 const DRUMS = `t >= ${DROP} && (t < ${BREAK[0]} || t >= ${BREAK[1]}) && t < ${LAST}`;
 const SOFT = `(t >= ${BREAK[0]} && t < ${BREAK[1]} ? 0.6 : 1)`;
 
-// I-vi-ii-V in C, rotated so the drop (bar 5) lands on Dm9.
+// I-vi-ii-V in C, rotated so the drop (bar 4) lands on Dm9.
 const PROG = [
-  { chord: 'C3+G3+B3+E4', root: 'A1', lead: 'C5 . . E5 . . D5 . . . C5 . . . . .' },  // Am9
   { chord: 'F3+A3+C4+E4', root: 'D2', lead: 'F5 . . A5 . . C6 . . . A5 . E5 . . .' },  // Dm9
   { chord: 'F3+A3+B3+E4', root: 'G1', lead: 'D5 . . F5 . . E5 . . . D5 . B4 . . .' },  // G13
   { chord: 'E3+G3+B3+D4', root: 'C2', lead: 'E5 . . G5 . . B5 . . . A5 . G5 . . .' },  // Cmaj9
+  { chord: 'C3+G3+B3+E4', root: 'A1', lead: 'C5 . . E5 . . D5 . . . C5 . . . . .' },  // Am9
 ];
 const bar = (cells) => { const s = Array(16).fill('.'); for (const [k, v] of cells) s[k] = v; return s.join(' '); };
 const CHORDS = PROG.map((p) => p.chord).join(' ');
@@ -106,9 +107,9 @@ export default {
     },
     {
       name: 'Lead',
-      // a marimba-ish pluck with a dotted-eighth echo; it rests under the size pairs
+      // a marimba-ish pluck with a dotted-eighth echo; it rests under the behavior map
       equation: '(sin(TAU*f*tau) + 0.25*sin(TAU*4*f*tau)*exp(-30*tau)) * exp(-7*tau)',
-      pattern: PROG.map((p) => p.lead).join(' '), gate: `${DRUMS} && (t < 27.2 || t >= ${BREAK[1]})`, gain: 0.36, pan: -0.15, echo: 0.3,
+      pattern: PROG.map((p) => p.lead).join(' '), gate: `${DRUMS} && (t < ${MAP[0]} || t >= ${MAP[1]})`, gain: 0.36, pan: -0.15, echo: 0.3,
     },
 
     // --- Sound effects, at the video's exact moments ---
@@ -133,6 +134,12 @@ export default {
       // the doorstop apple rocks over and back: a wobbling pitch
       equation: 'sin(TAU*(300*tau - 3.8*cos(TAU*5*tau)*exp(-2.5*tau))) * exp(-2.2*tau) * min(1, tau/0.01)',
       at: cues.boings.map((b) => b.t), len: 1.3, gain: 0.3, pan: cues.boings[0]?.pan ?? 0,
+    },
+    {
+      name: 'Sparkle',
+      // a high ping as each wave of dots lands on the map; r gives every ping its own pitch
+      equation: 'sin(TAU*f*(1 + 0.5*r)*tau) * exp(-40*tau)',
+      at: cues.sparkles ?? [], note: 'C7', len: 0.12, gain: 0.12, pan: 0.2,
     },
     {
       name: 'Pop',

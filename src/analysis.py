@@ -74,12 +74,16 @@ def summary(n):
     for pi, d in o:
         by.setdefault(pi, []).append(d)
     m = lambda pis, k: float(np.mean([d[k] for pi in pis for d in by[pi]]))
+    # push outcomes count only runs where the bar touched the object (0 if it never did at that height)
+    hit = lambda pis: [d for pi in pis for d in by[pi] if d.get("touched", 1)]
+    mp = lambda pis, k: float(np.mean([d[k] for d in hit(pis)])) if hit(pis) else 0.0
     s = {
-        "tips_low": m([0, 1], "toppled"), "tips_mid": m([2, 3], "toppled"), "tips_high": m([4, 5], "toppled"),
+        "tips_low": mp([0, 1], "toppled"), "tips_mid": mp([2, 3], "toppled"), "tips_high": mp([4, 5], "toppled"),
         "slip_angle": m([6, 7], "slip_angle"), "tip_angle": m([6, 7], "tip_angle"),
         "lands_upright": 1 - m([8, 9], "toppled"), "bounces": m([8, 9], "bounces"),
-        "rolls": float(np.mean([(d["max_tilt"] > 120 and d["disp"] > 0.6) for pi in (0, 1) for d in by[pi]])),
+        "rolls": float(np.mean([(d["max_tilt"] > 120 and d["disp"] > 0.6) for d in hit([0, 1])])) if hit([0, 1]) else 0.0,
         "rest_tilt": sim[n]["rest_tilt"],
+        "high_push_unreached": not hit([4, 5]),
     }
     if m([6, 7], "tip_angle") < 6:
         s["rolls"] = max(s["rolls"], 1.0)
@@ -108,6 +112,8 @@ def describe(n):
         bits.append("tips even when pushed low")
     elif s["tips_high"] > 0.5:
         bits.append("tips when pushed high, slides when pushed low")
+    elif s["high_push_unreached"]:
+        bits.append("slides when pushed low; too low-lying for the high push")
     else:
         bits.append("slides instead of tipping")
     if s["tip_angle"] < s["slip_angle"] + 1 and s["tip_angle"] < 50:

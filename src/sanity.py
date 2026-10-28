@@ -1,6 +1,6 @@
 """Physics sanity tests: boxes whose behavior has a textbook answer, run through the same probes in every engine.
 
-Push at height hp on a box with half-width b (along the push), fingertip friction mu_p = mu / 2: the fingertip's
+Push at height hp on a box with half-width b (along the push), bar friction mu_p = mu / 2: the bar's
 friction pins the near side down, so the box tips only if mu > b / (hp - mu_p * b); otherwise it slides.
 Slowly tilting ramp: it slips at atan(mu) or tips at atan(b / h_com), whichever angle comes first.
 """

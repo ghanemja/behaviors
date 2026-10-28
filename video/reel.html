@@ -5,6 +5,7 @@
 :root {
   --bg:#F1F3EC; --card:#FFFFFF; --soft:#F7F5FF; --ink:#1E1B2E; --ink-2:#4F4B63; --ink-3:#6A6680; --line:#C9C6D6;
   --accent:#FF7A3D; --butter:#FFD86B; --pink:#FF9BB0; --mint:#8EE0C3; --sky:#9CCBFF; --here:#FFF2C7;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100;
   --stage:#F6EEE2; --grid:#E0D2BC; --clay:#8592A0; --pusher:#FF7A3D; --warn:#FF9BB0;
   --bw:3px; --sh:5px 5px 0 var(--ink); --sh-lg:8px 8px 0 var(--ink);
   --display:"Bricolage Grotesque", "Figtree", sans-serif; --sans:"Figtree", Arial, sans-serif; --mono:"DM Mono", monospace;
@@ -41,7 +42,7 @@ h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-brea
 .stamp.bad { background: var(--pink); }
 .stamp.meh { background: var(--butter); }
 /* live captions: one phrase at a time, revealed word by word */
-#cap { position: absolute; left: 60px; right: 60px; bottom: 52px; z-index: 8; margin: 0; padding: 18px 30px 22px; border-radius: 24px; background: var(--ink); color: #fff;
+#cap { position: absolute; left: 60px; right: 60px; bottom: 290px; z-index: 8; margin: 0; padding: 18px 30px 22px; border-radius: 24px; background: var(--ink); color: #fff;
   box-shadow: 6px 6px 0 var(--accent); font-size: 41px; font-weight: 700; line-height: 1.26; letter-spacing: -.005em; opacity: 0; transform-origin: center bottom; }
 #cap .w { display: inline-block; white-space: pre; }
 #cap .ok { color: var(--mint); font-weight: 800; }
@@ -57,6 +58,13 @@ h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-brea
 .bar.thin { height: 44px; border-radius: 12px; box-shadow: 3px 3px 0 var(--ink); }
 .bar.b { background: var(--accent); }
 .bar.a { background: var(--pink); }
+.bar.j { background: var(--sky); }
+/* behavior map */
+#mapc { position: absolute; left: 60px; top: 236px; width: 960px; height: 650px; border: var(--bw) solid var(--ink); border-radius: 26px; background: var(--card); box-shadow: var(--sh); }
+.legend { position: absolute; left: 84px; top: 256px; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 24px; font-weight: 700; max-width: 900px; }
+.legend span { display: inline-flex; align-items: center; gap: 9px; opacity: 0; }
+.legend i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--ink); }
+.mtag { position: absolute; z-index: 2; padding: 4px 14px 7px; border: var(--bw) solid var(--ink); border-radius: 999px; background: var(--butter); box-shadow: 3px 3px 0 var(--ink); font-family: var(--display); font-size: 24px; font-weight: 800; white-space: nowrap; opacity: 0; transform-origin: left center; }
 .val { position: absolute; font-family: var(--display); font-size: 70px; font-weight: 800; letter-spacing: -.03em; line-height: 1; opacity: 0; }
 .val.thin { font-size: 38px; }
 .note { position: absolute; left: 60px; right: 60px; font-size: 26px; line-height: 1.4; color: var(--ink-2); font-weight: 500; margin: 0; }
@@ -80,18 +88,20 @@ h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-brea
 <section class="scene" id="s2">
   <div class="eyebrow">Query · pushed high</div>
   <h2 id="qname">Canned peaches</h2>
-  <div class="view" data-v="q" style="left:60px; top:226px; width:960px; height:262px"></div>
-  <div class="rowlbl beh" id="behLbl" style="left:60px; top:512px"><b>Behaves like</b><span>simulated behavior</span></div>
+  <div class="view" data-v="q" style="left:60px; top:196px; width:960px; height:180px"></div>
+  <div class="rowlbl beh" id="behLbl" style="left:60px; top:392px"><b>Behaves like</b><span>simulated behavior</span></div>
   <div id="behSlots"></div>
-  <div class="rowlbl" id="appLbl" style="left:60px; top:822px"><b>Looks like</b><span>image embedding, like NVIDIA's search</span></div>
+  <div class="rowlbl" id="appLbl" style="left:60px; top:636px"><b>Looks like</b><span>image embedding, like NVIDIA's search</span></div>
   <div id="appSlots"></div>
   <div class="ring" id="ring"></div>
 </section>
 
 <section class="scene" id="s3">
-  <div class="eyebrow">Different size, same behavior</div>
-  <h2>Size and weight <em>don't fool it</em></h2>
-  <div id="pairSlots"></div>
+  <div class="eyebrow">Behavior map</div>
+  <h2>Every object, placed by <em>how it moves</em></h2>
+  <canvas id="mapc" width="960" height="650"></canvas>
+  <div class="legend" id="legend"></div>
+  <div id="mapTags"></div>
 </section>
 
 <section class="scene" id="s4">
@@ -103,14 +113,13 @@ h1 em, h2 em { font-style: normal; padding: 0 .06em; -webkit-box-decoration-brea
 <section class="scene" id="s5">
   <div class="eyebrow" id="s5eye">Tested on objects no model saw</div>
   <h2>Does it hold up?</h2>
-  <div class="bl" style="top:262px">Nearest neighbors by behavior</div>
-  <div class="bar b" id="barB" style="top:310px"></div><div class="val" id="valB" style="top:318px">0.54</div>
-  <div class="bl" style="top:432px">Nearest neighbors by looks</div>
-  <div class="bar a" id="barA" style="top:480px"></div><div class="val" id="valA" style="top:488px">0.15</div>
-  <div class="bl" style="top:620px; font-size:26px">Same test in NVIDIA's PhysX <span>· behavior vs looks</span></div>
-  <div class="bar b thin" id="barPB" style="top:666px"></div><div class="val thin" id="valPB" style="top:670px">0.41</div>
-  <div class="bar a thin" id="barPA" style="top:724px"></div><div class="val thin" id="valPA" style="top:728px">0.15</div>
-  <p class="note" id="s5note" style="top:810px">Score: how well an object's 5 nearest neighbors predict its reaction to new pushes, tilts and drops (R², where 1 is perfect).</p>
+  <div class="bl" style="top:250px">Statistics of the simulations</div>
+  <div class="bar b" id="barB" style="top:296px"></div><div class="val" id="valB" style="top:304px">0.54</div>
+  <div class="bl" style="top:412px">Self-supervised JEPA <span>· learned, no labels</span></div>
+  <div class="bar j" id="barJ" style="top:458px"></div><div class="val" id="valJ" style="top:466px">0.46</div>
+  <div class="bl" style="top:574px">Image search <span>· by looks</span></div>
+  <div class="bar a" id="barA" style="top:620px"></div><div class="val" id="valA" style="top:628px">0.15</div>
+  <p class="note" id="s5note" style="top:748px">Score: how well an object's 5 nearest neighbors predict its reaction to new pushes, tilts and drops (R², 1 is perfect).</p>
 </section>
 
 <section class="scene" id="s6">
@@ -137,7 +146,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true,
 renderer.setPixelRatio(1); renderer.setSize(1080, 1350, false); renderer.setClearColor(0, 0);
 let A, NF;
 const trackCache = new Map();
-const sphereGeo = new THREE.SphereGeometry(1, 24, 16);
+const barGeo = new THREE.BoxGeometry(1, 1, 1);   // the pusher: a bar 2r thick and tall, two sizes wide, across the push
 const floorGeo = new THREE.PlaneGeometry(8, 8);
 const col = (v) => new THREE.Color(css(v)).convertSRGBToLinear();
 renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
@@ -175,7 +184,7 @@ class View {
     this.shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mats.shadow); this.floor.add(this.shadow); this.scene.add(this.floor);
     this.obj = new THREE.Group(); const md = MODELS[i], S = A[i].S, mdl = md.root.clone(); mdl.scale.setScalar(1 / S); this.obj.add(mdl); this.scene.add(this.obj);
     this.stg = document.createElement("div"); this.stg.className = "stg"; this.cv = document.createElement("canvas"); this.stg.appendChild(this.cv); el.appendChild(this.stg); this.ctx = this.cv.getContext("2d");
-    this.pusher = new THREE.Mesh(sphereGeo, mats.pusher); this.pusher.scale.setScalar(A[i].r); this.scene.add(this.pusher);
+    this.pusher = new THREE.Mesh(barGeo, mats.pusher); this.pusher.scale.set(2 * A[i].r, 2, 2 * A[i].r); this.scene.add(this.pusher);
     this.tr = track(i, p); this.p = p; this.center = md.box.getCenter(new THREE.Vector3()).multiplyScalar(1 / S);
     const ext = md.box.getSize(new THREE.Vector3()).multiplyScalar(1 / S); this.ss = Math.max(ext.x, ext.y) * 1.25;
     const c = CAM[p], tg = [c.target[0] + tshift, c.target[1], c.target[2]]; this.camera.position.set(tg[0] + c.off[0] * zoom, tg[1] + c.off[1] * zoom, tg[2] + c.off[2] * zoom); this.camera.lookAt(...tg);
@@ -204,11 +213,11 @@ const NAME = { drum_steel_a02: "steel drum", handTool_socket_9_16in_a01: "socket
 function slot(parent, i, x, y, w, h, extra) {
   const v = document.createElement("div"); v.className = "view"; Object.assign(v.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" }); parent.appendChild(v);
   const l = document.createElement("div"); l.className = "lbl"; l.style.left = x + "px"; l.style.top = (y + h + 18) + "px"; l.style.width = w + "px";
-  l.innerHTML = `${(NAME[A[i].id] || A[i].name).toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}<small>${extra ?? fmt(A[i])}</small>`; parent.appendChild(l); return v;
+  l.innerHTML = `${(NAME[A[i].id] || A[i].name).toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}${extra === false ? "" : `<small>${extra ?? fmt(A[i])}</small>`}`; parent.appendChild(l); return v;
 }
 
 // --- Timing. Everything sits on the soundtrack's grid: 150 bpm, a beat is 0.4 s, a bar 1.6 s (see soundtrack.song.js).
-const CUT = [0, 8.0, 27.2, 36.8, 49.6, 60.8, 67.2];   // scene boundaries, on bar lines
+const CUT = [0, 6.4, 19.2, 25.6, 35.2, 41.6, 44.8];   // scene boundaries, on bar lines: hook, search, map, results, apples, end card
 const prog = (t, start, dur) => Math.min(1, Math.max(0, (t - start) / dur));
 const back = (x) => (x <= 0 ? 0 : 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2);
 const outCubic = (x) => 1 - (1 - x) ** 3;
@@ -216,7 +225,7 @@ const outCubic = (x) => 1 - (1 - x) ** 3;
 function pop(el, t, start, dur = .5, rot = -8, rest = 0) { const k = prog(t, start, dur); el.style.opacity = k > 0 ? 1 : 0; el.style.transform = `scale(${back(k)}) rotate(${rest + (1 - outCubic(k)) * rot}deg)`; }
 
 // Cue times for the soundtrack (render.js cues writes them to video/cues.json).
-const CUES = { touches: [], lands: [], chimes: [], boings: [], pops: [], cuts: CUT.slice(2, -1), end: CUT.at(-1) };
+const CUES = { touches: [], lands: [], chimes: [], boings: [], pops: [], sparkles: [], cuts: CUT.slice(2, -1), end: CUT.at(-1) };
 window.CUES = CUES;
 
 // Play a view's push from `start`, and stamp its outcome on it the moment it is clear:
@@ -277,33 +286,31 @@ window.setup = async function () {
   const d = await (await fetch("data.json")).json(); A = d.assets; NF = d.nframes;
   const qi0 = id("food_canned_peach_a03");
   const HOOK = ["cabinet_file_b03", "food_beverage_beerBottle_b01", "decor_candle_i01"];
-  const PAIRS = [["machine_coffee_vending_a01", "dishware_plastic_cup_a01"], ["drum_plastic_natural_a05", "food_processed_cannedFood_j01"]];
   const APPLES = ["food_produce_apple_redDelicous_a01", "food_produce_apple_grannySmith_a01"];
-  const need = [...HOOK, ...APPLES, ...PAIRS.flat()].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
+  const need = [...HOOK, ...APPLES].map(id).concat([qi0], A[qi0].beh.slice(0, 4), A[qi0].app.slice(0, 4));
   await Promise.all([...new Set(need)].map(loadModel));
   const E = d.eval, f2 = (x) => x.toFixed(2), n = (x) => x.toLocaleString();
-  const R = { b: E.main["Rollout statistics (hand-built)"].R2, a: E.main["Appearance (SigLIP2)"].R2 };
-  const px = E.cross["cross-engine: PhysX, same hulls"].R2, P = { b: px["Rollout statistics (hand-built)"].R2, a: px["Appearance (SigLIP2)"].R2 };
+  const R = { b: E.main["Rollout statistics (hand-built)"].R2, j: E.main["JEPA behavior embedding"].R2, a: E.main["Appearance (SigLIP2)"].R2 };
+  const px = E.cross["cross-engine: PhysX, same hulls"].R2, P = { b: px["Rollout statistics (hand-built)"].R2, j: px["JEPA behavior embedding"].R2, a: px["Appearance (SigLIP2)"].R2 };
   const nBug = A.filter((a) => a.qa.includes("com_at_base")).length;
   const nm = (i) => NAME[A[i].id] || A[i].name;
   // a no-break space keeps a number and its unit on one caption line
-  const size = (i) => (A[i].S >= 1 ? `${+A[i].S.toFixed(1)}\u00a0m` : `${Math.round(A[i].S * 100)}\u00a0cm`);
-  const kg = (i) => (A[i].mass >= 1 ? `${Math.round(A[i].mass)}\u00a0kg` : `${Math.round(A[i].mass * 1000)}\u00a0g`);
+  const size = (i) => (A[i].S >= 1 ? `${+A[i].S.toFixed(1)} m` : `${Math.round(A[i].S * 100)} cm`);
 
   // s1: a filing cabinet and its two nearest behavior neighbors, the same low push
   const hs = $("hookSlots");
-  const v1 = HOOK.map((nn, k) => { const i = id(nn); const v = play(new View(slot(hs, i, 60 + k * 330, 590, 300, 330), i, "push_low", 1.4, 0.4), 3.6, LEN, { fell: "tips over", cls: "meh" }); if (k === 0) v.el.classList.add("hot"); return v; });
+  const v1 = HOOK.map((nn, k) => { const i = id(nn); const v = play(new View(slot(hs, i, 60 + k * 330, 500, 300, 300), i, "push_low", 1.4, 0.4), 1.6, LEN, { fell: "tips over", cls: "meh" }); if (k === 0) v.el.classList.add("hot"); return v; });
   scene("s1", CUT[0], CUT[1], v1);
 
   // s2: canned peaches, then its behavior neighbors, then its look-alikes; each row pushed in turn
   const q = qi0, qa = A[q], s2 = $("s2");
-  const vq = play(new View(s2.querySelector('[data-v="q"]'), q, "push_high", 1.0, 0.4), 11.6, LEN, {}, true);
+  const vq = play(new View(s2.querySelector('[data-v="q"]'), q, "push_high", 0.9, 0.4), 6.8, LEN, {}, true);
   vq.el.classList.add("hot");
   const tw = 225, gap = 20;
-  const beh = qa.beh.slice(0, 4).map((j, k) => play(new View(slot($("behSlots"), j, 60 + k * (tw + gap), 582, tw, 150), j, "push_high", 1.35, 0.5), 16.4));
-  const app = qa.app.slice(0, 4).map((j, k) => play(new View(slot($("appSlots"), j, 60 + k * (tw + gap), 892, tw, 150), j, "push_high", 1.35, 0.5), 21.2));
+  const beh = qa.beh.slice(0, 4).map((j, k) => play(new View(slot($("behSlots"), j, 60 + k * (tw + gap), 446, tw, 130, false), j, "push_high", 1.35, 0.5), 9.4));
+  const app = qa.app.slice(0, 4).map((j, k) => play(new View(slot($("appSlots"), j, 60 + k * (tw + gap), 690, tw, 130, false), j, "push_high", 1.35, 0.5), 12.6));
   const ring = $("ring");
-  const FOCUS = [[8.0, "q", 212, 290], [15.2, "beh", 498, 316], [20.0, "app", 808, 316], [24.0, "all"]];
+  const FOCUS = [[6.4, "q", 182, 208], [9.0, "beh", 378, 254], [12.0, "app", 622, 254], [16.8, "all"]];
   scene("s2", CUT[1], CUT[2], [vq, ...beh, ...app], (t) => {
     const f = FOCUS.filter(([a]) => t >= a).at(-1);
     const dim = (on) => (f[1] === "all" || on ? 1 : 0.28);
@@ -314,71 +321,96 @@ window.setup = async function () {
     ring.style.opacity = f[1] === "all" ? 0 : prog(t, f[0], .25);
   });
 
-  // s3: matches across size and weight, one row at a time
-  const ps = $("pairSlots"), v3 = [];
-  PAIRS.forEach((pair, r) => pair.forEach((nn, c) => { const i = id(nn);
-    v3.push(play(new View(slot(ps, i, 60 + c * 490, 300 + r * 420, 470, 300), i, "push_high", 1.45, 0.5), [29.6, 32.8][r], LEN, { fell: ["tips over", "rolls away"][r], cls: "meh" })); }));
-  scene("s3", CUT[2], CUT[3], v3);
+  // s3: the behavior map. Dots sweep in left to right, then the hook's three objects are picked out.
+  const ARCH = [["slides", "Slides", "--s1"], ["tips high", "Tips if pushed high", "--s2"], ["tippy", "Tips easily", "--s3"], ["rolls", "Rolls", "--s4"]];
+  const counts = Object.fromEntries(ARCH.map(([k]) => [k, A.filter((a) => a.arch === k).length]));
+  $("legend").innerHTML = ARCH.map(([k, l, c]) => `<span><i style="background:${css(c)}"></i>${l} (${n(counts[k])})</span>`).join("");
+  const mc = $("mapc"), g = mc.getContext("2d"), MW = 960, MH = 650, PAD = 40, TOP = 90;
+  const px_ = (a) => [PAD + a.xy[0] * (MW - 2 * PAD), TOP + a.xy[1] * (MH - TOP - PAD)];
+  const order = A.map((a, i) => i).sort((p, q2) => A[p].xy[0] - A[q2].xy[0]);
+  const DOTS0 = 19.5, SWEEP = 1.4, TRIO = 22.2;
+  const appear = new Float32Array(A.length); order.forEach((i, r) => (appear[i] = DOTS0 + SWEEP * r / A.length));
+  for (let k = 0; k < 24; k++) CUES.sparkles.push(+(DOTS0 + SWEEP * k / 24).toFixed(2));
+  const trio = HOOK.map(id), tags = $("mapTags");
+  trio.forEach((i, k) => { const [x, y] = px_(A[i]); const tg = document.createElement("span"); tg.className = "mtag"; tg.textContent = nm(i);
+    // labels sit right of their dot, or left of it near the map's right edge
+    const right = x > MW * 0.6;
+    Object.assign(tg.style, right ? { right: (1080 - 60 - x + 22) + "px", transformOrigin: "right center" } : { left: (60 + x + 22) + "px" }, { top: (236 + y - 22 + (k - 1) * 46) + "px" }); tags.appendChild(tg); });
+  CUES.pops.push(TRIO, TRIO + 0.25, TRIO + 0.5);
+  const ACOL = Object.fromEntries(ARCH.map(([k, , c]) => [k, css(c)]));
+  scene("s3", CUT[2], CUT[3], [], (t) => {
+    [...$("legend").children].forEach((e, k) => (e.style.opacity = prog(t, 19.4 + 0.15 * k, .2)));
+    g.clearRect(0, 0, MW, MH);
+    const hl = prog(t, TRIO, .4);
+    for (let i = 0; i < A.length; i++) {
+      const k = prog(t, appear[i], .25); if (k <= 0) continue;
+      const [x, y] = px_(A[i]); const r = 6.5 * back(k) * (trio.includes(i) ? 1 : 1 - 0.45 * hl);
+      g.globalAlpha = trio.includes(i) ? 1 : 1 - 0.55 * hl;
+      g.beginPath(); g.arc(x, y, Math.max(0, r), 0, Math.PI * 2); g.fillStyle = ACOL[A[i].arch]; g.fill(); g.lineWidth = 1.5; g.strokeStyle = css("--ink"); g.stroke();
+    }
+    g.globalAlpha = 1;
+    trio.forEach((i, k) => { const kk = prog(t, TRIO + 0.25 * k, .35); if (kk <= 0) return; const [x, y] = px_(A[i]);
+      g.beginPath(); g.arc(x, y, 16 * back(kk), 0, Math.PI * 2); g.lineWidth = 5; g.strokeStyle = css("--accent"); g.stroke(); });
+    [...tags.children].forEach((tg, k) => pop(tg, t, TRIO + 0.25 * k, .4, -6));
+  });
+
+  // s5: the held-out test, with the JEPA (R², 0 to 1 across 900 px)
+  $("s5eye").textContent = `Tested on ${n(E.n_test)} objects no model saw`;
+  $("s5note").textContent = `Score: how well an object's 5 nearest neighbors predict its reaction to new pushes, tilts and drops (R², 1 is perfect). Same order in NVIDIA's PhysX: ${f2(P.b)}, ${f2(P.j)}, ${f2(P.a)}.`;
+  const BARS = [["barB", "valB", R.b, 28.0], ["barJ", "valJ", R.j, 30.4], ["barA", "valA", R.a, 33.2]];
+  BARS.forEach(([, v, x]) => ($(v).textContent = f2(x)));
+  BARS.forEach(([, , , s]) => CUES.pops.push(s));
+  scene("s5", CUT[3], CUT[4], [], (t) => {
+    for (const [b, v, x, s] of BARS) { const w = 900 * x * outCubic(prog(t, s, .6)); $(b).style.width = Math.max(0, w) + "px"; $(b).style.opacity = t >= s ? 1 : 0;
+      $(v).style.left = (60 + w + 22) + "px"; $(v).style.opacity = prog(t, s + .35, .25); }
+    $("s5note").style.opacity = prog(t, 28.0, .4);
+  });
 
   // s4: two apples; one has its center of mass authored at its base
-  const bs = $("bugSlots"), notes = ["authored center of mass: middle", "authored center of mass: at the base"];
-  const v4 = APPLES.map((nn, c) => { const i = id(nn); return play(new View(slot(bs, i, 60 + c * 490, 300, 470, 560, notes[c]), i, "push_high", 2.3, 0.75), 39.6, LEN, { fell: "rolls over" }); });
-  const REVEAL = 44.8;
+  const bs = $("bugSlots"), notes = ["center of mass: middle", "center of mass: at the base"];
+  const v4 = APPLES.map((nn, c) => { const i = id(nn); return play(new View(slot(bs, i, 60 + c * 490, 300, 470, 480, notes[c]), i, "push_high", 2.3, 0.75), 35.6, LEN, { fell: "rolls over" }); });
+  const REVEAL = 38.4;
   CUES.pops.push(REVEAL);
-  scene("s4", CUT[3], CUT[4], v4, (t) => {
+  scene("s4", CUT[4], CUT[5], v4, (t) => {
     v4[1].el.classList.toggle("warn", t >= REVEAL);
     bs.querySelectorAll(".lbl small").forEach((s) => (s.style.opacity = prog(t, REVEAL, .3)));
   });
 
-  // s5: the held-out test, as bars (R², 0 to 1 across 900 px)
-  $("s5eye").textContent = `Tested on ${n(E.n_test)} objects no model saw`;
-  const BARS = [["barB", "valB", R.b, 52.0], ["barA", "valA", R.a, 54.4], ["barPB", "valPB", P.b, 56.8], ["barPA", "valPA", P.a, 56.8]];
-  BARS.forEach(([, v, x]) => ($(v).textContent = f2(x)));
-  BARS.forEach(([, , , s]) => CUES.pops.push(s));
-  scene("s5", CUT[4], CUT[5], [], (t) => {
-    for (const [b, v, x, s] of BARS) { const w = 900 * x * outCubic(prog(t, s, .6)); $(b).style.width = Math.max(0, w) + "px"; $(b).style.opacity = t >= s ? 1 : 0;
-      $(v).style.left = (60 + w + 22) + "px"; $(v).style.opacity = prog(t, s + .35, .25); }
-  });
-
   // s6: end card
-  const END = [61.2, 61.6, 62.0];
+  const END = [41.8, 42.1, 42.4];
   CUES.pops.push(...END);
   scene("s6", CUT[5], CUT[6], [], (t) => { pop($("d-url"), t, END[0], .5, 4); pop($("d-who"), t, END[1], .5, -4); pop($("d-series"), t, END[2], .45, -8, -3); });
   CUES.pops.push(0.15);
 
-  const [hc, hb, hk] = HOOK.map(id), [[vm, cup], [drum, can]] = PAIRS.map((p) => p.map(id));
+  const [hc, hb, hk] = HOOK.map(id);
+  // say exactly how many look-alikes fell in the rollouts shown
+  const nFell = app.filter((v) => v.stamp.textContent === LABEL.fell).length;
+  const fellLine = nFell === app.length ? "_Every one falls over_." : `_${["None", "One", "Two", "Three"][nFell]} of the four fall over_.`;
   CAPS = [
-    [0.4, 3.2, `I pushed ${n(A.length)} 3D objects from NVIDIA's SimReady library in a physics simulator.`],
-    [3.2, 5.6, "Same push for every one. Watch:"],
-    [5.6, 7.9, `a ${size(hc)} ${nm(hc)} tips over just like a ${nm(hb)} and a ${nm(hk)}.`],
-    [8.1, 11.2, "So I built a search that finds objects that ^move alike^."],
-    [11.2, 13.6, "Push a can of peaches high up:"],
-    [13.6, 15.2, "it *stays up*."],
-    [15.2, 18.4, "Search by ^behavior^ finds two sockets, a steel drum and a mug."],
-    [18.4, 20.0, "They *stay up too*."],
-    [20.0, 22.4, "Search by ^looks^ finds other cans."],
-    [22.4, 24.0, "_Every one falls over_."],
-    [24.0, 27.1, "Looking alike doesn't mean moving alike."],
-    [27.3, 29.6, "Size and weight don't fool it:"],
-    [29.6, 32.8, `a ${kg(vm)} ${nm(vm)} tips over just like a ${kg(cup)} ${nm(cup)},`],
-    [32.8, 36.7, `and a ${size(drum)} ${nm(drum)} rolls away just like a ${nm(can)}.`],
-    [36.9, 39.2, "It also catches broken physics."],
-    [39.2, 41.6, "Two apples, same push."],
-    [41.6, 44.8, "One rolls over. The other _pops back up_."],
-    [44.8, 47.2, "Its center of mass sits at its base: an authoring bug."],
-    [47.2, 49.5, `_${nBug} assets_ in the library have this bug.`],
-    [49.7, 52.0, "Does it work on objects it never saw?"],
-    [52.0, 54.4, `Neighbors by behavior predict how they react: ^${f2(R.b)}^`],
-    [54.4, 56.8, `Neighbors by looks: _${f2(R.a)}_`],
-    [56.8, 60.7, `Same result in NVIDIA's PhysX: ^${f2(P.b)}^ vs _${f2(P.a)}_`],
+    [0.3, 2.6, `I pushed ${n(A.length)} 3D objects from NVIDIA's SimReady library in a simulator.`],
+    [2.6, 6.3, `A ${size(hc)} ${nm(hc)} tips over just like a ${nm(hb)} and a ${nm(hk)}.`],
+    [6.5, 9.0, "Push a can of peaches high: it *stays up*."],
+    [9.0, 12.0, "Search by ^behavior^: sockets, a steel drum, a mug. They *stay up too*."],
+    [12.0, 14.4, "Search by ^looks^: other cans."],
+    [14.4, 16.8, fellLine],
+    [16.8, 19.1, "Looking alike doesn't mean moving alike."],
+    [19.3, 22.2, "Every dot is an object, placed by how it moved, not how it looks."],
+    [22.2, 25.5, `The ${nm(hc)}, the ${nm(hb)} and the ${nm(hk)} sit side by side.`],
+    [25.7, 28.0, "Does it work on objects it never saw?"],
+    [28.0, 30.4, `Statistics of the simulations predict how they react: ^${f2(R.b)}^`],
+    [30.4, 33.2, `A self-supervised ^JEPA^ that learns by predicting one push from another: ^${f2(R.j)}^`],
+    [33.2, 35.1, `Image search, by looks: _${f2(R.a)}_`],
+    [35.3, 37.0, "Bonus: two apples, same push."],
+    [37.0, 38.4, "One _pops back up_."],
+    [38.4, 41.5, `Its center of mass sits at its base: a bug in _${nBug} assets_.`],
   ];
-  for (const k of ["touches", "chimes", "pops"]) CUES[k] = [...new Set(CUES[k])].sort((a, b) => a - b);
+  for (const k of ["touches", "chimes", "pops", "sparkles"]) CUES[k] = [...new Set(CUES[k])].sort((a, b) => a - b);
   await document.fonts.ready;
   return CUT.at(-1);
 };
 window.renderAt = function (t) {
   renderer.setScissorTest(true);
-  const rs = $("r-series"); pop(rs, t, .15, .45, 8, 3); if (t > 7.4) rs.style.opacity = 1 - prog(t, 7.4, .3);
+  const rs = $("r-series"); pop(rs, t, .15, .45, 8, 3); if (t > 5.8) rs.style.opacity = 1 - prog(t, 5.8, .3);
   for (const s of SCENES) {
     const on = t >= s.start && t < s.end; s.el.classList.toggle("on", on);
     if (!on) continue;
